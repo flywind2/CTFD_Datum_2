@@ -695,10 +695,11 @@
                                 </GroupBox>
                             </Grid>
                             <Grid>
-         
-                                <LiveCharts:CartesianChart Margin="10,10,5,0" IsHitTestVisible="False" DisableAnimations="True" LegendLocation="None" DataTooltip="{x:Null}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                                AutomationProperties.IsRowHeader="False" Series="{Binding Experiment.Charts.AnalysisViewSeries}"
-                                Foreground="{StaticResource BlueColor}" FontSize="8" FontWeight="Bold">
+                                <LiveCharts:CartesianChart 
+                                    Margin="10,10,5,0" 
+                                    IsHitTestVisible="False" DisableAnimations="True" LegendLocation="None" DataTooltip="{x:Null}" 
+                                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Series="{Binding Experiment.Charts.FinalCurve}"
+                                    Foreground="{StaticResource BlueColor}" FontSize="8" FontWeight="Bold">
                                     <LiveCharts:CartesianChart.AxisX>
                                         <LiveCharts:Axis Title="{Binding Experiment.Charts.AnalysisXLabel}" FontSize="16" LabelFormatter="{Binding Experiment.Charts.AnalysisXFormatter}" Foreground="{StaticResource BlueColor}" FontWeight="Bold" >
                                             <LiveCharts:Axis.Separator>

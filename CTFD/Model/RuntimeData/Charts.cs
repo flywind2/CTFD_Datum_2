@@ -58,13 +58,19 @@ namespace CTFD.Model.RuntimeData
 
         public string AnalysisXLabel { get; private set; }
 
-        public SeriesCollection AnalysisViewSeries { get; private set; }
+        public SeriesCollection FinalCurve { get; private set; }
 
-        private SeriesCollection amplificationSeies;
+        private SeriesCollection finalAmplificationCurve;
 
-        private SeriesCollection standardMeltingSeies;
+        private SeriesCollection finalStandardMeltingCurve;
 
-        private SeriesCollection derivationMeltingSeies;
+        private SeriesCollection finalDerivationMeltingCurve;
+
+        private bool isAmplificationCurveFinished;
+
+        private bool isStandarMeltingCurveFinished;
+
+        private bool isDerivationMeltingCurveFinished;
 
         public Charts()
         {
@@ -82,13 +88,17 @@ namespace CTFD.Model.RuntimeData
 
         public void InitializeSeries()
         {
+            this.isAmplificationCurveFinished = false;
+            this.isStandarMeltingCurveFinished = false;
+            this.isDerivationMeltingCurveFinished = false;
+
             this.realtimeAmplificationCurve = this.CreateSeries<int>(32);
             this.realtimeMeltingCurve = this.CreateSeries<int>(32);
             this.realtimeTemperautreCurve = this.CreateSeries2<ObservablePoint>(3);
 
-            this.amplificationSeies = this.CreateSeries<int>(32);
-            this.standardMeltingSeies = this.CreateSeries<int>(32);
-            this.derivationMeltingSeies = this.CreateSeries<int>(32);
+            this.finalAmplificationCurve = this.CreateSeries<int>(32);
+            this.finalStandardMeltingCurve = this.CreateSeries<int>(32);
+            this.finalDerivationMeltingCurve = this.CreateSeries<int>(32);
         }
 
         private SeriesCollection CreateSeries<T>(int seriesCount, int smoothness = 3)
@@ -133,35 +143,30 @@ namespace CTFD.Model.RuntimeData
 
         public void AddAmplificationCurve(List<int[]> values)
         {
-            for (int i = 0; i < 32; i++) ((LiveCharts.Helpers.NoisyCollection<int>)this.amplificationSeies[i].Values).AddRange(values[i]);
+            this.isAmplificationCurveFinished = true;
+            for (int i = 0; i < 32; i++) ((LiveCharts.Helpers.NoisyCollection<int>)this.finalAmplificationCurve[i].Values).AddRange(values[i]);
         }
 
         public void AddStandardMeltingCurve()
         {
-            this.standardMeltingSeies = this.realtimeMeltingCurve;
+            this.isStandarMeltingCurveFinished = true;
+            this.finalStandardMeltingCurve = this.realtimeMeltingCurve;
         }
 
         public void AddDerivationMeltingCurves(List<int[]> values)
         {
-            for (int i = 0; i < 32; i++) ((LiveCharts.Helpers.NoisyCollection<int>)this.derivationMeltingSeies[i].Values).AddRange(values[i]);
+            this.isDerivationMeltingCurveFinished = true;
+            for (int i = 0; i < 32; i++) ((LiveCharts.Helpers.NoisyCollection<int>)this.finalDerivationMeltingCurve[i].Values).AddRange(values[i]);
         }
 
         public void ChangeSeriesVisibility(int sampleIndex, bool isCurveDisplayed)
         {
-            if (this.amplificationSeies.Count > sampleIndex && this.amplificationSeies[sampleIndex] != null)
-            {
-                ((GLineSeries)this.amplificationSeies[sampleIndex]).Visibility = isCurveDisplayed ? Visibility.Visible : Visibility.Hidden;
-            }
-            if (this.standardMeltingSeies.Count > sampleIndex && this.standardMeltingSeies[sampleIndex] != null)
-            {
-                var a = this.standardMeltingSeies[sampleIndex];
-                var b = (GLineSeries)a;
-                b.Visibility = isCurveDisplayed ? Visibility.Visible : Visibility.Hidden;
-            }
-            if (this.derivationMeltingSeies.Count > sampleIndex && this.derivationMeltingSeies[sampleIndex] != null)
-            {
-                ((GLineSeries)this.derivationMeltingSeies[sampleIndex]).Visibility = isCurveDisplayed ? Visibility.Visible : Visibility.Hidden;
-            }
+            if (this.isAmplificationCurveFinished) ((GLineSeries)this.finalAmplificationCurve[sampleIndex]).Visibility = isCurveDisplayed ? Visibility.Visible : Visibility.Hidden;
+            
+            if (this.isStandarMeltingCurveFinished) ((GLineSeries)this.finalStandardMeltingCurve[sampleIndex]).Visibility = isCurveDisplayed ? Visibility.Visible : Visibility.Hidden;
+            
+            if (this.isDerivationMeltingCurveFinished) ((GLineSeries)this.finalDerivationMeltingCurve[sampleIndex]).Visibility = isCurveDisplayed ? Visibility.Visible : Visibility.Hidden;
+            
         }
 
         public void ChangeRealtimeCurve(int curveIndex)
@@ -218,7 +223,7 @@ namespace CTFD.Model.RuntimeData
             {
                 case 0:
                 {
-                    this.AnalysisViewSeries = this.amplificationSeies;
+                    this.FinalCurve = this.finalAmplificationCurve;
                     this.AnalysisXFormatter = (value) => $"{((int)value / 2).ToString("00")}";
                     this.AnalysisXLabel = "运行时间（单位：分钟）";
                     this.AnalysisXStep = 4;
@@ -227,8 +232,8 @@ namespace CTFD.Model.RuntimeData
                 case 1:
                 case 2:
                 {
-                    if (index == 1) this.AnalysisViewSeries = this.standardMeltingSeies;
-                    else if (index == 2) this.AnalysisViewSeries = this.derivationMeltingSeies;
+                    if (index == 1) this.FinalCurve = this.finalStandardMeltingCurve;
+                    else if (index == 2) this.FinalCurve = this.finalDerivationMeltingCurve;
                     this.AnalysisXStep = null;
                     this.AnalysisXFormatter = null;
                     this.AnalysisXLabel = "温度变化（单位：次数）";
@@ -237,7 +242,7 @@ namespace CTFD.Model.RuntimeData
                 default: break;
             }
 
-            this.RaisePropertyChanged(nameof(this.AnalysisViewSeries));
+            this.RaisePropertyChanged(nameof(this.FinalCurve));
             this.RaisePropertyChanged(nameof(this.AnalysisXLabel));
             this.RaisePropertyChanged(nameof(this.AnalysisMaxValue));
             this.RaisePropertyChanged(nameof(this.AnalysisXStep));

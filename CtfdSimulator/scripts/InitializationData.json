@@ -1,0 +1,30 @@
+[
+  {
+    "Devices": [
+      {
+        "DevState": 0,
+        "ID": 0,
+        "IPAddress": "192.168.5.123",
+        "Name": "测试设备1",
+        "Operator": null,
+        "RackColumnCount": 8,
+        "RackRowCount": 4
+      }
+    ],
+    "Name": "测试设备组1"
+  },
+  {
+    "Devices": [
+      {
+        "DevState": 0,
+        "ID": 0,
+        "IPAddress": "192.168.5.133",
+        "Name": "测试设备2",
+        "Operator": null,
+        "RackColumnCount": 8,
+        "RackRowCount": 4
+      }
+    ],
+    "Name": "测试设备组2"
+  }
+]

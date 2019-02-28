@@ -1,0 +1,186 @@
+﻿{
+  "Experiment": {
+    "Feedbacks": [
+      { "Status": 0 },
+      { "Status": 0 },
+      { "Status": 0 },
+      { "Status": 0 },
+      { "Status": 0 },
+      { "Status": 0 },
+      { "Status": 0 },
+      { "Status": 0 },
+      { "Status": 0 },
+      { "Status": 0 },
+      { "Status": 0 }
+    ],
+    "GroupName": "项目组1",
+    "ProjectName": "项目1",
+    "Samples": [
+      {
+        "Detection": "检测1",
+        "HoleName": "A01"
+      },
+      {
+        "Detection": "检测2",
+        "HoleName": "A02"
+      },
+      {
+        "Detection": "检测3",
+        "HoleName": "A03"
+      },
+      {
+        "Detection": "检测4",
+        "HoleName": "A04"
+      },
+      {
+        "Detection": "检测1",
+        "HoleName": "A05"
+      },
+      {
+        "Detection": "检测2",
+        "HoleName": "A06"
+      },
+      {
+        "Detection": "检测3",
+        "HoleName": "A07"
+      },
+      {
+        "Detection": "检测4",
+        "HoleName": "A09"
+      },
+      {
+        "Detection": "检测1",
+        "HoleName": "B01"
+      },
+      {
+        "Detection": "检测2",
+        "HoleName": "B02"
+      },
+      {
+        "Detection": "检测3",
+        "HoleName": "B03"
+      },
+      {
+        "Detection": "检测4",
+        "HoleName": "B04"
+      },
+      {
+        "Detection": "检测1",
+        "HoleName": "B05"
+      },
+      {
+        "Detection": "检测2",
+        "HoleName": "B06"
+      },
+      {
+        "Detection": "检测3",
+        "HoleName": "B07"
+      },
+      {
+        "Detection": "检测4",
+        "HoleName": "B08"
+      },
+      {
+        "Detection": "检测1",
+        "HoleName": "C01"
+      },
+      {
+        "Detection": "检测2",
+        "HoleName": "C02"
+      },
+      {
+        "Detection": "检测3",
+        "HoleName": "C03"
+      },
+      {
+        "Detection": "检测4",
+        "HoleName": "C04"
+      },
+      {
+        "Detection": "检测1",
+        "HoleName": "C05"
+      },
+      {
+        "Detection": "检测2",
+        "HoleName": "C06"
+      },
+      {
+        "Detection": "检测3",
+        "HoleName": "C07"
+      },
+      {
+        "Detection": "检测4",
+        "HoleName": "C08"
+      },
+      {
+        "Detection": "检测1",
+        "HoleName": "D01"
+      },
+      {
+        "Detection": "检测2",
+        "HoleName": "D02"
+      },
+      {
+        "Detection": "检测3",
+        "HoleName": "D03"
+      },
+      {
+        "Detection": "检测4",
+        "HoleName": "D04"
+      },
+      {
+        "Detection": "检测1",
+        "HoleName": "D05"
+      },
+      {
+        "Detection": "检测2",
+        "HoleName": "D06"
+      },
+      {
+        "Detection": "检测3",
+        "HoleName": "D07"
+      },
+      {
+        "Detection": "检测4",
+        "HoleName": "D08"
+      }
+    ],
+    "Parameter": {
+      "AD": 6000,
+      "AT": 710,
+      "DD": 3000,
+      "DT": 990,
+      "HS": 4600,
+      "HSD": 30,
+      "IM": true,
+      "LS": 1600,
+      "LSD": 10,
+      "MeltDuration": 0
+    }
+  },
+  "Accounts": [
+    {
+      "DateTime": null,
+      "Password": "SS",
+      "Remark": null,
+      "Role": 0,
+      "UserName": "AA"
+    },
+    {
+      "DateTime": null,
+      "Password": "SS",
+      "Remark": null,
+      "Role": 1,
+      "UserName": "AAW"
+    },
+    {
+      "DateTime": null,
+      "Password": "FF",
+      "Remark": null,
+      "Role": 0,
+      "UserName": "AA2"
+    }
+  ],
+  "CurrentTcpServerIPAddress": "127.0.0.1",
+  "TcpServerPort": 4510
+}

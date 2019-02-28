@@ -1,0 +1,21 @@
+﻿<ResourceDictionary 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:PresentationOptions="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options">
+    <Color x:Key="BlueColorColor" A="255" R="53" G="170" B="247"/>
+    <Color x:Key="ChartColorColor" A="255" R="197" G="134" B="0"/>
+    <SolidColorBrush x:Key="GridLine" PresentationOptions:Freeze="True" Color="White"/>
+    <SolidColorBrush x:Key="BlueColor" PresentationOptions:Freeze="True" Color="#FF35AAF7"/>
+    <SolidColorBrush x:Key="BlueColor1" PresentationOptions:Freeze="True" Color="#FF35AAF7"/>
+    <SolidColorBrush x:Key="BlueColor2" PresentationOptions:Freeze="True" Color="#FF75C8FF"/>
+    <SolidColorBrush x:Key="GrayColor" PresentationOptions:Freeze="True" Color="#FFD8D8D8"/>
+    <SolidColorBrush x:Key="GrayColor2" PresentationOptions:Freeze="True" Color="#FFACACAC"/>
+    <SolidColorBrush x:Key="GreenColor" PresentationOptions:Freeze="True" Color="#FF97C300"/>
+    <SolidColorBrush x:Key="WathetColor" PresentationOptions:Freeze="True" Color="#FFA1D0FF"/>
+    <SolidColorBrush x:Key="WathetColor2" PresentationOptions:Freeze="True" Color="#FFD6ECFF"/>
+    <SolidColorBrush x:Key="WathetColor3" PresentationOptions:Freeze="True" Color="#FFEAF5FF"/>
+    <SolidColorBrush x:Key="ChartColor1" PresentationOptions:Freeze="True" Color="#FFC58600"/>
+    <SolidColorBrush x:Key="ChartColor2" PresentationOptions:Freeze="True" Color="#FF9C76C1"/>
+    <SolidColorBrush x:Key="ChartColor3" PresentationOptions:Freeze="True" Color="#FF76C187"/>
+    <SolidColorBrush x:Key="BlueTransparent" PresentationOptions:Freeze="True" Color="#4C0080FF"/>
+</ResourceDictionary>

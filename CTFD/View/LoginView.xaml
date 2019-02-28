@@ -1,0 +1,45 @@
+﻿<UserControl 
+    x:Class="CTFD.View.LoginView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    mc:Ignorable="d" 
+    xmlns:vm="clr-namespace:CTFD.ViewModel"
+    d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <vm:LoginViewModel/>
+    </UserControl.DataContext>
+
+    <Viewbox Stretch="Fill" >
+        <Viewbox.Resources>
+            <StackPanel x:Key="Signin" Orientation="Horizontal">
+                <Path Data="{StaticResource Signin}" Fill="White" Margin="25,-3,0,0"/>
+                <TextBlock Foreground="White" FontSize="14" Text="登录" FontWeight="Bold" Width="80" Margin="6,0,0,0"/>
+            </StackPanel>
+
+            <StackPanel x:Key="Clear" Orientation="Horizontal">
+                <Path Data="{StaticResource Eraser}" Fill="White" Margin="25,1,0,0" Height="13" Width="16" Stretch="Fill"/>
+                <TextBlock Foreground="White" FontSize="14" Text="清除" FontWeight="Bold" Width="80" Margin="6,0,0,0"/>
+            </StackPanel>
+
+        </Viewbox.Resources>
+        <Grid  Width="800" Height="424">
+            <StackPanel Orientation="Vertical" VerticalAlignment="Center" >
+                <TextBlock Foreground="{StaticResource BlueColor}" HorizontalAlignment="Center" FontSize="20" FontWeight="Bold" Text="{Binding Message,FallbackValue=用户登录}"/>
+                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Margin="20,30,20,0">
+                    <Path Fill="{StaticResource BlueColor}" Stretch="Uniform" Width="25" Height="26" Data="{StaticResource UserName}" VerticalAlignment="Bottom" Margin="20,0,0,5"/>
+                    <TextBox  Text="{Binding Account.UserName}" Style="{StaticResource TextBox}" BorderBrush="{StaticResource ChartColor1}" Foreground="{StaticResource ChartColor1}" Background="{StaticResource BlueColor}" FontSize="16" Width="250" Height="30" Margin="-26,10,20,0"/>
+                </StackPanel>
+                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Margin="0,20,0,20">
+                    <Path Fill="{StaticResource BlueColor}" Stretch="Fill" Width="25" Height="26" Data="{StaticResource Lock}" VerticalAlignment="Bottom" Margin="20,0,0,5"/>
+                    <PasswordBox x:Name="PasswordBox1" Style="{StaticResource RD_PasswordBoxBrightStyle}" FontSize="16" Width="250" Height="30" Margin="-26,10,20,0"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Width="300">
+                    <Button Content="{StaticResource Signin}" IsDefault="True" Style="{StaticResource Button}" Command="{Binding Login}" CommandParameter="0"  Width="110" Height="26" Margin="26,0,0,0"/>
+                    <Button  Content="{StaticResource Clear}" IsDefault="True"  Style="{StaticResource Button}" Command="{Binding Clear}" CommandParameter="0"  Width="110" Height="26" Margin="30,0,0,0"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+    </Viewbox>
+</UserControl>

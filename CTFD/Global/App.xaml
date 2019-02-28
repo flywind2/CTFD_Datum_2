@@ -1,0 +1,49 @@
+﻿<Application 
+    x:Class="CTFD.Global.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Global/Dictionary/Language/zh-CN.xaml"/>
+                <ResourceDictionary Source="/Global/Dictionary/Style/Brush.xaml"/>
+                <ResourceDictionary Source="/Global/Dictionary/Style/DataGrid.xaml"/>
+                <ResourceDictionary Source="/Global/Dictionary/Style/TextBlock.xaml"/>
+                <ResourceDictionary Source="/Global/Dictionary/Path.xaml"/>
+                <ResourceDictionary Source="/Global/Dictionary/Style/TextBox.xaml"/>
+                <ResourceDictionary Source="/Global/Dictionary/Style/CheckBox.xaml"/>
+                <ResourceDictionary Source="/Global/Dictionary/Style/Button.xaml"/>
+                <ResourceDictionary Source="/Global/Dictionary/Style/Expander.xaml"/>
+                <ResourceDictionary Source="/Global/Dictionary/Style/TreeView.xaml"/>
+                <ResourceDictionary Source="/Global/Dictionary/Style/ScrollBar.xaml"/>
+                <ResourceDictionary Source="/Global/Dictionary/Style/ToggleButton.xaml"/>
+                <ResourceDictionary Source="/Global/Dictionary/Style/ComboBox.xaml"/>
+                <ResourceDictionary Source="/Global/Dictionary/Style/ToolTip.xaml"/>
+                <ResourceDictionary Source="/Global/Dictionary/Style/DataPicker.xaml"/>
+                <ResourceDictionary Source="/Global/Dictionary/Style/GridSplitter.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <DropShadowEffect x:Key="Effect1" Color="#FF959595" ShadowDepth="5" BlurRadius="8" Direction="0"/>
+            <DataTemplate x:Key="TreeViewItem1" >
+                <Grid HorizontalAlignment="Stretch">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseLeftButtonUp">
+                            <i:InvokeCommandAction Command="{Binding DataContext.SelectProject, ElementName=Instance}" CommandParameter="{Binding}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <TextBlock
+                        Text="{Binding Name}" FontSize="16" Margin="-16,0,0,0" DockPanel.Dock="Left" VerticalAlignment="Center" FontWeight="Bold"
+                        Width="120" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type TreeViewItem}, Mode=FindAncestor}}"  />
+                </Grid>
+            </DataTemplate>
+
+            <HierarchicalDataTemplate x:Key="TreeViewItem0" ItemsSource="{Binding Projects}" ItemTemplate="{StaticResource TreeViewItem1}" >
+                <DockPanel LastChildFill="True" VerticalAlignment="Center" >
+                    <TextBlock FontSize="15" Text="{Binding Name}" Margin="2,0,0,0" DockPanel.Dock="Left" VerticalAlignment="Center" FontWeight="Bold" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type TreeViewItem}, Mode=FindAncestor}}"/>
+                </DockPanel>
+            </HierarchicalDataTemplate>
+
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

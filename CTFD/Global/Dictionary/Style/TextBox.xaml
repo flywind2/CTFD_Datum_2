@@ -1,0 +1,161 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Global/Dictionary/Style/Brush.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
+    <Style x:Key="TextBox" TargetType="{x:Type TextBox}">
+        <Setter Property="CaretBrush" Value="{Binding Foreground}"/>
+        <Setter Property="FontSize" Value="18"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="AllowDrop" Value="true"/>
+        <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
+        <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TextBox}">
+                    <Grid>
+                        <Rectangle x:Name="Line" Height="1.5" Fill="{TemplateBinding Background}" Width="{TemplateBinding Width}" VerticalAlignment="Bottom"/>
+                        <Rectangle x:Name="UnderLine" Height="2.5"  Fill="{TemplateBinding Background}" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" RenderTransformOrigin="0.5,0.5">
+                            <Rectangle.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform ScaleX="0"/>
+                                </TransformGroup>
+                            </Rectangle.RenderTransform>
+                        </Rectangle>
+                        <ScrollViewer x:Name="PART_ContentHost" Margin="0,0,-5,0"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"  HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="Validation.HasError" Value="True">
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Opacity" TargetName="Line" Value="0.56"/>
+                        </Trigger>
+                        <EventTrigger RoutedEvent="GotFocus" >
+                            <BeginStoryboard>
+                                <Storyboard RepeatBehavior="1x" >
+                                    <DoubleAnimation Storyboard.TargetName="UnderLine"  Storyboard.TargetProperty="(Rectangle.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" From="0.3"  To="1" Duration="0:0:0.2" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="LostFocus" >
+                            <BeginStoryboard>
+                                <Storyboard RepeatBehavior="1x" >
+                                    <DoubleAnimation Storyboard.TargetName="UnderLine"  Storyboard.TargetProperty="(Rectangle.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" From="0.7" By="0" To="0" Duration="0:0:0.2"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        
+    </Style>
+
+    <Style x:Key="RD_PasswordBoxBrightStyle" TargetType="{x:Type PasswordBox}">
+        <Setter Property="CaretBrush" Value="{StaticResource BlueColor}"/>
+        <Setter Property="PasswordChar" Value="●"/>
+        <Setter Property="Foreground" Value="{StaticResource GreenColor}"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="AllowDrop" Value="true"/>
+        <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
+        <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type PasswordBox}">
+
+                    <Viewbox Stretch="Fill">
+                        <Border x:Name="border" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" SnapsToDevicePixels="true" BorderThickness="0,0,0,2" BorderBrush="{DynamicResource BlueColor}" >
+                            <ScrollViewer x:Name="PART_ContentHost" Margin="3" Focusable="false" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+                        </Border>
+                    </Viewbox>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Opacity" TargetName="border" Value="0.56"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter TargetName="border" Property="BorderThickness" Value="0,0,0,3"/>
+                        </Trigger>
+                        <Trigger Property="IsKeyboardFocused" Value="true">
+
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsInactiveSelectionHighlightEnabled" Value="true"/>
+                    <Condition Property="IsSelectionActive" Value="false"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="SelectionBrush" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}"/>
+            </MultiTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="VerifyTextBox" TargetType="{x:Type TextBox}" BasedOn="{StaticResource TextBox}">
+        <Style.Resources>
+            <ControlTemplate x:Key="ValidationErrorTemplate">
+                <Grid>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Background="{StaticResource BlueColor}" BorderThickness="2" BorderBrush="{StaticResource BlueColor2}" CornerRadius ="5" HorizontalAlignment="Right" VerticalAlignment="Stretch" Margin ="0,-10,90,0" MaxWidth="320">
+                            <Border.Effect>
+                                <!--<DropShadowEffect Direction="0" BlurRadius="5" ShadowDepth="0" />-->
+                                <DropShadowEffect Color="#FF838383" ShadowDepth="0" BlurRadius="10" Direction="0"/>
+                            </Border.Effect>
+                            <TextBlock Text="{Binding Path=/ErrorContent}" Margin="10,5,10,5" FontSize="{Binding FontSize, RelativeSource={RelativeSource Self}}" TextWrapping="Wrap" FontWeight="Bold" Foreground="White"/>
+                        </Border>
+                        <!--<Path Height="18" Width="18" Data="{StaticResource Error}" Fill="{StaticResource BlueColor}" Stretch="Uniform" Margin="0,0,0,3"/>-->
+
+                        <AdornedElementPlaceholder/>
+                    </StackPanel>
+                </Grid>
+            </ControlTemplate>
+        </Style.Resources>
+        <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ValidationErrorTemplate}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TextBox}">
+                    <Canvas >
+                        <Border x:Name="border" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" SnapsToDevicePixels="true" BorderThickness="0,0,0,2" BorderBrush="{DynamicResource BlueColor}" >
+                            <ScrollViewer x:Name="PART_ContentHost"  Focusable="false" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center"  HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
+                        </Border>
+                    </Canvas>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="Validation.HasError" Value="True">
+                            <Setter TargetName="border" Property="BorderBrush" Value="Red" />
+                            <Setter Property="ToolTip"  Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsInactiveSelectionHighlightEnabled" Value="true"/>
+                    <Condition Property="IsSelectionActive" Value="false"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="SelectionBrush" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}"/>
+            </MultiTrigger>
+
+            <!--<Trigger Property="Validation.HasError" Value="True">
+                <Setter Property="ToolTip"  Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}" />
+
+            </Trigger>-->
+        </Style.Triggers>
+    </Style>
+</ResourceDictionary>

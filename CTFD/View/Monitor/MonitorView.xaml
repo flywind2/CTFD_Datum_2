@@ -1,0 +1,911 @@
+﻿<UserControl
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:control="clr-namespace:CTFD.View.Control"
+    xmlns:Rpmunit="clr-namespace:CTFD.View.Control.Rpm"
+    xmlns:sample="clr-namespace:CTFD.View.Control.Sample"
+    xmlns:Thermal="clr-namespace:CTFD.View.Control.Thermal"
+    xmlns:behavior="clr-namespace:CTFD.ViewModel.Behavior"
+    xmlns:EventCommand="clr-namespace:CTFD.ViewModel.CommandAction"
+    xmlns:cv="clr-namespace:CTFD.ViewModel.Converter"
+    xmlns:validation="clr-namespace:CTFD.ViewModel.Validation"
+    xmlns:LiveCharts="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+    xmlns:gc="clr-namespace:LiveCharts.Geared;assembly=LiveCharts.Geared"
+    xmlns:lcu="http://schemas.arction.com/charting/ultimate/"
+    x:Class="CTFD.View.Monitor.MonitorView"
+    mc:Ignorable="d"
+    x:Name="Instance"
+    d:DesignHeight="450" d:DesignWidth="800" Loaded="Instance_Loaded">
+
+    <Viewbox x:Name="Viewbox1" Stretch="Fill" >
+        <Viewbox.Resources>
+            <cv:BoolInversion x:Key="BoolInversion"/>
+            <cv:ViewIndexToVisibility x:Key="ViewIndexToVisibility"/>
+            <Style TargetType="{x:Type GroupBox}">
+                <Setter Property="FontSize" Value="18"/>
+                <Setter Property="BorderThickness" Value="3"/>
+                <Setter Property="FontWeight" Value="Bold"/>
+                <Setter Property="Foreground" Value="{StaticResource GreenColor}"/>
+                <Setter Property="Width" Value="256"/>
+                <Setter Property="Canvas.Top" Value="60"/>
+            </Style>
+            <validation:DissociationTemperatureRule x:Key="DissociationTemperatureRule"/>
+            <cv:StackPanelHeightToGroupBoxHeight x:Key="StackPanelHeightToGroupBoxHeight"/>
+            <DropShadowEffect x:Key="PanelEffect" Direction="180" BlurRadius="22" Color="#FFD8D8D8"/>
+
+            <Style TargetType="{x:Type ToolTip}" BasedOn="{StaticResource ToolTip}"/>
+            <StackPanel x:Key="SaveTemplate" Orientation="Horizontal">
+                <Canvas Width="38" Height="25">
+                    <Path Data="{StaticResource Template}" Fill="White" Canvas.Left="14" />
+                    <Rectangle Fill="{Binding Background, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" Width="10" Height="10" Canvas.Left="29" Canvas.Top="12"/>
+                    <Path Data="{StaticResource Save}" Stroke="{Binding Background, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" StrokeThickness=".6" Stretch="Fill" Fill="White" Width="12" Height="12" Canvas.Left="28" Canvas.Top="11"/>
+                </Canvas>
+                <TextBlock Foreground="White" Text="保存模板" Width="80" Margin="6,2,0,0"/>
+            </StackPanel>
+
+            <StackPanel x:Key="OpenChart" Orientation="Horizontal">
+                <Canvas Width="38" Height="25">
+                    <Path Data="{StaticResource Chart}" Fill="White" Canvas.Left="14" />
+                    <Rectangle Fill="{Binding Background, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" Width="10" Height="6" Canvas.Left="27" Canvas.Top="13"/>
+                    <Path Data="{StaticResource Open}" Stroke="{Binding Background, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" StrokeThickness=".6" Stretch="Fill" Fill="White" Width="15" Height="12" Canvas.Left="26" Canvas.Top="11"/>
+                </Canvas>
+                <TextBlock Foreground="White" Text="导入曲线" Width="80" Margin="6,2,0,0"/>
+            </StackPanel>
+
+            <StackPanel x:Key="SaveChart" Orientation="Horizontal">
+                <Canvas Width="38" Height="25">
+                    <Path Data="{StaticResource Chart}" Fill="White" Canvas.Left="14" />
+                    <Rectangle Fill="{Binding Background, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" Width="10" Height="10" Canvas.Left="27" Canvas.Top="13"/>
+                    <Path Data="{StaticResource Save}" Stroke="{Binding Background, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" StrokeThickness=".6" Stretch="Fill" Fill="White" Width="13" Height="13" Canvas.Left="26" Canvas.Top="11"/>
+                </Canvas>
+                <TextBlock Foreground="White" Text="保存曲线" Width="80" Margin="6,2,0,0"/>
+            </StackPanel>
+
+            <StackPanel x:Key="OpenTemplate" Orientation="Horizontal">
+                <Canvas Width="38" Height="25">
+                    <Path Data="{StaticResource Template}" Fill="White" Canvas.Left="14" />
+                    <Rectangle Fill="{Binding Background, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" Width="10" Height="6" Canvas.Left="27" Canvas.Top="13"/>
+                    <Path Data="{StaticResource Open}" Stroke="{Binding Background, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" StrokeThickness=".6" Stretch="Fill" Fill="White" Width="15" Height="12" Canvas.Left="26" Canvas.Top="11"/>
+                </Canvas>
+                <TextBlock Foreground="White" Text="导入模板" Width="80" Margin="6,2,0,0"/>
+            </StackPanel>
+
+            <StackPanel x:Key="Stop" Orientation="Horizontal" HorizontalAlignment="Stretch">
+                <Path Data="{StaticResource Run}" Fill="White" Margin="0,-1,0,0"/>
+                <TextBlock Foreground="White" Text="运行实验" Width="80" Margin="10,2,0,0"/>
+            </StackPanel>
+
+            <StackPanel x:Key="Run" Orientation="Horizontal" HorizontalAlignment="Stretch">
+                <control:CircleProgressBar  Width="25" Height="25" Foreground="White"/>
+                <TextBlock Foreground="White" Text="停止实验" Width="80" Margin="10,2,0,0"/>
+            </StackPanel>
+
+            <StackPanel x:Key="CoolDown" Orientation="Horizontal" HorizontalAlignment="Center">
+                <TextBlock Foreground="White" Text="{Binding CoolDownTimer.TimingData, StringFormat=准备实验 (\{0\})}" Width="100" TextAlignment="Center"/>
+            </StackPanel>
+
+            <StackPanel x:Key="Pinter" Orientation="Horizontal">
+                <Path Data="{StaticResource Pinter}" Fill="White" Margin="15,-3,0,0"/>
+                <TextBlock Foreground="White" FontSize="14" Text="打印报告" Width="80" Margin="6,0,0,0"/>
+            </StackPanel>
+
+            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource AnimationButton}">
+                <Setter Property="Height" Value="30"/>
+                <Setter Property="Width" Value="130"/>
+                <Setter Property="Background" Value="{StaticResource BlueColor}"/>
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="FontWeight" Value="Bold"/>
+            </Style>
+
+            <ContextMenu x:Key="SettingSample">
+                <MenuItem Header="编辑" Command="{Binding ShowSampleSettingView}" CommandParameter="{Binding SelectedItems, ElementName=DataGrid1}"/>
+                <Separator/>
+                <MenuItem Header="删除"/>
+            </ContextMenu>
+
+            <DrawingBrush x:Key="Icon">
+                <DrawingBrush.Drawing>
+                    <DrawingGroup>
+                        <GeometryDrawing>
+                            <GeometryDrawing.Geometry>
+                                <PathGeometry Figures="{StaticResource Device}">
+                                    <PathGeometry.Transform>
+                                        <TransformGroup>
+                                            <ScaleTransform ScaleY="0.055"/>
+                                            <TranslateTransform Y="1.2"/>
+                                        </TransformGroup>
+                                    </PathGeometry.Transform>
+                                </PathGeometry>
+                            </GeometryDrawing.Geometry>
+                            <GeometryDrawing.Brush>
+                                <SolidColorBrush Color="{StaticResource BlueColorColor}"/>
+                            </GeometryDrawing.Brush>
+                        </GeometryDrawing>
+
+                        <GeometryDrawing>
+                            <GeometryDrawing.Geometry>
+                                <PathGeometry Figures="{StaticResource Operator}">
+                                    <PathGeometry.Transform>
+                                        <TransformGroup>
+                                            <ScaleTransform ScaleY="0.055"/>
+                                            <TranslateTransform Y="2.8"/>
+                                        </TransformGroup>
+                                    </PathGeometry.Transform>
+                                </PathGeometry>
+                            </GeometryDrawing.Geometry>
+                            <GeometryDrawing.Brush>
+                                <SolidColorBrush Color="{StaticResource BlueColorColor}"/>
+                            </GeometryDrawing.Brush>
+                        </GeometryDrawing>
+                    </DrawingGroup>
+                </DrawingBrush.Drawing>
+            </DrawingBrush>
+
+        </Viewbox.Resources>
+        <Canvas Background="{StaticResource WathetColor2}" Tag="0" Width="1100" Height="630" >
+            <Canvas.Resources>
+                <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource TextBox}">
+                    <Setter Property="Background" Value="{StaticResource BlueColor}"/>
+                    <Setter Property="Foreground" Value="{StaticResource ChartColor1}"/>
+                    <Setter Property="Width" Value="130"/>
+                    <Setter Property="Height" Value="20"/>
+                    <Setter Property="FontSize" Value="16"/>
+                    <Setter Property="Canvas.Left" Value="368"/>
+                    <Setter Property="VerticalAlignment" Value="Bottom"/>
+                </Style>
+                <Style TargetType="{x:Type control:VerifyTextBox}" BasedOn="{StaticResource VerifyTextBox}">
+                    <Setter Property="Width" Value="60"/>
+                    <Setter Property="Height" Value="20"/>
+                    <Setter Property="FontSize" Value="16"/>
+                    <Setter Property="Canvas.Left" Value="368"/>
+                    <Setter Property="VerticalAlignment" Value="Bottom"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                </Style>
+
+                <DrawingBrush x:Key="NumberDown">
+                    <DrawingBrush.Drawing>
+                        <GeometryDrawing Brush="{StaticResource BlueColor}">
+                            <GeometryDrawing.Geometry>
+                                <PathGeometry Figures="{StaticResource NumberDown}"/>
+                            </GeometryDrawing.Geometry>
+                            <!--<GeometryDrawing.Brush>
+                                    <SolidColorBrush Color="{StaticResource BlueColorColor}"/>
+                                </GeometryDrawing.Brush>-->
+                        </GeometryDrawing>
+                    </DrawingBrush.Drawing>
+                </DrawingBrush>
+                <DrawingBrush x:Key="NumberUp">
+                    <DrawingBrush.Drawing>
+                        <GeometryDrawing>
+                            <GeometryDrawing.Geometry>
+                                <PathGeometry Figures="{StaticResource NumberUp}"/>
+                            </GeometryDrawing.Geometry>
+                            <GeometryDrawing.Brush>
+                                <SolidColorBrush Color="{StaticResource BlueColorColor}"/>
+                            </GeometryDrawing.Brush>
+                        </GeometryDrawing>
+                    </DrawingBrush.Drawing>
+                </DrawingBrush>
+                <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TextBlock}">
+                    <Setter Property="Foreground" Value="{StaticResource BlueColor}"/>
+                    <Setter Property="FontSize" Value="16"/>
+                    <Setter Property="FontWeight" Value="Bold"/>
+                </Style>
+                <Style TargetType="{x:Type Path}">
+                    <Setter Property="Fill" Value="{StaticResource BlueColor}"/>
+                </Style>
+            </Canvas.Resources>
+            <TabControl SelectedIndex="{Binding StepIndex}" BorderThickness="0,0,0,3" BorderBrush="{StaticResource WathetColor}" Height="{Binding ExperimentViewHeight,FallbackValue=637}" Width="1100" Canvas.Top="-4">
+                <TabItem Height=".1">
+                    <Canvas>
+                        <!--<TextBlock Text="任务分支选择" FontSize="35" Canvas.Left="440" Canvas.Top="70" Foreground="{StaticResource GreenColor}"  />-->
+                        <Button Command="{Binding SwitchViewExperiment}" CommandParameter="1"  Background="{StaticResource BlueColor}" Foreground="White" Width="160" Height="180" Canvas.Left="320" Canvas.Top="220">
+                            <StackPanel Orientation="Vertical">
+                                <Path Data="{StaticResource Experiment}" Fill="White" Stretch="Fill" Width="100" Height="100"/>
+                                <TextBlock Style="{StaticResource TextBlock}" FontSize="24" Text="新建实验" Margin="0,15,0,0"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Background="{StaticResource BlueColor}" Command="{Binding SwitchViewExperiment}" CommandParameter="5" Foreground="White" Width="160" Height="180" Canvas.Left="600" Canvas.Top="220">
+                            <StackPanel Orientation="Vertical">
+                                <Path Data="{StaticResource Search}" Fill="White" Stretch="Fill" Width="100" Height="100" />
+                                <TextBlock Style="{StaticResource TextBlock}" FontSize="24" Text="历史报告" Margin="0,15,0,0"/>
+                            </StackPanel>
+                        </Button>
+                    </Canvas>
+                </TabItem>
+                <TabItem Height=".1">
+                    <Canvas >
+                        <Canvas.Resources>
+                            <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TextBlock}">
+                                <Setter Property="Foreground" Value="{StaticResource BlueColor}"/>
+                                <Setter Property="FontSize" Value="16"/>
+                                <Setter Property="FontWeight" Value="Bold"/>
+                            </Style>
+                            <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource TextBox}">
+                                <Setter Property="Background" Value="{StaticResource BlueColor}"/>
+                                <Setter Property="Foreground" Value="{StaticResource ChartColor1}"/>
+                                <Setter Property="FontSize" Value="16"/>
+                                <Setter Property="Width" Value="130"/>
+                            </Style>
+
+                        </Canvas.Resources>
+                        <Canvas Width="320" Height="320" Canvas.Left="90" Canvas.Top="150">
+                            <i:Interaction.Behaviors>
+                                <behavior:SampleMultiSelect ViewModel="{Binding ''}"/>
+                            </i:Interaction.Behaviors>
+                            <TextBlock Text="{Binding Experiment.Samples[0].Detection}"/>
+                            <sample:SampleRack DataContext="{Binding Experiment}" Width="320"  />
+                        </Canvas>
+                        <Path Data="{StaticResource Horn}" Fill="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" Width="26" Height="26" Stretch="Fill" Canvas.Top="60" Canvas.Left="60"/>
+                        <TextBlock Foreground="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" Text="        您可以扫描试剂盒上二维码覆盖当前默认的基本信息以及修改这些信息来满足实验要求(当前默认信息为上一次实验的基本信息)" TextWrapping="Wrap" Canvas.Left="60" Canvas.Top="55" LineStackingStrategy="BlockLineHeight" LineHeight="30" Width="1004"/>
+                        <Button Command="{Binding Rollback}" Width="241" Content="恢复默认信息（上一次实验信息）" Canvas.Left="775" Canvas.Top="480"/>
+                        <GroupBox Header="实验信息设置" Canvas.Left="470" Canvas.Top="120" Width="275" Height="120" FontSize="16" FontWeight="Bold" Foreground="{StaticResource GreenColor}">
+                            <Canvas>
+                                <TextBlock LineStackingStrategy="BlockLineHeight" LineHeight="40"  Text="实验名称：&#xA;是否熔解：" Canvas.Left="10" Canvas.Top="10"/>
+                                <TextBox Text="{Binding Experiment.Name}" Width="120"  Canvas.Left="110" Canvas.Top="25"/>
+                                <ToggleButton Style="{StaticResource AnimationToggleButton}" Canvas.Left="110" Canvas.Top="60" Width="50"  IsChecked="{Binding Experiment.Parameter.IsMelt}" Background="{StaticResource BlueColor}" />
+
+                            </Canvas>
+                        </GroupBox>
+
+                        <GroupBox Header="项目信息设置" Canvas.Left="470" Canvas.Top="260" Width="275" Height="120" FontSize="16" FontWeight="Bold" Foreground="{StaticResource GreenColor}">
+                            <Canvas>
+                                <TextBlock LineStackingStrategy="BlockLineHeight" LineHeight="32"  Text="项目组：&#xA;项目名：" Canvas.Left="10" Canvas.Top="10"/>
+                                <TextBox Text="{Binding Experiment.GroupName}" Canvas.Left="110" Canvas.Top="25">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="LostFocus">
+                                            <i:InvokeCommandAction Command="{Binding LostFocus}"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </TextBox>
+                                <TextBox Text="{Binding Experiment.ProjectName}" Canvas.Left="110" Canvas.Top="55">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="LostFocus">
+                                            <i:InvokeCommandAction Command="{Binding LostFocus}"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </TextBox>
+                            </Canvas>
+                        </GroupBox>
+
+
+                        <GroupBox Header="芯片信息设置" Canvas.Left="470" Canvas.Top="400" Width="275" Height="120" FontSize="16" FontWeight="Bold" Foreground="{StaticResource GreenColor}">
+                            <Canvas>
+                                <TextBlock LineStackingStrategy="BlockLineHeight" LineHeight="32"  Text="孔位信息：&#xA;检测内容：" Canvas.Left="10" Canvas.Top="10"/>
+
+                                <TextBox Text="{Binding HoleName}" Width="80"  Canvas.Left="110" Canvas.Top="25" >
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="LostFocus">
+                                            <i:InvokeCommandAction Command="{Binding LostFocus}"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </TextBox>
+                                <TextBox Text="{Binding Detection}" Canvas.Left="110" Canvas.Top="55">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="LostFocus">
+                                            <i:InvokeCommandAction Command="{Binding LostFocus}"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </TextBox>
+                            </Canvas>
+                        </GroupBox>
+                        <GroupBox Header="实验参数设置"  Canvas.Top="120" Width="260" Height="345" FontSize="16" FontWeight="Bold" Foreground="{StaticResource GreenColor}" Canvas.Left="770">
+                            <Canvas>
+                                <TextBlock LineStackingStrategy="BlockLineHeight" LineHeight="32"  Text="裂解温度：&#xA;裂解时间：&#xA;扩增温度：&#xA;扩增时间：&#xA;低速转速：&#xA;低速用时：&#xA;高速转速：&#xA;高速用时：&#xA;熔解用时：" Canvas.Left="15" Canvas.Top="10"/>
+                                <TextBlock LineStackingStrategy="BlockLineHeight" LineHeight="32"  TextAlignment="Right" Text="(摄氏度)&#xA;(分钟)&#xA;(摄氏度)&#xA;(分钟)&#xA;(转/分钟)&#xA;(秒钟)&#xA;(转/分钟)&#xA;(秒钟)&#xA;(分钟)" Canvas.Right="15" Canvas.Top="15" FontSize="15"/>
+
+                                <Canvas Width="120" Height="360" Canvas.Left="100" Canvas.Top="23">
+                                    <TextBox Canvas.Top="4" Text="{Binding DT}" >
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="LostFocus">
+                                                <i:InvokeCommandAction Command="{Binding LostFocus}"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </TextBox>
+                                    <TextBox Canvas.Top="36"  Text="{Binding DD}" >
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="LostFocus">
+                                                <i:InvokeCommandAction Command="{Binding LostFocus}"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </TextBox>
+                                    <TextBox Canvas.Top="68" Text="{Binding AT}" >
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="LostFocus">
+                                                <i:InvokeCommandAction Command="{Binding LostFocus}"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </TextBox>
+                                    <TextBox Canvas.Top="100" Text="{Binding AD}" >
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="LostFocus">
+                                                <i:InvokeCommandAction Command="{Binding LostFocus}"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </TextBox>
+                                    <TextBox Canvas.Top="132" Text="{Binding Experiment.Parameter.LowSpeed}" >
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="LostFocus">
+                                                <i:InvokeCommandAction Command="{Binding LostFocus}"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </TextBox>
+                                    <TextBox Canvas.Top="164" Text="{Binding Experiment.Parameter.LowSpeedDuration}" >
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="LostFocus">
+                                                <i:InvokeCommandAction Command="{Binding LostFocus}"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </TextBox>
+                                    <TextBox Canvas.Top="196" Text="{Binding Experiment.Parameter.HighSpeed}" >
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="LostFocus">
+                                                <i:InvokeCommandAction Command="{Binding LostFocus}"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </TextBox>
+                                    <TextBox Canvas.Top="228" Text="{Binding Experiment.Parameter.HighSpeedDuration}" >
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="LostFocus">
+                                                <i:InvokeCommandAction Command="{Binding LostFocus}"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </TextBox>
+                                    <TextBox Canvas.Top="260" Text="{Binding Experiment.Parameter.MeltDuration}">
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="LostFocus">
+                                                <i:InvokeCommandAction Command="{Binding LostFocus}"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </TextBox>
+                                </Canvas>
+                            </Canvas>
+                        </GroupBox>
+                    </Canvas>
+                </TabItem>
+                <TabItem Height=".1">
+                    <Canvas Background="White">
+                        <i:Interaction.Behaviors>
+                            <behavior:SampleMultiSelect ViewModel="{Binding ''}" />
+                        </i:Interaction.Behaviors>
+                        <DataGrid 
+                            x:Name="DataGrid1" TextBlock.LineStackingStrategy="MaxHeight" SelectedIndex="{Binding SelectedSampleIndex}" 
+                            ItemsSource="{Binding Experiment.Samples}" VerticalScrollBarVisibility="Visible" Background="White"
+                            SelectionMode="Extended" AutoGenerateColumns="False" CanUserAddRows="False"
+                            Canvas.Bottom="10" Canvas.Left="10"  Width="844" Height="550" Canvas.Top="11" >
+                            <DataGrid.Resources>
+                                <Style x:Key="Editing" TargetType="{x:Type TextBox}">
+                                    <Setter Property="Foreground" Value="{StaticResource BlueColor}"/>
+                                    <Setter Property="Background" Value="White"/>
+                                    <Setter Property="BorderBrush" Value="{StaticResource BlueColor}"/>
+                                    <Setter Property="BorderThickness" Value="1"/>
+                                    <Setter Property="CaretBrush" Value="{StaticResource BlueColor}"/>
+                                </Style>
+                            </DataGrid.Resources>
+
+                            <!--<i:Interaction.Triggers>
+                                <i:EventTrigger EventName="MouseLeftButtonUp">
+                                    <i:InvokeCommandAction Command="{Binding RaiseSelectedSamples}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>-->
+                            <DataGrid.Style>
+                                <StaticResource ResourceKey="DataGrid2"/>
+                            </DataGrid.Style>
+
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Width="40" IsReadOnly="True" Header="孔位"  Binding="{Binding HoleName}"/>
+                                <DataGridTextColumn Width="90" IsReadOnly="True" Header="检测项目" Binding="{Binding Detection}"/>
+                                <DataGridTextColumn MinWidth="80" EditingElementStyle="{StaticResource Editing}" Header="样本名"  Binding="{Binding Name}"/>
+                                <DataGridTextColumn MinWidth="70" IsReadOnly="True" Header="姓名"  Binding="{Binding Patient.Name}"/>
+                                <DataGridTextColumn MinWidth="50" IsReadOnly="True" Header="性别"  Binding="{Binding Patient.Sex}"/>
+                                <DataGridTextColumn MinWidth="50" IsReadOnly="True" Header="年龄"  Binding="{Binding Patient.Age}"/>
+                                <DataGridTextColumn MinWidth="80" IsReadOnly="True" Header="病历号"  Binding="{Binding Patient.CaseId}"/>
+                                <DataGridTextColumn MinWidth="60" IsReadOnly="True" Header="门诊号" Binding="{Binding Patient.OutPatientId}"/>
+                                <!--<DataGridTextColumn MinWidth="80" IsReadOnly="True" Header="住院号"  Binding="{Binding Patient.HospitalizationId}"/>-->
+                                <DataGridTextColumn MinWidth="60" IsReadOnly="True" Header="临床诊断"  Binding="{Binding Patient.Diagnosis}"/>
+                                <DataGridTextColumn MinWidth="80" IsReadOnly="True" Header="送检科室"  Binding="{Binding Patient.Office}"/>
+
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <sample:SampleRack Canvas.Left="870" Canvas.Top="10" Width="210" DataContext="{Binding Experiment}"/>
+                        <Canvas Canvas.Left="866" Canvas.Bottom="15" Width="230" Height="220">
+                            <Canvas.Resources>
+                                <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource TextBox}">
+                                    <Setter Property="Canvas.Left" Value="74"/>
+                                    <Setter Property="Width" Value="140"/>
+                                    <Setter Property="Height" Value="22"/>
+                                    <Setter Property="FontSize" Value="14"/>
+                                    <Setter Property="Padding" Value="0,2,0,-2"/>
+                                    <Setter Property="Background" Value="{StaticResource BlueColor}"/>
+                                </Style>
+
+                            </Canvas.Resources>
+                            <TextBlock LineStackingStrategy="BlockLineHeight" LineHeight="25" FontSize="15" Text="样本名称：&#xA;样源姓名：&#xA;样源性别：&#xA;样源年龄：&#xA;   病历号：&#xA;   门诊号：&#xA;临床诊断：&#xA;送检科室："   />
+
+                            <TextBox Text="{Binding CurrentSample.Name}"  Canvas.Top="5">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="LostFocus">
+                                        <i:InvokeCommandAction Command="{Binding EditSample}" CommandParameter="0"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </TextBox>
+                            <TextBox Text="{Binding CurrentSample.Patient.Name, Mode=OneWayToSource}" Canvas.Top="30" >
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="LostFocus">
+                                        <i:InvokeCommandAction Command="{Binding EditSample}" CommandParameter="1"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </TextBox>
+                            <TextBox Text="{Binding CurrentSample.Patient.Sex}" Canvas.Top="55">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="LostFocus">
+                                        <i:InvokeCommandAction Command="{Binding EditSample}" CommandParameter="2"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </TextBox>
+                            <TextBox Text="{Binding CurrentSample.Patient.Age}" Canvas.Top="80">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="LostFocus">
+                                        <i:InvokeCommandAction Command="{Binding EditSample}" CommandParameter="3"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </TextBox>
+                            <TextBox Text="{Binding CurrentSample.Patient.CaseId}" Canvas.Top="105">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="LostFocus">
+                                        <i:InvokeCommandAction Command="{Binding EditSample}" CommandParameter="4"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </TextBox>
+
+                            <TextBox Text="{Binding CurrentSample.Patient.OutPatientId}" Canvas.Top="130">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="LostFocus">
+                                        <i:InvokeCommandAction Command="{Binding EditSample}" CommandParameter="6"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </TextBox>
+                            <TextBox  Canvas.Top="155">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="LostFocus">
+                                        <i:InvokeCommandAction Command="{Binding EditSample}" CommandParameter="7"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </TextBox>
+                            <TextBox Text="{Binding PatientDiagnosis}" Canvas.Top="180" Canvas.Left="74" Width="136">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="LostFocus">
+                                        <i:InvokeCommandAction Command="{Binding EditSample}" CommandParameter="8"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </TextBox>
+                        </Canvas>
+                    </Canvas>
+                </TabItem>
+                <TabItem Height=".1">
+                    <Canvas>
+                        <GroupBox Header="曲线切换" FontSize="15" Width="540" Height="58" Canvas.Left="20" Canvas.Top="15">
+                            <Canvas>
+                                <Canvas.Resources>
+                                    <Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource RadioButton}">
+                                        <Setter Property="Width" Value="25"/>
+                                        <Setter Property="Height" Value="25"/>
+                                        <Setter Property="Background" Value="{StaticResource BlueColor}"/>
+                                        <Setter Property="Foreground" Value="{StaticResource BlueColor}"/>
+                                    </Style>
+                                </Canvas.Resources>
+                                <RadioButton Canvas.Left="15" Canvas.Top="3" IsChecked="{Binding Experiment.IsRealtimeFluorescenceSeries}" />
+                                <TextBlock Text="实时扩增曲线" Canvas.Left="48" Canvas.Top="5"/>
+                                <RadioButton Canvas.Left="160" Canvas.Top="3"  IsChecked="{Binding Experiment.IsRealtimeMeltingSeries}"/>
+                                <TextBlock Text="实时标准熔解曲线" Canvas.Left="192" Canvas.Top="5"/>
+                                <RadioButton Canvas.Left="336" Canvas.Top="3" IsChecked="{Binding Experiment.IsRealtimeTemperatureSeries}"/>
+                                <TextBlock Text="上盖和底座温度曲线" Canvas.Left="368" Canvas.Top="5"/>
+                            </Canvas>
+                        </GroupBox>
+
+                        <GroupBox Header="实验时间" FontSize="15" Width="360" Height="58" Canvas.Left="570" Canvas.Top="15">
+                            <Canvas>
+                                <Path Data="{StaticResource Clock}" Stretch="Fill" Canvas.Top="3" Canvas.Left="10" Height="24" Width="24" />
+                                <TextBlock Canvas.Left="40" Canvas.Top="5" Text="{Binding Experiment.BackgroundTimer.TimingData, FallbackValue=未知时间, StringFormat=已用时:\{0\}}" Foreground="{StaticResource ChartColor1}" />
+
+                                <Path  Data="{StaticResource Remain}"  Stretch="Fill" Canvas.Top="3" Canvas.Left="180" Height="24" Width="19"/>
+                                <TextBlock Text="{Binding Experiment.CountdownTimer.TimingData, FallbackValue=未知时间, StringFormat=倒计时:\{0\}}" Foreground="{StaticResource ChartColor1}" Canvas.Left="206" Canvas.Top="5"/>
+                            </Canvas>
+                        </GroupBox>
+
+                        <Button Command="{Binding RunOrPause}" Content="{Binding StartButtonContent}" Height="40" Width="130"  Canvas.Left="945" Canvas.Top="28"/>
+
+                        <LiveCharts:CartesianChart Series="{Binding Experiment.Charts.RealtimeCurve}" IsHitTestVisible="False" DisableAnimations="True"  LegendLocation="None"    Canvas.Left="25" Canvas.Top="85" Width="810" Height="493" >
+                            <LiveCharts:CartesianChart.AxisX>
+                                <LiveCharts:Axis 
+                                    Title="{Binding Experiment.Charts.RealtimeXTitle}"
+                                    MinValue="0"
+                                    MaxValue="{Binding Experiment.Charts.RealtimeXMaxValue}" 
+                                    LabelFormatter="{Binding Experiment.Charts.RealtimeXFomatter}" 
+                                    Foreground="{StaticResource ChartColor1}"  FontSize="14" FontWeight="Bold">
+                                    <LiveCharts:Axis.Separator >
+                                        <LiveCharts:Separator  Stroke="{StaticResource GrayColor}" StrokeDashArray="3,2" StrokeThickness="1" Step="{Binding Experiment.Charts.RealtimeXStep}"/>
+                                    </LiveCharts:Axis.Separator>
+                                </LiveCharts:Axis>
+                            </LiveCharts:CartesianChart.AxisX>
+                            
+                            <LiveCharts:CartesianChart.AxisY >
+                                <LiveCharts:Axis 
+                                    Title="{Binding Experiment.Charts.RealtimeYTitle}" 
+                                    MinValue="0" Foreground="{StaticResource ChartColor1}" FontSize="14" FontWeight="Bold" 
+                                    LabelFormatter="{Binding Experiment.Charts.RealtimeYFomatter}">
+                                    <LiveCharts:Axis.Separator>
+                                        <LiveCharts:Separator  Stroke="{StaticResource GrayColor}" StrokeDashArray="3,2" StrokeThickness="1"  />
+                                    </LiveCharts:Axis.Separator>
+                                </LiveCharts:Axis>
+                            </LiveCharts:CartesianChart.AxisY>
+                        </LiveCharts:CartesianChart>
+
+                        <GroupBox Width="230" Height="460" Header="实时状态" FontSize="15"  Canvas.Left="850" Canvas.Top="90">
+                            <StackPanel Orientation="Vertical" Width="200">
+                                <StackPanel.Resources>
+                                    <Style TargetType="{x:Type Canvas}">
+                                        <Setter Property="Height" Value="28"/>
+                                        <Setter Property="Margin" Value="0,10,0,0"/>
+                                        <Setter Property="Width" Value="200"/>
+                                    </Style>
+
+                                    <Style TargetType="{x:Type Path}" >
+                                        <Setter Property="Stretch" Value="Fill"/>
+                                        <Setter Property="Width" Value="26"/>
+                                        <Setter Property="Height" Value="26"/>
+                                        <Setter Property="Fill" Value="{StaticResource BlueColor}"/>
+                                    </Style>
+
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="Foreground" Value="{StaticResource ChartColor1}"/>
+                                        <Setter Property="FontSize" Value="16"/>
+                                        <Setter Property="FontWeight" Value="Bold"/>
+                                        <Setter Property="Canvas.Left" Value="40"/>
+                                        <Setter Property="Canvas.Top" Value="5"/>
+                                    </Style>
+                                </StackPanel.Resources>
+
+                                <Canvas Visibility="{Binding Experiment.Feedbacks[2].Status}">
+                                    <Path Data="{StaticResource Experiment}"  />
+                                    <TextBlock Text="{Binding Experiment.Name, FallbackValue=未知实验, StringFormat=实验名称：\{0\}}" Foreground="{StaticResource ChartColor1}" />
+                                </Canvas>
+
+                                <Canvas Visibility="{Binding Experiment.Feedbacks[3].Status}">
+                                    <Path  Data="{StaticResource Project}"  Width="15" Canvas.Left="6"/>
+                                    <TextBlock Text="{Binding Experiment.Feedbacks[3].Value, FallbackValue=未知项目, StringFormat=项目名称：\{0\}}" Foreground="{StaticResource ChartColor1}" />
+                                </Canvas>
+
+                                <Canvas Visibility="{Binding Experiment.Feedbacks[4].Status}">
+                                    <Path Data="{StaticResource UserName}" />
+                                    <TextBlock Text="{Binding Experiment.Feedbacks[4].Value, FallbackValue=未知人员, StringFormat=操作人员：\{0\}}" Foreground="{StaticResource ChartColor1}" />
+                                </Canvas>
+
+                                <Canvas Visibility="{Binding Experiment.Feedbacks[5].Status}">
+                                    <Path  Data="{StaticResource Step}" />
+                                    <TextBlock Text="{Binding Experiment.Feedbacks[5].Value, FallbackValue=未知阶段, StringFormat=实验阶段：\{0\}}" Foreground="{StaticResource ChartColor1}" />
+                                </Canvas>
+
+                                <Canvas Visibility="{Binding Experiment.Feedbacks[6].Status}">
+                                    <Path  Data="{StaticResource Speed}" />
+                                    <TextBlock Text="{Binding Experiment.Feedbacks[6].Value, FallbackValue=未知转速, StringFormat=电机转速：\{0\}（rpm）}" Foreground="{StaticResource ChartColor1}" />
+                                </Canvas>
+
+                                <Canvas Visibility="{Binding Experiment.Feedbacks[7].Status}">
+                                    <Path  Data="{StaticResource Thermoneter}" />
+                                    <TextBlock Text="{Binding Experiment.Feedbacks[7].Value, FallbackValue=未知温度, StringFormat=上盖温度：\{0\}（℃）}" Foreground="{StaticResource ChartColor1}" />
+                                </Canvas>
+
+                                <Canvas Visibility="{Binding Experiment.Feedbacks[8].Status}">
+                                    <Path Data="{StaticResource Thermoneter}" />
+                                    <TextBlock Text="{Binding Experiment.Feedbacks[8].Value, FallbackValue=未知温度, StringFormat=裂解温度：\{0\}（℃）}" Foreground="{StaticResource ChartColor1}" />
+                                </Canvas>
+
+                                <Canvas Visibility="{Binding Experiment.Feedbacks[9].Status}">
+                                    <Path Data="{StaticResource Thermoneter}" />
+                                    <TextBlock Text="{Binding Experiment.Feedbacks[9].Value, FallbackValue=未知温度, StringFormat=扩增温度：\{0\}（℃）}" Foreground="{StaticResource ChartColor1}" />
+                                </Canvas>
+                            </StackPanel>
+
+                        </GroupBox>
+                    </Canvas>
+                </TabItem>
+                <TabItem Height=".1">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="79*"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="21*"/>
+                        </Grid.ColumnDefinitions>
+                        <DockPanel Visibility="{Binding Test2}" LastChildFill="True" Grid.Column="0" Grid.RowSpan="3" >
+                            <Grid Height="60" HorizontalAlignment="Stretch" DockPanel.Dock="Top" Margin="0,15,0,0">
+                                <GroupBox Header="阈值设定" FontSize="15" Width="180" Height="58" HorizontalAlignment="Left" Margin="10,0,0,0">
+                                    <Canvas>
+                                        <TextBlock Text="阈值基准线：" Canvas.Left="10" Canvas.Top="6"/>
+                                        <TextBox Text="0.00" Width="50" FontSize="13" Canvas.Left="104" Canvas.Top="6"/>
+                                    </Canvas>
+                                </GroupBox>
+
+                                <GroupBox Header="曲线切换" FontSize="15" Width="420" Height="58" HorizontalAlignment="Left" Margin="200,0,0,0">
+                                    <Canvas>
+                                        <Canvas.Resources>
+                                            <Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource RadioButton}">
+                                                <Setter Property="Width" Value="25"/>
+                                                <Setter Property="Height" Value="25"/>
+                                                <Setter Property="Background" Value="{StaticResource BlueColor}"/>
+                                                <Setter Property="Foreground" Value="{StaticResource BlueColor}"/>
+                                            </Style>
+                                        </Canvas.Resources>
+                                        <RadioButton Canvas.Left="15" Canvas.Top="3" IsChecked="{Binding Experiment.IsAmplificationSeries}" />
+                                        <TextBlock Text="扩增曲线" Canvas.Left="48" Canvas.Top="5"/>
+                                        <RadioButton Canvas.Left="128" Canvas.Top="3" IsChecked="{Binding Experiment.IsMelting1Series}" />
+                                        <TextBlock Text="标准熔解曲线" Canvas.Left="158" Canvas.Top="5"/>
+                                        <RadioButton Canvas.Left="268" Canvas.Top="3" IsChecked="{Binding Experiment.IsMelting2Series}"/>
+                                        <TextBlock Text="导数熔解曲线" Canvas.Left="298" Canvas.Top="5"/>
+                                    </Canvas>
+                                </GroupBox>
+
+                                <GroupBox Header="曲线筛选" FontSize="15" Width="220" Height="58" HorizontalAlignment="Left" Margin="630,0,0,0" >
+                                    <Canvas>
+                                        <Canvas.Resources>
+                                            <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource ComboBox}">
+                                                <Setter Property="RenderTransform">
+                                                    <Setter.Value>
+                                                        <TransformGroup>
+                                                            <ScaleTransform ScaleX="0.8" ScaleY="0.8"/>
+                                                            <SkewTransform/>
+                                                            <RotateTransform/>
+                                                            <TranslateTransform/>
+                                                        </TransformGroup>
+                                                    </Setter.Value>
+                                                </Setter>
+                                                <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+                                                <Setter Property="Canvas.Top" Value="2"/>
+                                                <Setter Property="Height" Value="28"/>
+                                            </Style>
+                                        </Canvas.Resources>
+                                        <ComboBox Canvas.Left="6" SelectedIndex="{Binding MajorSelection}" Padding="2,2,0,0" Width="100" >
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="DropDownClosed" >
+                                                    <i:InvokeCommandAction Command="{Binding MajorSelectionChanged}"/>
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                            <ComboBoxItem Content="全部"/>
+                                            <ComboBoxItem Content="检查内容"/>
+                                            <ComboBoxItem Content="样本"/>
+                                            <ComboBoxItem Content="结果"/>
+                                        </ComboBox>
+
+                                        <ComboBox Canvas.Left="100" IsEnabled="{Binding IsMinorEnabled}" ItemsSource="{Binding MinorSource}" SelectedIndex="{Binding MinorSelection}" Padding="2,2,0,0" Width="100" >
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="DropDownClosed" >
+                                                    <i:InvokeCommandAction Command="{Binding MinorSelectionChanged}"/>
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </ComboBox>
+                                    </Canvas>
+                                </GroupBox>
+                            </Grid>
+                            <Grid>
+         
+                                <LiveCharts:CartesianChart Margin="10,10,5,0" IsHitTestVisible="False" DisableAnimations="True" LegendLocation="None" DataTooltip="{x:Null}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                AutomationProperties.IsRowHeader="False" Series="{Binding Experiment.Charts.AnalysisViewSeries}"
+                                Foreground="{StaticResource BlueColor}" FontSize="8" FontWeight="Bold">
+                                    <LiveCharts:CartesianChart.AxisX>
+                                        <LiveCharts:Axis Title="{Binding Experiment.Charts.AnalysisXLabel}" FontSize="16" LabelFormatter="{Binding Experiment.Charts.AnalysisXFormatter}" Foreground="{StaticResource BlueColor}" FontWeight="Bold" >
+                                            <LiveCharts:Axis.Separator>
+                                                <LiveCharts:Separator Stroke="{StaticResource WathetColor2}" StrokeThickness="1" />
+                                            </LiveCharts:Axis.Separator>
+                                        </LiveCharts:Axis>
+                                    </LiveCharts:CartesianChart.AxisX>
+                                    <LiveCharts:CartesianChart.AxisY >
+                                        <LiveCharts:Axis Title="荧光值" FontSize="16" Foreground="{StaticResource BlueColor}" FontWeight="Bold" LabelFormatter="{Binding Experiment.Charts.AnalysisYFormatter}">
+                                            <LiveCharts:Axis.Separator>
+                                                <LiveCharts:Separator Stroke="{StaticResource WathetColor2}" StrokeThickness="1" />
+                                            </LiveCharts:Axis.Separator>
+                                        </LiveCharts:Axis>
+                                    </LiveCharts:CartesianChart.AxisY>
+                                </LiveCharts:CartesianChart>
+
+                                <!--<Thumb Cursor="SizeNS" VerticalContentAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="{Binding Margin}" DragDelta="Thumb_DragDelta">
+                                    <Thumb.Template>
+                                        <ControlTemplate>
+                                            <Canvas >
+                                                <TextBox Foreground="{StaticResource GreenColor}" FontWeight="Bold" Canvas.Left="-5" Canvas.Bottom="5"  Height="16" Width="53" Text="{Binding test}" TextAlignment="Center"/>
+                                                <Line  X1="0" X2="550" StrokeDashArray="3,1" Stroke="{StaticResource ChartColor1}" StrokeThickness="3" />
+                                            </Canvas>
+                                        </ControlTemplate>
+                                    </Thumb.Template>
+                                </Thumb>-->
+
+                            </Grid>
+                        </DockPanel>
+                        <GridSplitter Style="{StaticResource GridSplitter}" ShowsPreview="True" Grid.Column="1" Grid.RowSpan="3" Width="10"  VerticalAlignment="Stretch" HorizontalAlignment="Center"/>
+                        <sample:SampleRack Grid.Column="3"  DataContext="{Binding Experiment}" />
+                        <GridSplitter Style="{StaticResource GridSplitter}" Grid.Column="2" Grid.Row="1" Height="10" Background="{StaticResource GrayColor}" VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
+                        <DataGrid Grid.Column="2" Grid.Row="2" 
+                            Style="{StaticResource DataGrid2}" ItemsSource="{Binding Experiment.Samples}" 
+                            SelectionMode="Extended" AutoGenerateColumns="False" CanUserAddRows="False" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Width="40" IsReadOnly="True" Header="孔位"  Binding="{Binding HoleName}"/>
+                                <DataGridTemplateColumn  Width="40" Header="曲线">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <CheckBox Style="{StaticResource ElipseCheckBox}" Height="14" Width="14" IsChecked="{Binding IsCurveDisplayed, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,1,0,0" />
+                                        </DataTemplate>
+
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Width="90" IsReadOnly="True" Header="检测项目" Binding="{Binding Detection}"/>
+                                <DataGridTextColumn MinWidth="80"  Header="样本名"  Binding="{Binding Name}"/>
+                                <DataGridTextColumn MinWidth="80"  Header="CT值"  Binding="{Binding CtResult}"/>
+                                <DataGridTextColumn MinWidth="80"  Header="TM值"  Binding="{Binding TmResult}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                    </Grid>
+                </TabItem>
+                <TabItem Height=".1">
+                    <Canvas>
+                        <ScrollViewer Height="450" Width="700" Canvas.Left="20" Canvas.Top="8">
+                            <StackPanel Orientation="Vertical" Width="700" >
+                                <TextBlock Foreground="#FF878787" FontWeight="Bold" FontSize="30" Text="速创职工医院" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,0"/>
+                                <TextBlock Foreground="#FF878787" FontSize="23" FontWeight="Normal" Text="核酸扩增荧光定量PCR检测报告" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,10,0,0"/>
+                                <Canvas DataContext="{Binding SelectedItem, ElementName=DataGrid3}" Margin="0,10,0,0"  Height="80">
+                                    <Canvas.Resources>
+                                        <Style TargetType="{x:Type TextBlock}" />
+                                    </Canvas.Resources>
+                                    <TextBlock Canvas.Left="25" Canvas.Top="10" Foreground="#FF878787" FontSize="16" LineHeight="20" LineStackingStrategy="BlockLineHeight" 
+                                           Text="姓        名：                    病  历  号：                    临床诊断：                    样本编号：                    &#xA;性        别：                    病  床  号：                    住  院  号：                    采样日期：               &#xA;年        龄：                    门  诊  号：                    送检科室：                    样本类型：          " FontFamily="Microsoft JhengHei UI"/>
+                                    <TextBlock Text="{Binding Patient.Name, FallbackValue=未知}" Canvas.Left="110" Canvas.Top="12"/>
+                                    <TextBlock Text="{Binding Patient.Sex, FallbackValue=未知}" Canvas.Left="110" Canvas.Top="32"/>
+                                    <TextBlock Text="{Binding Patient.Age, FallbackValue=未知}" Canvas.Left="110" Canvas.Top="52"/>
+
+                                    <TextBlock Text="{Binding Patient.CaseId, FallbackValue=未知}" Canvas.Left="270" Canvas.Top="12"/>
+                                    <TextBlock Text="{Binding Patient.BedId, FallbackValue=未知}" Canvas.Left="270" Canvas.Top="32"/>
+                                    <TextBlock Text="{Binding Patient.OutPatientId, FallbackValue=未知}" Canvas.Left="270" Canvas.Top="52"/>
+
+                                    <TextBlock Text="{Binding Patient.Diagnosis, FallbackValue=未知}" Canvas.Left="430" Canvas.Top="12"/>
+                                    <TextBlock Text="{Binding Patient.HospitalizationId, FallbackValue=未知}" Canvas.Left="430" Canvas.Top="32"/>
+                                    <TextBlock Text="{Binding Patient.Office, FallbackValue=未知}" Canvas.Left="430" Canvas.Top="52"/>
+
+                                    <TextBlock Text="{Binding Patient.SampleId, FallbackValue=未知}" Canvas.Left="590" Canvas.Top="12"/>
+                                    <TextBlock Text="{Binding Patient.SamplingDate, FallbackValue=未知}" Canvas.Left="590" Canvas.Top="32"/>
+                                    <TextBlock Text="{Binding Patient.SampleType, FallbackValue=未知}" Canvas.Left="590" Canvas.Top="52"/>
+                                </Canvas>
+
+                                <Line X1="0" X2="630" Stroke="Black" StrokeThickness="1" Width="650" Height="3" VerticalAlignment="Top" Margin="0,10,0,0"/>
+                                <TextBlock Foreground="#FF878787" FontSize="16" VerticalAlignment="Top" Margin="0,10,0,0" Text="检测项目                        测量结果                        参  考  值                        单        位                        " FontFamily="Microsoft JhengHei UI"/>
+                                <Line X1="0" X2="630" Stroke="Black" StrokeThickness="1" Width="650" Height="3" VerticalAlignment="Top" Margin="0,10,0,0"/>
+                                <Line X1="0" X2="630" Stroke="Black" StrokeThickness="1" Width="650" Height="3" VerticalAlignment="Top" Margin="0,80,0,0"/>
+                                <LiveCharts:CartesianChart VerticalAlignment="Top"
+                                    Margin="30,20,50,0" IsHitTestVisible="False" 
+                                    DisableAnimations="True" LegendLocation="None" 
+                                    DataTooltip="{x:Null}"  Foreground="{StaticResource BlueColor}" FontSize="8" Height="300" Canvas.Left="736" Canvas.Top="10">
+                                    <LiveCharts:CartesianChart.AxisX >
+                                        <LiveCharts:Axis Title="周期数" Foreground="#FF878787" FontWeight="Bold">
+                                            <LiveCharts:Axis.Separator>
+                                                <LiveCharts:Separator  Stroke="#FFDADADA" StrokeThickness=".5" />
+                                            </LiveCharts:Axis.Separator>
+                                        </LiveCharts:Axis>
+                                    </LiveCharts:CartesianChart.AxisX>
+                                    <LiveCharts:CartesianChart.AxisY >
+                                        <LiveCharts:Axis Title="荧光值" Foreground="#FF878787"  FontWeight="Bold">
+                                            <LiveCharts:Axis.Separator>
+                                                <LiveCharts:Separator  Stroke="#FFDADADA" StrokeThickness=".5" />
+                                            </LiveCharts:Axis.Separator>
+                                        </LiveCharts:Axis>
+                                    </LiveCharts:CartesianChart.AxisY>
+                                </LiveCharts:CartesianChart>
+
+                                <TextBlock Foreground="#FF878787" FontSize="16" LineHeight="20" LineStackingStrategy="BlockLineHeight" VerticalAlignment="Bottom" Margin="0,20,0,0" 
+                                           Text="送检医师：                    检验日期：                    检  验  者：                    审核者：                    " FontFamily="Microsoft JhengHei UI"/>
+
+                                <Canvas Height="50">
+                                    <TextBlock Text="医师结论：" FontFamily="Microsoft JhengHei UI" Foreground="#FF878787" FontSize="16" Canvas.Top="10" Canvas.Left="38"/>
+                                    <TextBox Background="#FF878787" FontFamily="Microsoft JhengHei UI" BorderBrush="#FF878787" Canvas.Left="130" Canvas.Top="8" Width="500" Height="25"/>
+                                </Canvas>
+                            </StackPanel>
+                        </ScrollViewer>
+                        <DataGrid x:Name="DataGrid3" Style="{StaticResource DataGrid}" ItemsSource="{Binding Experiment.Samples}" SelectionMode="Single" AutoGenerateColumns="False" Height="370" Width="350" Canvas.Left="735" Canvas.Top="10"  >
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Width="90" IsReadOnly="True" Header="检测项目"  Binding="{Binding HoleName}"/>
+                                <DataGridTextColumn Width="80" IsReadOnly="True" Header="操作人员"/>
+                                <DataGridTextColumn MinWidth="130" Header="实验日期"  Binding="{Binding Name}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <Canvas Width="340" Height="80" Canvas.Left="740" Canvas.Bottom="0">
+                            <Button Style="{StaticResource AnimationButton}" Background="{StaticResource BlueColor}" Foreground="White" Command="{Binding OpenFluorescenceChart}" Width="100" Height="30" Content="打开" />
+                            <Button Style="{StaticResource AnimationButton}" Background="{StaticResource BlueColor}" Foreground="White" Command="{Binding SaveFluorescenceChart}" Width="100" Height="30" Content="导出" Canvas.Top="40"/>
+
+                            <Button Style="{StaticResource AnimationButton}" Background="{StaticResource BlueColor}" Foreground="White" Width="100" Height="30" Content="打印报告" Canvas.Left="120" />
+                            <Button Style="{StaticResource AnimationButton}" Background="{StaticResource BlueColor}" Foreground="White" Width="100" Height="30" Content="全部打印" Canvas.Left="120"  Canvas.Top="40"/>
+
+                            <Button Style="{StaticResource AnimationButton}" Background="{StaticResource BlueColor}" Command="{Binding Test}" CommandParameter="0" Foreground="White" Width="100" Height="30" Content="发送" Canvas.Left="240" />
+                            <Button Style="{StaticResource AnimationButton}" Background="{StaticResource BlueColor}" Command="{Binding Test}" CommandParameter="1" Foreground="White" Width="100" Height="30" Content="连接" Canvas.Left="240"  Canvas.Top="40"/>
+                        </Canvas>
+                    </Canvas>
+                </TabItem>
+                <!--
+                <TabItem Height=".1">
+                            <Canvas>
+                                <TextBlock Text="扫描试剂盒上二维码覆盖当前实验基本信息" FontSize="29" Canvas.Left="300" Canvas.Top="70" Foreground="{StaticResource GreenColor}"  />
+                <Button Style="{StaticResource AnimationButton}" Command="{Binding ShowManualSettingView}" Width="120" Height="40" Canvas.Left="930" Background="{StaticResource BlueColor}" Foreground="White" Content="手动修改" Canvas.Top="392" FontSize="16"/>
+                <TextBlock Text="实验名称：" FontSize="26" Canvas.Left="390" Canvas.Top="188"   />
+                <TextBox Text="{Binding Experiment.Name,UpdateSourceTrigger=PropertyChanged}" CaretBrush="{StaticResource GreenColor}" SelectionBrush="{StaticResource GreenColor}" BorderBrush="{StaticResource BlueColor}" FontSize="23" Width="250" Height="35" Canvas.Left="525" Canvas.Top="187"/>
+                <TextBlock Text="{Binding Experiment.Project.GroupName, FallbackValue=所属分组： 未知, StringFormat=所属分类： \{0:C\}}" FontSize="26" Canvas.Left="390" Canvas.Top="258" />
+                <TextBlock Text="{Binding Experiment.Project.Name, FallbackValue=项目名称： 未知, StringFormat=项目名称： \{0:C\}}" FontSize="26" Canvas.Left="390" Canvas.Top="328" />
+                <TextBlock Text="是否熔解：" Canvas.Left="390" Canvas.Top="400" FontSize="26"/>
+                <ToggleButton Style="{StaticResource AnimationToggleButton}" IsChecked="{Binding Experiment.Project.Parameter.IsMelt}" Background="{StaticResource BlueColor}" Canvas.Left="531" Canvas.Top="402" Width="60" />
+        </Canvas>
+        </TabItem>
+        -->
+            </TabControl>
+            <!--<Canvas Width="1100" Height="50" Canvas.Bottom="0">
+                <Line X1="0" X2="670" Width="670" Height="8" Canvas.Left="220" Canvas.Top="50" Stroke="{StaticResource WathetColor}" StrokeThickness="20"/>
+                <CheckBox Style="{StaticResource ColorTextSwitch}" IsChecked="{Binding IsStartView, Mode=OneWay}" IsEnabled="False" Background="{StaticResource BlueColor}" Content="开始" FontSize="28" Width="110" Height="50" Canvas.Left="50" />
+                <CheckBox Style="{StaticResource ColorTextSwitch}" IsChecked="{Binding IsBasicSetupView, Mode=OneWay}" IsEnabled="False" Background="{StaticResource BlueColor}" Content="基本设置" FontSize="28" Width="110" Height="50" Canvas.Left="200"  />
+                <CheckBox Style="{StaticResource ColorTextSwitch}" IsChecked="{Binding IsSampleSetupView, Mode=OneWay}" IsEnabled="False" Background="{StaticResource BlueColor}" Content="样本信息" FontSize="28" Width="110" Height="50" Canvas.Left="350"  />
+                <CheckBox Style="{StaticResource ColorTextSwitch}" IsChecked="{Binding IsExprimentView, Mode=OneWay}" IsEnabled="False" Background="{StaticResource BlueColor}" Content="运行实验" FontSize="28" Width="110" Height="50" Canvas.Left="500"/>
+                <CheckBox Style="{StaticResource ColorTextSwitch}" IsChecked="{Binding IsAnalysisView, Mode=OneWay}" IsEnabled="False" Background="{StaticResource BlueColor}" Content="结果分析" FontSize="28" Width="110" Height="50" Canvas.Left="650" />
+                <CheckBox Style="{StaticResource ColorTextSwitch}" IsChecked="{Binding IsReportView, Mode=OneWay}" IsEnabled="False" Background="{StaticResource BlueColor}" Content="报告" FontSize="28" Width="110" Height="50" Canvas.Left="800" />
+            </Canvas>-->
+            
+            <Button Content="上一步" Command="{Binding TurnPrevious}" Visibility="{Binding StepIndex, Converter={StaticResource ViewIndexToVisibility}}" Width="100" Height="30" Canvas.Right="150" Canvas.Bottom="10"/>
+            <Button Content="下一步" Command="{Binding TurnNext}" Visibility="{Binding StepIndex, Converter={StaticResource ViewIndexToVisibility}}" Width="100" Height="30"  Canvas.Right="30" Canvas.Bottom="10"/>
+
+
+
+
+
+
+            <!--<StackPanel  Width="120" Canvas.Right="50" Canvas.Left="930" Canvas.Bottom="10">
+                <StackPanel.Resources>
+                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource Button}">
+                        <Setter Property="Width" Value="120"/>
+                        <Setter Property="Height" Value="40"/>
+                        <Setter Property="Margin" Value="0,15,0,0"/>
+                    </Style>
+                </StackPanel.Resources>
+                -->
+            <!--<Button Command="{Binding OpenFluorescenceChart}" Content="{StaticResource OpenChart}"/>
+                <Button Command="{Binding SaveFluorescenceChart}" Content="{StaticResource SaveChart}"/>-->
+            <!--
+
+                <Button Command="{Binding OpenTemplate}" Content="{StaticResource OpenTemplate}"/>
+                <Button Command="{Binding SaveTemplate}" Content="{StaticResource SaveTemplate}"/>
+                <Button Command="{Binding SaveTemplate}" CommandParameter="True" Content="{StaticResource Pinter}" />
+
+            </StackPanel>-->
+
+            <Canvas Canvas.Right="30" Width="902"  Visibility="{Binding TempeInfoPanelState, FallbackValue=Collapsed}" >
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseLeftButtonUp">
+                        <EventCommand:EventCommand Command="{Binding ClickInfoPanel}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorLevel=1, AncestorType={x:Type Canvas}, Mode=FindAncestor}}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <Rectangle Effect="{StaticResource PanelEffect}" Width="904" Height="550" Canvas.Top="40" Fill="{StaticResource WathetColor3}" Stroke="{StaticResource BlueColor}" StrokeThickness="2"/>
+                <Thermal:ThermalRegion Canvas.Left="2" Canvas.Top="42"/>
+            </Canvas>
+
+            <Canvas Canvas.Right="30" Width="902" Visibility="{Binding SpeedInfoPanelState, FallbackValue=Collapsed}" >
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseLeftButtonUp">
+                        <EventCommand:EventCommand Command="{Binding ClickInfoPanel}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorLevel=1, AncestorType={x:Type Canvas}, Mode=FindAncestor}}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <Rectangle Effect="{StaticResource PanelEffect}" Width="904" Height="550" Canvas.Top="40" Fill="{StaticResource WathetColor3}" Stroke="{StaticResource BlueColor}" StrokeThickness="2"/>
+                <Rpmunit:RpmRegion Canvas.Left="2" Canvas.Top="42" Height="550"/>
+            </Canvas>
+
+        </Canvas>
+    </Viewbox>
+</UserControl>

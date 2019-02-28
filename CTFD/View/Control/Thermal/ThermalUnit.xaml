@@ -1,0 +1,35 @@
+﻿<UserControl
+    x:Class="CTFD.View.Control.Thermal.ThermalUnit"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    mc:Ignorable="d" 
+    xmlns:cv="clr-namespace:CTFD.View.Control.Thermal"
+    d:DesignHeight="300" d:DesignWidth="100">
+    <UserControl.Resources>
+        <cv:CanvasTopToTemperature x:Key="CanvasTopToTemperature"/>
+        <Style TargetType="TextBox" >
+            <Setter Property="Background" Value="{x:Null}"/>
+            <Setter Property="BorderBrush" Value="{x:Null}"/>
+        </Style>
+    </UserControl.Resources>
+    <Viewbox Stretch="Fill">
+        <Canvas Width="100" Height="300" >
+            <Thumb Cursor="SizeNS" VerticalContentAlignment="Center" Canvas.Top="{Binding Y2,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Canvas.Left="50" Canvas.ZIndex="10" DragDelta="Thumb_DragDelta">
+                <Thumb.Template>
+                    <ControlTemplate>
+                        <Canvas >
+                            <TextBox Foreground="{StaticResource GreenColor}" FontWeight="Bold" Canvas.Left="-5" Canvas.Bottom="5"  Height="16" Width="53" Text="{Binding test}" TextAlignment="Center"/>
+                            <!--<Path Stretch="Fill" Width="13" Height="13" Data="{StaticResource Clock}" Canvas.Left="45" Fill="{StaticResource BlueColor}" Canvas.Bottom="7"/>-->
+                            <Line X1="0" X2="50"  Stroke="{Binding PlateauColor}" StrokeThickness="2" />
+                            <TextBox Foreground="{StaticResource GreenColor}" FontWeight="Bold" Canvas.Left="10" Canvas.Top="5"  Height="16" Width="30" Text="{Binding DataContext.Y2,UpdateSourceTrigger=Explicit,Converter={StaticResource CanvasTopToTemperature}}" KeyDown="TextBox_KeyDown"/>
+                            <!--<Path Stretch="Fill" Width="13" Height="13" Data="{StaticResource Temperature}" Canvas.Left="44" Fill="{StaticResource BlueColor}" Canvas.Top="7"/>-->
+                        </Canvas>
+                    </ControlTemplate>
+                </Thumb.Template>
+            </Thumb>
+            <Line X1="0" Y1="{Binding Y1}" X2="50" Y2="{Binding Y2}" Stroke="Gray" StrokeThickness="1" StrokeDashArray="1.5,1.7"/>
+        </Canvas>
+    </Viewbox>
+</UserControl>

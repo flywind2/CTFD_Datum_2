@@ -1,0 +1,30 @@
+﻿<Window 
+    x:Class="CTFD.View.MainWindow"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:control="clr-namespace:CTFD.View.Control"
+    mc:Ignorable="d" WindowState="Maximized"
+    xmlns:vm="clr-namespace:CTFD.ViewModel"
+    Title="{Binding Title}" Height="450" Width="800" >
+    <Window.InputBindings>
+        <KeyBinding Gesture="Ctrl+T" Command="{Binding Test}"/>
+    </Window.InputBindings>
+    <Window.DataContext>
+        <vm:MainWindowViewModel/>
+    </Window.DataContext>
+    <Window.Resources>
+        <DropShadowEffect x:Key="PanelEffect" Direction="180" BlurRadius="22" Color="#FFD8D8D8"/>
+    </Window.Resources>
+    <Grid>
+        <control:Toast Panel.ZIndex="0" IsPopup="{Binding IsNotified,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Message="{Binding Message}" Opacity="0" Effect="{StaticResource PanelEffect}"  />
+        <ContentControl Panel.ZIndex="1" Content="{Binding ContentView}"/>
+    </Grid>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closed">
+            <i:InvokeCommandAction Command="{Binding Close}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+</Window>

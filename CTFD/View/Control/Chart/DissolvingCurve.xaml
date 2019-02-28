@@ -1,0 +1,28 @@
+﻿<UserControl 
+    x:Class="CTFD.View.Control.Chart.DissolvingCurve"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    mc:Ignorable="d" 
+    xmlns:LiveCharts="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+    d:DesignHeight="530" d:DesignWidth="860">
+    <Grid>
+        <LiveCharts:CartesianChart DataTooltip="{x:Null}"  DisableAnimations="True"  Series="{Binding DataContext.SeriesCollection}"  LegendLocation="Right">
+            <LiveCharts:CartesianChart.AxisX>
+                <LiveCharts:Axis Title="时间"  Foreground="{StaticResource BlueColor}" FontWeight="Bold" >
+                    <LiveCharts:Axis.Separator>
+                        <LiveCharts:Separator Stroke="{StaticResource WathetColor2}" StrokeThickness="1" />
+                    </LiveCharts:Axis.Separator>
+                </LiveCharts:Axis>
+            </LiveCharts:CartesianChart.AxisX>
+            <LiveCharts:CartesianChart.AxisY >
+                <LiveCharts:Axis Title="温度" Foreground="{StaticResource BlueColor}" FontWeight="Bold" >
+                    <LiveCharts:Axis.Separator>
+                        <LiveCharts:Separator Stroke="{StaticResource WathetColor2}" StrokeThickness="1" />
+                    </LiveCharts:Axis.Separator>
+                </LiveCharts:Axis>
+            </LiveCharts:CartesianChart.AxisY>
+        </LiveCharts:CartesianChart>
+    </Grid>
+</UserControl>

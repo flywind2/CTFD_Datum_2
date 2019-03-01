@@ -50,13 +50,15 @@ namespace CTFD.Model.RuntimeData
 
         public int? RealtimeXStep { get; private set; }
 
-        public Func<double, string> AnalysisXFormatter { get; private set; }
+        public Func<double, string> FinalXFormatter { get; private set; }
+
+        public Func<double, string> FinalYFormatter => (value) => value.ToString("N0");
 
         public int? AnalysisXStep { get; private set; } = null;
 
-        public int? AnalysisMaxValue { get; private set; } = null;
+        public int? FinalXMaxValue { get; private set; } = null;
 
-        public string AnalysisXLabel { get; private set; }
+        public string FinalXTitle { get; private set; }
 
         public SeriesCollection FinalCurve { get; private set; }
 
@@ -75,7 +77,6 @@ namespace CTFD.Model.RuntimeData
         public Charts()
         {
             this.InitializeSeries();
-            this.ChangeAnalysisViewSeries(0);
         }
 
         public void RaiseRealtimeXAxis(int amplificationTemperature, int ampXEnd, int experimentDuaring)
@@ -99,6 +100,9 @@ namespace CTFD.Model.RuntimeData
             this.finalAmplificationCurve = this.CreateSeries<int>(32);
             this.finalStandardMeltingCurve = this.CreateSeries<int>(32);
             this.finalDerivationMeltingCurve = this.CreateSeries<int>(32);
+
+            this.ChangeRealtimeCurve(0);
+            this.ChangeFinalCurve(0);
         }
 
         private SeriesCollection CreateSeries<T>(int seriesCount, int smoothness = 3)
@@ -141,32 +145,36 @@ namespace CTFD.Model.RuntimeData
             this.realtimeTemperautreCurve[index].Values.Add(point);
         }
 
-        public void AddAmplificationCurve(List<int[]> values)
+        public void AddAmplificationCurve(List<int[]> curveData)
         {
             this.isAmplificationCurveFinished = true;
-            for (int i = 0; i < 32; i++) ((LiveCharts.Helpers.NoisyCollection<int>)this.finalAmplificationCurve[i].Values).AddRange(values[i]);
+            for (int i = 0; i < 32; i++) ((LiveCharts.Helpers.NoisyCollection<int>)this.finalAmplificationCurve[i].Values).AddRange(curveData[i]);
         }
 
-        public void AddStandardMeltingCurve()
+        public void AddStandardMeltingCurve(List<int[]> curveData = null)
         {
             this.isStandarMeltingCurveFinished = true;
-            this.finalStandardMeltingCurve = this.realtimeMeltingCurve;
+            for (int i = 0; i < 32; i++)
+            {
+               if(curveData==null)   this.finalStandardMeltingCurve[i].Values = this.realtimeMeltingCurve[i].Values;
+               else ((LiveCharts.Helpers.NoisyCollection<int>)this.finalStandardMeltingCurve[i].Values).AddRange(curveData[i]);
+            }
         }
 
-        public void AddDerivationMeltingCurves(List<int[]> values)
+        public void AddDerivationMeltingCurves(List<int[]> curveData)
         {
             this.isDerivationMeltingCurveFinished = true;
-            for (int i = 0; i < 32; i++) ((LiveCharts.Helpers.NoisyCollection<int>)this.finalDerivationMeltingCurve[i].Values).AddRange(values[i]);
+            for (int i = 0; i < 32; i++) ((LiveCharts.Helpers.NoisyCollection<int>)this.finalDerivationMeltingCurve[i].Values).AddRange(curveData[i]);
         }
 
         public void ChangeSeriesVisibility(int sampleIndex, bool isCurveDisplayed)
         {
             if (this.isAmplificationCurveFinished) ((GLineSeries)this.finalAmplificationCurve[sampleIndex]).Visibility = isCurveDisplayed ? Visibility.Visible : Visibility.Hidden;
-            
+
             if (this.isStandarMeltingCurveFinished) ((GLineSeries)this.finalStandardMeltingCurve[sampleIndex]).Visibility = isCurveDisplayed ? Visibility.Visible : Visibility.Hidden;
-            
+
             if (this.isDerivationMeltingCurveFinished) ((GLineSeries)this.finalDerivationMeltingCurve[sampleIndex]).Visibility = isCurveDisplayed ? Visibility.Visible : Visibility.Hidden;
-            
+
         }
 
         public void ChangeRealtimeCurve(int curveIndex)
@@ -189,7 +197,7 @@ namespace CTFD.Model.RuntimeData
                     this.RealtimeCurve = this.realtimeMeltingCurve;
                     this.RealtimeXTitle = "实时熔解温度（分钟）";
                     this.RealtimeYTitle = "荧光值";
-                    this.RealtimeXFomatter = (value) => (this.meltingXStart + (value*2)).ToString();
+                    this.RealtimeXFomatter = (value) => (this.meltingXStart + (value * 2)).ToString();
                     this.RealtimeYFomatter = (value) => value.ToString("N0");
                     this.RealtimeXMaxValue = this.meltingXEnd;
                     this.RealtimeXStep = null;
@@ -217,16 +225,17 @@ namespace CTFD.Model.RuntimeData
             this.RaisePropertyChanged(nameof(this.RealtimeXStep));
         }
 
-        public void ChangeAnalysisViewSeries(int index)
+        public void ChangeFinalCurve(int index)
         {
             switch (index)
             {
                 case 0:
                 {
                     this.FinalCurve = this.finalAmplificationCurve;
-                    this.AnalysisXFormatter = (value) => $"{((int)value / 2).ToString("00")}";
-                    this.AnalysisXLabel = "运行时间（单位：分钟）";
-                    this.AnalysisXStep = 4;
+                    this.FinalXTitle = "实时扩增时间（分钟）";
+                    this.FinalXFormatter = (value) => $"{((int)(value / 2)).ToString("00")}";
+                    this.FinalXMaxValue = this.ampXEnd;
+                    this.AnalysisXStep = this.RealtimeXMaxValue >= 50 ? 8 : 4;
                     break;
                 }
                 case 1:
@@ -234,20 +243,32 @@ namespace CTFD.Model.RuntimeData
                 {
                     if (index == 1) this.FinalCurve = this.finalStandardMeltingCurve;
                     else if (index == 2) this.FinalCurve = this.finalDerivationMeltingCurve;
+                    this.FinalXTitle = "温度变化时间（分钟）";
+                    this.FinalXFormatter = (value) => (this.meltingXStart + (value * 2)).ToString();
+                    this.FinalXMaxValue = this.meltingXEnd;
                     this.AnalysisXStep = null;
-                    this.AnalysisXFormatter = null;
-                    this.AnalysisXLabel = "温度变化（单位：次数）";
                     break;
                 }
                 default: break;
             }
-
             this.RaisePropertyChanged(nameof(this.FinalCurve));
-            this.RaisePropertyChanged(nameof(this.AnalysisXLabel));
-            this.RaisePropertyChanged(nameof(this.AnalysisMaxValue));
+            this.RaisePropertyChanged(nameof(this.FinalXTitle));
+            this.RaisePropertyChanged(nameof(this.FinalXFormatter));
+            this.RaisePropertyChanged(nameof(this.FinalXMaxValue));
             this.RaisePropertyChanged(nameof(this.AnalysisXStep));
-            this.RaisePropertyChanged(nameof(this.AnalysisXFormatter));
+        }
 
+        public IEnumerable<int[]> GetFinalCurveData(int curveIndex)
+        {
+            var curve = default(SeriesCollection);
+            switch (curveIndex)
+            {
+                case 0: { curve = this.finalAmplificationCurve; break; }
+                case 1: { curve = this.finalStandardMeltingCurve; break; }
+                case 2: { curve = this.finalDerivationMeltingCurve; break; }
+                default: break;
+            }
+            foreach (var item in curve) yield return ((IList<int>)item.Values).ToArray();
         }
     }
 }

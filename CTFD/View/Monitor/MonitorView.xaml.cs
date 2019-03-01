@@ -33,5 +33,10 @@ namespace CTFD.View.Monitor
             var aa = this.ViewModel.Margin.Top+e.VerticalChange;
             this.ViewModel.Margin = new Thickness(0, aa, 0, 0);
         }
+
+        private void CartesianChart_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

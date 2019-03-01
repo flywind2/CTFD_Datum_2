@@ -26,7 +26,7 @@ namespace CTFD.Model.RuntimeData
         [IgnoreDataMember]
         public int RealtimeCurveIndex { get; private set; }
 
-        private int analysisViewSeriesIndex;
+        private int finalCurveIndex;
 
         private string name;
 
@@ -97,15 +97,15 @@ namespace CTFD.Model.RuntimeData
         [IgnoreDataMember]
         public bool IsAmplificationSeries
         {
-            get => this.analysisViewSeriesIndex == 0 ? true : false;
+            get => this.finalCurveIndex == 0 ? true : false;
             set
             {
                 if (value)
                 {
-                    this.analysisViewSeriesIndex = 0;
+                    this.finalCurveIndex = 0;
                     this.RaisePropertyChanged(nameof(this.IsMelting1Series));
                     this.RaisePropertyChanged(nameof(this.IsMelting2Series));
-                    this.Charts.ChangeAnalysisViewSeries(this.analysisViewSeriesIndex);
+                    this.Charts.ChangeFinalCurve(this.finalCurveIndex);
                 }
             }
         }
@@ -113,15 +113,15 @@ namespace CTFD.Model.RuntimeData
         [IgnoreDataMember]
         public bool IsMelting1Series
         {
-            get => this.analysisViewSeriesIndex == 1 ? true : false;
+            get => this.finalCurveIndex == 1 ? true : false;
             set
             {
                 if (value)
                 {
-                    this.analysisViewSeriesIndex = 1;
+                    this.finalCurveIndex = 1;
                     this.RaisePropertyChanged(nameof(this.IsMelting2Series));
                     this.RaisePropertyChanged(nameof(this.IsAmplificationSeries));
-                    this.Charts.ChangeAnalysisViewSeries(this.analysisViewSeriesIndex);
+                    this.Charts.ChangeFinalCurve(this.finalCurveIndex);
                 }
             }
         }
@@ -129,15 +129,15 @@ namespace CTFD.Model.RuntimeData
         [IgnoreDataMember]
         public bool IsMelting2Series
         {
-            get => this.analysisViewSeriesIndex == 2 ? true : false;
+            get => this.finalCurveIndex == 2 ? true : false;
             set
             {
                 if (value)
                 {
-                    this.analysisViewSeriesIndex = 2;
+                    this.finalCurveIndex = 2;
                     this.RaisePropertyChanged(nameof(this.IsMelting1Series));
                     this.RaisePropertyChanged(nameof(this.IsAmplificationSeries));
-                    this.Charts.ChangeAnalysisViewSeries(this.analysisViewSeriesIndex);
+                    this.Charts.ChangeFinalCurve(this.finalCurveIndex);
                 }
             }
         }
@@ -326,6 +326,7 @@ namespace CTFD.Model.RuntimeData
         {
             this.Charts.RaiseRealtimeXAxis(ampTemperature, ampXEnd, experimentDuaring);
             this.Charts.ChangeRealtimeCurve(this.RealtimeCurveIndex);
+            this.Charts.ChangeFinalCurve(this.finalCurveIndex);
         }
 
         public void ChangeSeriesVisibility(int sampleID, bool isCurveDisplayed) => this.Charts.ChangeSeriesVisibility(sampleID, isCurveDisplayed);
@@ -338,11 +339,8 @@ namespace CTFD.Model.RuntimeData
 
         public void AddDerivationMeltingCurves(List<int[]> curveData) => this.Charts.AddDerivationMeltingCurves(curveData);
 
-        public void AddStandardMeltingCurve() => this.Charts.AddStandardMeltingCurve();
+        public void AddStandardMeltingCurve(List<int[]> curveData = null) => this.Charts.AddStandardMeltingCurve(curveData);
 
-        //public IEnumerable<int[]> GetAmplificationData()
-        //{
-        //    foreach (var item in this.Charts.RealtimeAmplificationCurve) yield return ((IList<int>)item.Values).ToArray();
-        //}
+        public IEnumerable<int[]> GetAmplificationData(int curveIndex) => this.Charts.GetFinalCurveData(curveIndex);
     }
 }

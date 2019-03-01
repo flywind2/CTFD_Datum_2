@@ -159,8 +159,8 @@ namespace CTFD.ViewModel.Monitor
 
         public bool IsReportView => this.GetViewStatus(5);
 
-        private bool GetViewStatus(int index)=>this.StepIndex == index ? true : false;
-        
+        private bool GetViewStatus(int index) => this.StepIndex == index ? true : false;
+
         public object StartButtonContent
         {
             get => this.startButtonContent;
@@ -321,7 +321,9 @@ namespace CTFD.ViewModel.Monitor
                     StreamReader reader = new StreamReader(openFileDialog.FileName);
                     string line;
                     while ((line = reader.ReadLine()) != null) { result.Add(line); }
-                    this.Experiment.AddAmplificationCurve(this.ReadCav(result));
+
+                    this.SetAllStringToCurveData(result);
+                    //this.Experiment.AddAmplificationCurve(this.ReadCav(result));
                     General.ShowToast("打开荧光曲线成功");
                 }
                 catch { }
@@ -338,7 +340,7 @@ namespace CTFD.ViewModel.Monitor
                 {
                     using (var streamWriter = new StreamWriter(new FileStream(saveFileDialog.FileName, FileMode.OpenOrCreate, FileAccess.ReadWrite)))
                     {
-                        //streamWriter.WriteLine(this.WriteCsv(this.Experiment.GetAmplificationData().ToList()));
+                        streamWriter.WriteLine(this.GetAllCurveDataToString());
                     }
                     General.ShowToast($"保存荧光曲线成功");
                 }
@@ -435,48 +437,6 @@ namespace CTFD.ViewModel.Monitor
             this.Experiment.Initialize();
             this.CoolDownTimer = new BackgroundTimer(new DateTime(1, 1, 1, 0, 0, 10), "ss", -1);
             this.CoolDownTimer.Stopped += CoolDownTimer_Stopped;
-        }
-
-        private string WriteCsv(List<int[]> data)
-        {
-            var result = new StringBuilder();
-            var firstRow = new StringBuilder();
-            firstRow.Append("数据,");
-            var timeStamp = new DateTime(1, 1, 1, 0, 0, 0);
-            for (int i = 0; i < data[0].Length; i++)
-            {
-                timeStamp = timeStamp.AddSeconds(30);
-                firstRow.AppendFormat($"{timeStamp.ToString("HH:mm:ss")},");
-            }
-            result.AppendLine(firstRow.ToString());
-            for (int i = 0; i < data.Count; i++)
-            {
-                var row = new StringBuilder();
-                row.Append($"{this.Experiment.Samples[i].HoleName},");
-                foreach (var item in data[i]) row.AppendFormat($"{item},");
-                result.AppendLine(row.ToString());
-            }
-            return result.ToString();
-        }
-
-        private List<int[]> ReadCav(List<string> data)
-        {
-            data.RemoveAt(0);
-            var result = new List<int[]>(data.Count);
-            var values = new List<int>();
-            foreach (var item in data)
-            {
-                foreach (var item2 in item.Split(','))
-                {
-                    if (int.TryParse(item2, out int value))
-                    {
-                        values.Add(value);
-                    }
-                }
-                if (values.Count > 0) result.Add(values.ToArray());
-                values.Clear();
-            }
-            return result;
         }
 
         private void CoolDownTimer_Stopped(object sender, EventArgs e)
@@ -739,13 +699,95 @@ namespace CTFD.ViewModel.Monitor
                     }
                     case Token.CtValue:
                     {
-                       var ctResult = General.JsonDeserialize<string[]>(value);
+                        var ctResult = General.JsonDeserialize<string[]>(value);
                         for (int i = 0; i < this.Experiment.Samples.Length; i++) this.Experiment.Samples[i].CtResult = ctResult[i];
                         break;
                     }
                     default: break;
                 }
             });
+        }
+
+        private string GetAmplificationCurveDataToString(List<int[]> data)
+        {
+            var result = new StringBuilder();
+            var firstRow = new StringBuilder();
+            firstRow.Append("时间,");
+            var timeStamp = new DateTime(1, 1, 1, 0, 0, 0);
+            for (int i = 0; i < data[0].Length; i++)
+            {
+                timeStamp = timeStamp.AddSeconds(30);
+                firstRow.AppendFormat($"{timeStamp.ToString("HH:mm:ss")},");
+            }
+            result.AppendLine(firstRow.ToString());
+            for (int i = 0; i < data.Count; i++)
+            {
+                var row = new StringBuilder();
+                row.Append($"{this.Experiment.Samples[i].HoleName},");
+                foreach (var item in data[i]) row.AppendFormat($"{item},");
+                result.AppendLine(row.ToString());
+            }
+            return result.ToString();
+        }
+
+        private string GetMeltingCurveDataToString(List<int[]> data)
+        {
+            var result = new StringBuilder();
+            var firstRow = new StringBuilder();
+            firstRow.Append("温度,");
+            var temp = this.Experiment.Parameter.AmplificationTemperature / 10;
+            for (int i = 0; i < data[0].Length; i++) firstRow.AppendFormat($"{ temp + (i * 2)}℃,");
+
+            result.AppendLine(firstRow.ToString());
+            for (int i = 0; i < data.Count; i++)
+            {
+                var row = new StringBuilder();
+                row.Append($"{this.Experiment.Samples[i].HoleName},");
+                foreach (var item in data[i]) row.AppendFormat($"{item},");
+                result.AppendLine(row.ToString());
+            }
+            return result.ToString();
+        }
+
+        private string GetAllCurveDataToString()
+        {
+            var result = new StringBuilder();
+            result.AppendLine("扩增曲线");
+            result.AppendLine(this.GetAmplificationCurveDataToString(this.Experiment.GetAmplificationData(0).ToList()));
+            result.AppendLine("标准熔解曲线");
+            result.AppendLine(this.GetMeltingCurveDataToString(this.Experiment.GetAmplificationData(1).ToList()));
+            result.AppendLine("导数熔解曲线");
+            result.AppendLine(this.GetMeltingCurveDataToString(this.Experiment.GetAmplificationData(2).ToList()));
+            return result.ToString();
+        }
+
+        private List<int[]> SetStringToCurveData(List<string> data)
+        {
+            data.RemoveAt(0);
+            var result = new List<int[]>(data.Count);
+            var values = new List<int>();
+            foreach (var item in data)
+            {
+                foreach (var item2 in item.Split(','))
+                {
+                    if (int.TryParse(item2, out int value))
+                    {
+                        values.Add(value);
+                    }
+                }
+                if (values.Count > 0) result.Add(values.ToArray());
+                values.Clear();
+            }
+            return result;
+        }
+
+        private void SetAllStringToCurveData(List<string> data)
+        {
+            this.Experiment.AddAmplificationCurve(this.SetStringToCurveData(data.Skip(1).Take(33).ToList()));
+
+            this.Experiment.AddStandardMeltingCurve(this.SetStringToCurveData(data.Skip(36).Take(33).ToList()));
+
+            this.Experiment.AddDerivationMeltingCurves(this.SetStringToCurveData(data.Skip(71).Take(33).ToList()));
         }
 
         DateTime t;

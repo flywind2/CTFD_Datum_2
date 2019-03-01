@@ -502,7 +502,7 @@
                                 <RadioButton Canvas.Left="160" Canvas.Top="3"  IsChecked="{Binding Experiment.IsRealtimeMeltingSeries}"/>
                                 <TextBlock Text="实时标准熔解曲线" Canvas.Left="192" Canvas.Top="5"/>
                                 <RadioButton Canvas.Left="336" Canvas.Top="3" IsChecked="{Binding Experiment.IsRealtimeTemperatureSeries}"/>
-                                <TextBlock Text="上盖和底座温度曲线" Canvas.Left="368" Canvas.Top="5"/>
+                                <TextBlock Text="温度曲线" Canvas.Left="368" Canvas.Top="5"/>
                             </Canvas>
                         </GroupBox>
 
@@ -601,12 +601,12 @@
 
                                 <Canvas Visibility="{Binding Experiment.Feedbacks[8].Status}">
                                     <Path Data="{StaticResource Thermoneter}" />
-                                    <TextBlock Text="{Binding Experiment.Feedbacks[8].Value, FallbackValue=未知温度, StringFormat=裂解温度：\{0\}（℃）}" Foreground="{StaticResource ChartColor1}" />
+                                    <TextBlock Text="{Binding Experiment.Feedbacks[8].Value, FallbackValue=未知温度, StringFormat=内圈温度：\{0\}（℃）}" Foreground="{StaticResource ChartColor1}" />
                                 </Canvas>
 
                                 <Canvas Visibility="{Binding Experiment.Feedbacks[9].Status}">
                                     <Path Data="{StaticResource Thermoneter}" />
-                                    <TextBlock Text="{Binding Experiment.Feedbacks[9].Value, FallbackValue=未知温度, StringFormat=扩增温度：\{0\}（℃）}" Foreground="{StaticResource ChartColor1}" />
+                                    <TextBlock Text="{Binding Experiment.Feedbacks[9].Value, FallbackValue=未知温度, StringFormat=外圈温度：\{0\}（℃）}" Foreground="{StaticResource ChartColor1}" />
                                 </Canvas>
                             </StackPanel>
 
@@ -699,16 +699,16 @@
                                     Margin="10,10,5,0" 
                                     IsHitTestVisible="False" DisableAnimations="True" LegendLocation="None" DataTooltip="{x:Null}" 
                                     HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Series="{Binding Experiment.Charts.FinalCurve}"
-                                    Foreground="{StaticResource BlueColor}" FontSize="8" FontWeight="Bold">
+                                    Foreground="{StaticResource BlueColor}" FontSize="8" FontWeight="Bold" >
                                     <LiveCharts:CartesianChart.AxisX>
-                                        <LiveCharts:Axis Title="{Binding Experiment.Charts.AnalysisXLabel}" FontSize="16" LabelFormatter="{Binding Experiment.Charts.AnalysisXFormatter}" Foreground="{StaticResource BlueColor}" FontWeight="Bold" >
+                                        <LiveCharts:Axis Title="{Binding Experiment.Charts.FinalXTitle}" MinValue="0" MaxValue="{Binding Experiment.Charts.FinalXMaxValue}"  FontSize="16" LabelFormatter="{Binding Experiment.Charts.FinalXFormatter}" Foreground="{StaticResource BlueColor}" FontWeight="Bold" >
                                             <LiveCharts:Axis.Separator>
                                                 <LiveCharts:Separator Stroke="{StaticResource WathetColor2}" StrokeThickness="1" />
                                             </LiveCharts:Axis.Separator>
                                         </LiveCharts:Axis>
                                     </LiveCharts:CartesianChart.AxisX>
                                     <LiveCharts:CartesianChart.AxisY >
-                                        <LiveCharts:Axis Title="荧光值" FontSize="16" Foreground="{StaticResource BlueColor}" FontWeight="Bold" LabelFormatter="{Binding Experiment.Charts.AnalysisYFormatter}">
+                                        <LiveCharts:Axis Title="荧光值" FontSize="16" MinValue="0" MaxValue="10000" Foreground="{StaticResource BlueColor}" FontWeight="Bold" LabelFormatter="{Binding Experiment.Charts.FinalYFormatter,Mode=OneTime}">
                                             <LiveCharts:Axis.Separator>
                                                 <LiveCharts:Separator Stroke="{StaticResource WathetColor2}" StrokeThickness="1" />
                                             </LiveCharts:Axis.Separator>

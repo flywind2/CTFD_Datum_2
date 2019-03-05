@@ -21,15 +21,12 @@ namespace CTFD.Model.RuntimeData
     [DataContract]
     public class Sample : Notify
     {
-        //private string detection = string.Empty;
         private string name = string.Empty;
-        private Brush brush;
+        private readonly Brush brush;
         private bool isSelected;
         private bool isLoaded;
         private bool isCurveDisplayed = true;
         private string ctResult = string.Empty;
-        //private ChartValues<int> rawValues;
-        //private ChartValues<int> dissolutionValues;
 
         [IgnoreDataMember]
         public Patient Patient { get; set; }

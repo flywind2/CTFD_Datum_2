@@ -1,35 +1,28 @@
-﻿using CTFD.Global;
-using CTFD.Global.Common;
+﻿using CTFD.Global.Common;
 using CTFD.Model.Base;
-using LiveCharts;
 using LiveCharts.Defaults;
-using LiveCharts.Geared;
-using LiveCharts.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Media;
 
 namespace CTFD.Model.RuntimeData
 {
     [DataContract]
     public class Experiment : Notify
     {
-        public DateTime startTime { get; private set; }
-
-        private Experiment backup;
+        private DateTime startTime;
 
         [IgnoreDataMember]
-        public int RealtimeCurveIndex { get; private set; }
+        public bool IsStarted { get; private set; }
+
+        private Experiment backup;
 
         private int finalCurveIndex;
 
         private string name;
 
+        [DataMember]
         public string Name
         {
             get { return this.name; }
@@ -39,6 +32,21 @@ namespace CTFD.Model.RuntimeData
                 this.RaisePropertyChanged(nameof(this.Name));
             }
         }
+
+        [DataMember]
+        public string GroupName { get; set; }
+
+        [DataMember]
+        public string ProjectName { get; set; }
+
+        [DataMember]
+        public Parameter Parameter { get; set; } = new Parameter();
+
+        [DataMember]
+        public Feedback[] Feedbacks { get; set; }
+
+        [DataMember]
+        public Sample[] Samples { get; set; }
 
         [IgnoreDataMember]
         public bool IsRealtimeFluorescenceSeries
@@ -151,20 +159,8 @@ namespace CTFD.Model.RuntimeData
         [IgnoreDataMember]
         public Charts Charts { get; private set; }
 
-        [DataMember]
-        public string GroupName { get; set; }
-
-        [DataMember]
-        public string ProjectName { get; set; }
-
-        [DataMember]
-        public Parameter Parameter { get; set; } = new Parameter();
-
-        [DataMember]
-        public Feedback[] Feedbacks { get; set; }
-
-        [DataMember]
-        public Sample[] Samples { get; set; }
+        [IgnoreDataMember]
+        public int RealtimeCurveIndex { get; private set; }
 
         public void Initialize()
         {
@@ -218,20 +214,33 @@ namespace CTFD.Model.RuntimeData
             return remainningTime / 60;
         }
 
-        public void ReStartTimer()
+        public void Start()
+        {
+            this.IsStarted = true;
+            this.ReStartTimer();
+            this.ResetExperiment();
+        }
+
+        public void Stop()
+        {
+            this.IsStarted = false;
+            this.StopTimer();
+        }
+
+        private void ReStartTimer()
         {
             this.BackgroundTimer.Restart();
             this.CountdownTimer.Restart();
             this.startTime = DateTime.Now;
         }
 
-        public void StopTimer()
+        private void StopTimer()
         {
             this.BackgroundTimer.Stop();
             this.CountdownTimer.Stop();
         }
 
-        public void ResetExperiment()
+        private void ResetExperiment()
         {
             this.Charts.InitializeSeries();
         }
@@ -322,11 +331,16 @@ namespace CTFD.Model.RuntimeData
             this.RaisePropertyChanged(nameof(this.Samples));
         }
 
-        public void RaiseRealtimeXAxis(int ampTemperature, int ampXEnd, int experimentDuaring)
+        private void RaiseRealtimeXAxis(int ampTemperature, int ampXEnd, int experimentDuaring)
         {
             this.Charts.RaiseRealtimeXAxis(ampTemperature, ampXEnd, experimentDuaring);
             this.Charts.ChangeRealtimeCurve(this.RealtimeCurveIndex);
             this.Charts.ChangeFinalCurve(this.finalCurveIndex);
+        }
+
+        public void RaiseRealtimeXAxis()
+        {
+            if (this.IsStarted == false) this.RaiseRealtimeXAxis(this.Parameter.AmplificationTemperature, this.Parameter.GetTimeAxis(), this.CalculateRemainningTime());
         }
 
         public void ChangeSeriesVisibility(int sampleID, bool isCurveDisplayed) => this.Charts.ChangeSeriesVisibility(sampleID, isCurveDisplayed);

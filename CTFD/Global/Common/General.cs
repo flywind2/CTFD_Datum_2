@@ -15,7 +15,7 @@ namespace CTFD.Global.Common
 {
     public static partial class General
     {
-        public static event EventHandler<GlobalEventArgs> GlobalHandler;
+        
 
         public static void RaiseGlobalHandler(GlobalEvent globalEvent, object value = null)
         {

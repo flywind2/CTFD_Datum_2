@@ -16,6 +16,20 @@ namespace CTFD.Model.RuntimeData
 {
     public class Charts : Notify
     {
+        private double b;
+        public double B
+        {
+            get { return this.b; }
+            set
+            {
+                this.b = value;
+                this.RaisePropertyChanged(nameof(this.B));
+                General.RaiseGlobalHandler(GlobalEvent.SectionChanged, value);
+                //VisualTreeHelper.HitTest(this, null, this.MouseDownHitTestResultCallback, new GeometryHitTestParameters(new EllipseGeometry(this.firstPoint, 2, 2)));
+            }
+        }
+
+
         public SeriesCollection RealtimeCurve { get; private set; }
 
         private SeriesCollection realtimeAmplificationCurve { get; set; }
@@ -156,8 +170,8 @@ namespace CTFD.Model.RuntimeData
             this.isStandarMeltingCurveFinished = true;
             for (int i = 0; i < 32; i++)
             {
-               if(curveData==null)   this.finalStandardMeltingCurve[i].Values = this.realtimeMeltingCurve[i].Values;
-               else ((LiveCharts.Helpers.NoisyCollection<int>)this.finalStandardMeltingCurve[i].Values).AddRange(curveData[i]);
+                if (curveData == null) this.finalStandardMeltingCurve[i].Values = this.realtimeMeltingCurve[i].Values;
+                else ((LiveCharts.Helpers.NoisyCollection<int>)this.finalStandardMeltingCurve[i].Values).AddRange(curveData[i]);
             }
         }
 
@@ -184,7 +198,7 @@ namespace CTFD.Model.RuntimeData
                 case 0:
                 {
                     this.RealtimeCurve = this.realtimeAmplificationCurve;
-                    this.RealtimeXTitle = "实时扩增时间（分钟）";
+                    this.RealtimeXTitle = "时间（分钟）";
                     this.RealtimeYTitle = "荧光值";
                     this.RealtimeXFomatter = (value) => $"{((int)(value / 2)).ToString("00")}";
                     this.RealtimeYFomatter = (value) => value.ToString("N0");
@@ -195,7 +209,7 @@ namespace CTFD.Model.RuntimeData
                 case 1:
                 {
                     this.RealtimeCurve = this.realtimeMeltingCurve;
-                    this.RealtimeXTitle = "实时熔解温度（分钟）";
+                    this.RealtimeXTitle = "温度（℃）";
                     this.RealtimeYTitle = "荧光值";
                     this.RealtimeXFomatter = (value) => (this.meltingXStart + (value * 2)).ToString();
                     this.RealtimeYFomatter = (value) => value.ToString("N0");
@@ -206,7 +220,7 @@ namespace CTFD.Model.RuntimeData
                 case 2:
                 {
                     this.RealtimeCurve = this.realtimeTemperautreCurve;
-                    this.RealtimeXTitle = "温度变化时间（分钟）";
+                    this.RealtimeXTitle = "时间（分钟）";
                     this.RealtimeYTitle = "温度（℃）";
                     this.RealtimeXFomatter = null;
                     this.RealtimeYFomatter = (value) => $"{(value / 10).ToString("00.0")}";

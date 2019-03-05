@@ -13,7 +13,8 @@ namespace CTFD.Global.Common
         RaiseSelectedSamplesFromTable = 3,
         ResetTcpServer = 4,
         ShowToast = 5,
-        CurveVisibilityChanged = 6
+        CurveVisibilityChanged = 6,
+        SectionChanged = 7
     }
 
     [Flags]
@@ -94,7 +95,7 @@ namespace CTFD.Global.Common
         OuterRingTemperature = 0x10,
 
         [Description("CT值")]
-        CtValue =0x11
+        CtValue = 0x11
     }
 
     [Flags]

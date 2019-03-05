@@ -2,6 +2,9 @@
 using CTFD.ViewModel.Monitor;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Shapes;
+using System.Linq;
 
 namespace CTFD.View.Monitor
 {
@@ -10,8 +13,6 @@ namespace CTFD.View.Monitor
     /// </summary>
     public partial class MonitorView : UserControl
     {
-       
-
         private MonitorViewModel ViewModel;
         public MonitorView()
         {
@@ -19,24 +20,36 @@ namespace CTFD.View.Monitor
             General.Stop = this.Viewbox1.FindResource(nameof(General.Stop));
             General.Run = this.Viewbox1.FindResource(nameof(General.Run));
             General.CoolDown = this.Viewbox1.FindResource(nameof(General.CoolDown));
+         
         }
 
         private void Instance_Loaded(object sender, RoutedEventArgs e)
         {
             this.ViewModel = this.DataContext as MonitorViewModel;
-
+            General.GlobalHandler += General_GlobalHandler;
         }
 
-        private void Thumb_DragDelta(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e)
+        private void General_GlobalHandler(object sender, GlobalEventArgs e)
         {
-            UIElement thumb = e.Source as UIElement;
-            var aa = this.ViewModel.Margin.Top+e.VerticalChange;
-            this.ViewModel.Margin = new Thickness(0, aa, 0, 0);
-        }
+            switch (e.GlobalEvent)
+            {
+                case GlobalEvent.SectionChanged:
+                {
 
-        private void CartesianChart_Loaded(object sender, RoutedEventArgs e)
-        {
+                    //var canvas = this.FinalCurve;
+                    //var bb = false;
+                    //VisualTreeHelper.HitTest(this.Viewbox1, null, f =>
+                    //{
+                    //    var aaa = f.VisualHit;
+                    //    //General.ShowToast();
+                    //    return HitTestResultBehavior.Continue;
+                    //}, new GeometryHitTestParameters(this.Section.);
 
+                    //General.ShowToast(mouse);
+                    break;
+                };
+                default:break;
+            }
         }
     }
 }

@@ -17,6 +17,8 @@ namespace CTFD.Global.Common
 {
     public static partial class General
     {
+        public static event EventHandler<GlobalEventArgs> GlobalHandler;
+
         public static ILog Log { get; } = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         public static WorkingData WorkingData { get; set; } = new WorkingData();

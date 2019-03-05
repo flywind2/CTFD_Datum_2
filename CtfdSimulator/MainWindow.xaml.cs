@@ -131,7 +131,7 @@ namespace CtfdSimulator
                 case 2:
                 {
                     var chartData = new int[32];
-                    for (int i = 0; i < 32; i++) chartData[i] = new Random().Next(500) * i;
+                    for (int i = 0; i < 32; i++) chartData[i] = new Random().Next(5) * i;
                     result = JsonSerialize(chartData);
                     break;
                 }

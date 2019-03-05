@@ -493,7 +493,7 @@ namespace CTFD.ViewModel.Monitor
                 }
                 case 3:
                 {
-                    this.Experiment.RaiseRealtimeXAxis(this.Experiment.Parameter.AmplificationTemperature, this.Experiment.Parameter.GetTimeAxis(), this.Experiment.CalculateRemainningTime());
+                    if(this.Experiment.IsStarted==false) this.Experiment.RaiseRealtimeXAxis();
                     break;
                 }
                 case 4:
@@ -588,8 +588,7 @@ namespace CTFD.ViewModel.Monitor
                     this.StartButtonContent = General.Run;
                     General.Status = Status.Run;
                     General.ShowToast("实验开始");
-                    this.Experiment.ReStartTimer();
-                    this.Experiment.ResetExperiment();
+                    this.Experiment.Start();
                 }
                 else
                 {
@@ -597,7 +596,7 @@ namespace CTFD.ViewModel.Monitor
                     General.Status = Status.Stop;
                     General.ShowToast("实验停止");
                     General.WriteSetup();
-                    this.Experiment.StopTimer();
+                    this.Experiment.Stop();
 
                 }
             }
@@ -790,13 +789,9 @@ namespace CTFD.ViewModel.Monitor
             this.Experiment.AddDerivationMeltingCurves(this.SetStringToCurveData(data.Skip(71).Take(33).ToList()));
         }
 
-        DateTime t;
-        int index1 = 0;
         public void Test()
         {
-            if (index1 == 0) t = DateTime.Now;
-            else General.ShowToast((DateTime.Now - t).Minutes.ToString());
-            index1++;
+            this.OnViewChanged();
         }
 
         void ISample.ResetSelection()

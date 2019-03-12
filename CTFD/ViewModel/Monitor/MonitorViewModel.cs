@@ -21,16 +21,9 @@ namespace CTFD.ViewModel.Monitor
 {
     public class MonitorViewModel : Base.ViewModel, ISample
     {
-        private Thickness margin;
-        public Thickness Margin
-        {
-            get { return this.margin; }
-            set
-            {
-                this.margin = value;
-                this.RaisePropertyChanged(nameof(this.Margin));
-            }
-        }
+        public Visibility IsAccountManagementEnabled { get; set; }
+
+        public Visibility IsSystemSetupEnabled { get; set; }
 
         private string holeName;
 
@@ -387,10 +380,10 @@ namespace CTFD.ViewModel.Monitor
 
         public RelayCommand TransmitParameter => new RelayCommand(() => this.TransmitData(Token.Parameter));
 
-        public RelayCommand ShowManualSettingView => new RelayCommand(() =>
-        {
-            ((Window)Activator.CreateInstance(typeof(CTFD.View.Monitor.ManualSettingView), new object[1] { this.Experiment })).ShowDialog();
-        });
+        //public RelayCommand ShowManualSettingView => new RelayCommand(() =>
+        //{
+        //    ((Window)Activator.CreateInstance(typeof(CTFD.View.Monitor.ManualSettingView), new object[1] { this.Experiment })).ShowDialog();
+        //});
 
         public RelayCommand TurnPrevious => new RelayCommand(() =>
         {
@@ -493,7 +486,7 @@ namespace CTFD.ViewModel.Monitor
                 }
                 case 3:
                 {
-                    if(this.Experiment.IsStarted==false) this.Experiment.RaiseRealtimeXAxis();
+                    if (this.Experiment.IsStarted == false) this.Experiment.RaiseRealtimeXAxis();
                     break;
                 }
                 case 4:
@@ -563,7 +556,13 @@ namespace CTFD.ViewModel.Monitor
             {
                 switch (token)
                 {
-                    case Token.Parameter: { byte[] data = General.JsonSerialize(this.Experiment.Parameter); if (data != null) result.AddRange(data); break; }
+                    case Token.Parameter:
+                    {
+                        byte[] data = General.JsonSerialize(this.Experiment);
+                        var aaa = General.JsonSerializeToString(this.Experiment);
+                        if (data != null) result.AddRange(data);
+                        break;
+                    }
                     case Token.Query: { byte[] data = General.JsonSerialize(General.WorkingData.Query); if (data != null) result.AddRange(data); break; }
                     default: break;
                 }
@@ -676,7 +675,11 @@ namespace CTFD.ViewModel.Monitor
                     }
                     case Token.Rpm: { this.Experiment.SetRpm(BitConverter.ToInt16(value, 0)); break; }
                     case Token.Step: { this.Experiment.SetStep(BitConverter.ToInt16(value, 0)); break; }
-                    case Token.Query: { break; }
+                    case Token.Query: { General.RaiseGlobalHandler(GlobalEvent.Query, value); break; }
+                    case Token.QueryChart: { General.RaiseGlobalHandler(GlobalEvent.QueryChart, value); break; }
+                    case Token.HistoryCurve1: { General.RaiseGlobalHandler(GlobalEvent.HistoryCurve1, value); break; }
+                    case Token.HistoryCurve2: { General.RaiseGlobalHandler(GlobalEvent.HistoryCurve2, value); break; }
+                    case Token.HistoryCurve3: { General.RaiseGlobalHandler(GlobalEvent.HistoryCurve3, value); break; }
                     case Token.AmplificationCurve:
                     {
                         var curveData = General.JsonDeserialize<List<int[]>>(value);
@@ -789,9 +792,23 @@ namespace CTFD.ViewModel.Monitor
             this.Experiment.AddDerivationMeltingCurves(this.SetStringToCurveData(data.Skip(71).Take(33).ToList()));
         }
 
+        public void SetRoleButton()
+        {
+            switch (General.WorkingData.Configuration.Account.Role)
+            {
+                case "管理员": { this.IsSystemSetupEnabled = Visibility.Collapsed; break; }
+                case "操作员": { this.IsAccountManagementEnabled = Visibility.Collapsed; this.IsSystemSetupEnabled = Visibility.Collapsed; break; }
+                default: break;
+            }
+            this.RaisePropertyChanged(nameof(this.IsAccountManagementEnabled));
+            this.RaisePropertyChanged(nameof(this.IsSystemSetupEnabled));
+        }
+
         public void Test()
         {
-            this.OnViewChanged();
+
+
+            General.RaiseGlobalHandler(GlobalEvent.Test);
         }
 
         void ISample.ResetSelection()

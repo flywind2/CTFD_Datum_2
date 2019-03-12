@@ -11,16 +11,16 @@ namespace CTFD.Model.RuntimeData
     [DataContract]
     public class Experiment : Notify
     {
-        private DateTime startTime;
-
-        [IgnoreDataMember]
-        public bool IsStarted { get; private set; }
-
         private Experiment backup;
 
         private int finalCurveIndex;
 
         private string name;
+
+        [DataMember]
+        public string StartTime { get; set; } 
+
+        private DateTime startTime;
 
         [DataMember]
         public string Name
@@ -47,6 +47,9 @@ namespace CTFD.Model.RuntimeData
 
         [DataMember]
         public Sample[] Samples { get; set; }
+
+        [IgnoreDataMember]
+        public bool IsStarted { get; private set; }
 
         [IgnoreDataMember]
         public bool IsRealtimeFluorescenceSeries

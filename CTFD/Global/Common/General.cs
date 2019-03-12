@@ -15,7 +15,7 @@ namespace CTFD.Global.Common
 {
     public static partial class General
     {
-        
+
 
         public static void RaiseGlobalHandler(GlobalEvent globalEvent, object value = null)
         {
@@ -110,14 +110,23 @@ namespace CTFD.Global.Common
             General.SetBinding(source.GetLastThermalUnit(), target.GetFirstThermalUnit());
         }
 
-        public static void WriteJsonFile(object obj, string fileName, Encoding encoding)=>File.WriteAllText(fileName, General.JsonSerializeToString(obj), encoding);
-        
+        public static void WriteJsonFile(object obj, string fileName, Encoding encoding)
+        {
+            var aaa = General.JsonSerializeToString(obj);
+            File.WriteAllText(fileName,aaa, encoding);
+        }
+
         public static T ReadJsonFile<T>(string fileName, Encoding encoding) => General.JsonDeserializeFromString<T>(File.ReadAllText(fileName, encoding));
 
-        public static void ReadSetup()=>General.WorkingData.Configuration = General.ReadJsonFile<Model.RuntimeData.Setup>($"{Environment.CurrentDirectory}{Properties.Resources.SetupFilePath}", Encoding.Default);
-        
-        public static void WriteSetup()=>General.WriteJsonFile(General.WorkingData.Configuration, $"{Environment.CurrentDirectory}{Properties.Resources.SetupFilePath}", Encoding.Default);
-        
+        public static void ReadSetup() => General.WorkingData.Configuration = General.ReadJsonFile<Model.RuntimeData.Setup>($"{Environment.CurrentDirectory}{Properties.Resources.SetupFilePath}", Encoding.Default);
+
+        public static void WriteSetup()
+        {
+            var aa = General.WorkingData.Configuration;
+
+            General.WriteJsonFile(aa, $"{Environment.CurrentDirectory}{Properties.Resources.SetupFilePath}", Encoding.Default);
+        }
+
         public static DataTable ReadExcel(string fileName, string sheetName)
         {
             var result = new DataTable();

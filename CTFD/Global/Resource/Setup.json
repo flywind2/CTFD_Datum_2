@@ -1,5 +1,7 @@
 ﻿{
   "Experiment": {
+    "Name": "实验5",
+    "StartTime": "20190306121031",
     "Feedbacks": [
       { "Status": 0 },
       { "Status": 0 },
@@ -146,39 +148,46 @@
       }
     ],
     "Parameter": {
-      "AD": 6000,
-      "AT": 710,
-      "DD": 3000,
-      "DT": 990,
-      "HS": 4600,
-      "HSD": 30,
-      "IM": true,
-      "LS": 1600,
-      "LSD": 10,
+      "AmplificationDuration": 6000,
+      "AmplificationTemperature": 710,
+      "LysisDuration": 3000,
+      "LysisTemperature": 990,
+      "HighSpeed": 4600,
+      "HighSpeedDuration": 30,
+      "IsMelt": true,
+      "LowSpeed": 1600,
+      "LowSpeedDuration": 10,
       "MeltDuration": 0
     }
+  },
+  "Account": {
+    "DateTime": null,
+    "Password": "sc123456",
+    "Remark": null,
+    "Role": "工程师",
+    "UserName": "sc"
   },
   "Accounts": [
     {
       "DateTime": null,
-      "Password": "SS",
+      "Password": "sc123456",
       "Remark": null,
-      "Role": 0,
-      "UserName": "AA"
+      "Role": "工程师",
+      "UserName": "sc"
     },
     {
       "DateTime": null,
-      "Password": "SS",
+      "Password": "sx123456",
       "Remark": null,
-      "Role": 1,
-      "UserName": "AAW"
+      "Role": "管理员",
+      "UserName": "sx"
     },
     {
       "DateTime": null,
-      "Password": "FF",
+      "Password": "123456",
       "Remark": null,
-      "Role": 0,
-      "UserName": "AA2"
+      "Role": "操作员",
+      "UserName": "牟其中"
     }
   ],
   "CurrentTcpServerIPAddress": "127.0.0.1",

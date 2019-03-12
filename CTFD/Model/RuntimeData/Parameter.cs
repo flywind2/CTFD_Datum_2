@@ -15,37 +15,37 @@ namespace CTFD.Model.RuntimeData
         /// <summary>
         /// 裂解温度
         /// </summary>
-        [DataMember(Name = "DT")]
+        [DataMember]
         public int LysisTemperature { get; set; }
 
         /// <summary>
         /// 裂解时间
         /// </summary>
-        [DataMember(Name = "DD")]
+        [DataMember]
         public int LysisDuration { get; set; }
 
         /// <summary>
         /// 扩增温度
         /// </summary>
-        [DataMember(Name = "AT")]
+        [DataMember]
         public int AmplificationTemperature { get; set; }
 
         /// <summary>
         /// 扩增时间
         /// </summary>
-        [DataMember(Name = "AD")]
+        [DataMember]
         public int AmplificationDuration { get; set; }
 
         /// <summary>
         /// 低转速
         /// </summary>
-        [DataMember(Name = "LS")]
+        [DataMember]
         public int LowSpeed { get; set; } = 1600;
 
         /// <summary>
         /// 低速时间
         /// </summary>
-        [DataMember(Name = "LSD")]
+        [DataMember]
         public int LowSpeedDuration { get; set; } = 10;
 
         /// <summary>
@@ -57,13 +57,13 @@ namespace CTFD.Model.RuntimeData
         /// <summary>
         /// 高转速
         /// </summary>
-        [DataMember(Name = "HS")]
+        [DataMember]
         public int HighSpeed { get; set; } = 4600;
 
         /// <summary>
         /// 高速时间
         /// </summary>
-        [DataMember(Name = "HSD")]
+        [DataMember]
         public int HighSpeedDuration { get; set; } = 30;
 
         [IgnoreDataMember]
@@ -81,7 +81,7 @@ namespace CTFD.Model.RuntimeData
         /// <summary>
         /// 是否熔解
         /// </summary>
-        [DataMember(Name = "IM")]
+        [DataMember]
         public bool IsMelt { get; set; }
 
         public Parameter GetCopy()

@@ -14,7 +14,13 @@ namespace CTFD.Global.Common
         ResetTcpServer = 4,
         ShowToast = 5,
         CurveVisibilityChanged = 6,
-        SectionChanged = 7
+        SectionChanged = 7,
+        Query = 8,
+        QueryChart = 9,
+        HistoryCurve1 = 10,
+        HistoryCurve2 = 11,
+        HistoryCurve3 = 12,
+        LoadRole = 13
     }
 
     [Flags]
@@ -33,14 +39,6 @@ namespace CTFD.Global.Common
         RemoveThermalCell = 0,
         ChangeLastThermalUnit = 1,
         ChangeFirstThermalUnit = 2,
-    }
-
-    [Flags]
-    public enum Role
-    {
-        Enginner = 0,
-        Administrator = 1,
-        Operator = 2
     }
 
     [Flags]
@@ -95,7 +93,16 @@ namespace CTFD.Global.Common
         OuterRingTemperature = 0x10,
 
         [Description("CT值")]
-        CtValue = 0x11
+        CtValue = 0x11,
+
+        [Description("查询曲线1")]
+        HistoryCurve1 = 19,
+
+        [Description("查询曲线2")]
+        HistoryCurve2 = 20,
+
+        [Description("查询曲线3")]
+        HistoryCurve3 = 21,
     }
 
     [Flags]

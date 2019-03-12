@@ -24,7 +24,9 @@
                 <ResourceDictionary Source="/Global/Dictionary/Style/DataPicker.xaml"/>
                 <ResourceDictionary Source="/Global/Dictionary/Style/GridSplitter.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            
             <DropShadowEffect x:Key="Effect1" Color="#FF959595" ShadowDepth="5" BlurRadius="8" Direction="0"/>
+            
             <DataTemplate x:Key="TreeViewItem1" >
                 <Grid HorizontalAlignment="Stretch">
                     <i:Interaction.Triggers>
@@ -37,13 +39,33 @@
                         Width="120" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type TreeViewItem}, Mode=FindAncestor}}"  />
                 </Grid>
             </DataTemplate>
-
+            
             <HierarchicalDataTemplate x:Key="TreeViewItem0" ItemsSource="{Binding Projects}" ItemTemplate="{StaticResource TreeViewItem1}" >
                 <DockPanel LastChildFill="True" VerticalAlignment="Center" >
                     <TextBlock FontSize="15" Text="{Binding Name}" Margin="2,0,0,0" DockPanel.Dock="Left" VerticalAlignment="Center" FontWeight="Bold" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type TreeViewItem}, Mode=FindAncestor}}"/>
                 </DockPanel>
             </HierarchicalDataTemplate>
+           
 
+            <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource TextBox}">
+                <Setter Property="Background" Value="{StaticResource BlueColor}"/>
+                <Setter Property="Foreground" Value="{StaticResource ChartColor1}"/>
+                <Setter Property="FontSize" Value="16"/>
+                <Setter Property="Width" Value="130"/>
+            </Style>
+
+             <Style TargetType="{x:Type GroupBox}">
+                <Setter Property="FontSize" Value="18"/>
+                <Setter Property="BorderThickness" Value="3"/>
+                <Setter Property="FontWeight" Value="Bold"/>
+                <Setter Property="Foreground" Value="{StaticResource GreenColor}"/>
+            </Style>
+            
+            <Style TargetType="Button" BasedOn="{StaticResource MyButton}">
+                <Setter Property="Background" Value="{StaticResource BlueColor}"/>
+                <Setter Property="Foreground" Value="White"/>
+            </Style>
+            
         </ResourceDictionary>
     </Application.Resources>
 </Application>

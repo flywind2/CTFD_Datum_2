@@ -20,6 +20,9 @@ namespace CTFD.Model.RuntimeData
         public ObservableCollection<Account> Accounts { get; set; } = new ObservableCollection<Account>();
 
         [DataMember]
+        public Account Account { get; set; } = new Account();
+
+        [DataMember]
         public string CurrentTcpServerIPAddress { get; set; } = string.Empty;
 
         [DataMember]

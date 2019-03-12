@@ -19,7 +19,7 @@ namespace CTFD.ViewModel
 {
     public class MainWindowViewModel : Base.ViewModel
     {
-        private readonly LoginView loginView = new LoginView();
+        private readonly LoginView loginView;//= new LoginView();
         private readonly WorkingView workingView;// = new WorkingView();
         private WorkingViewModel workingViewModel => this.workingView.DataContext as WorkingViewModel;
 
@@ -54,7 +54,7 @@ namespace CTFD.ViewModel
         public MainWindowViewModel()
         {
             General.ReadSetup();
-            
+            this.loginView = new LoginView();
             this.ContentView = this.loginView;
             General.GlobalHandler += General_GlobalHandler;
             this.InitializeLog();
@@ -100,6 +100,7 @@ namespace CTFD.ViewModel
         private void ShowWorkingView()
         {
             this.ContentView = this.workingView;
+            ((WorkingViewModel)this.workingView.DataContext).MonitorViewModel.SetRoleButton();
         }
 
         private void ShowMonitorView()

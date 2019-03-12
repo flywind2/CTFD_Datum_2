@@ -29,7 +29,6 @@ namespace CTFD.Model.RuntimeData
             }
         }
 
-
         public SeriesCollection RealtimeCurve { get; private set; }
 
         private SeriesCollection realtimeAmplificationCurve { get; set; }

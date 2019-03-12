@@ -1,6 +1,7 @@
 ﻿using CTFD.Global.Common;
 using CTFD.View;
 using CTFD.View.Help;
+using CTFD.View.History;
 using CTFD.View.Monitor;
 using CTFD.View.Setup;
 using CTFD.ViewModel.Monitor;
@@ -17,6 +18,8 @@ namespace CTFD.ViewModel
         private readonly HelpView helpView = new HelpView();
 
         private readonly SettingView setupView = new SettingView();
+
+        private readonly HistoryView historyView = new HistoryView();
 
         public MonitorViewModel MonitorViewModel => this.monitorView.DataContext as MonitorViewModel;
 
@@ -41,7 +44,7 @@ namespace CTFD.ViewModel
             {
                 if (value)
                 {
-                    this.ContentView = this.helpView;
+                    this.ContentView = this.historyView;
                     this.viewState = ViewState.HelpView;
                     this.RaiseViewState();
                 }

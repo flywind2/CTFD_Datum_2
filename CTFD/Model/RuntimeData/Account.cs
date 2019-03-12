@@ -18,7 +18,7 @@ namespace CTFD.Model.RuntimeData
         public string Password { get; set; }
 
         [DataMember]
-        public Role Role { get; set; }
+        public string Role { get; set; }
 
         [DataMember]
         public string DateTime { get; set; }
@@ -33,7 +33,7 @@ namespace CTFD.Model.RuntimeData
 
         public Account() { }
 
-        public Account(string userName, string password, Role role, string remark)
+        public Account(string userName, string password, string role, string remark)
         {
             this.UserName = userName;
             this.Password = password;

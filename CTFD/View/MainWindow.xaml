@@ -16,6 +16,10 @@
         <vm:MainWindowViewModel/>
     </Window.DataContext>
     <Window.Resources>
+        <Style TargetType="TextBlock" BasedOn="{StaticResource TextBlock}">
+            <Setter Property="Foreground" Value="{StaticResource BlueColor}"/>
+            <Setter Property="FontSize" Value="16"/>
+        </Style>
         <DropShadowEffect x:Key="PanelEffect" Direction="180" BlurRadius="22" Color="#FFD8D8D8"/>
     </Window.Resources>
     <Grid>

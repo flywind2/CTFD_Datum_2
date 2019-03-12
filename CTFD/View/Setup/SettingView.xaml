@@ -7,7 +7,7 @@
     xmlns:SampleRack="clr-namespace:CTFD.View.Control.Sample"
     xmlns:convert="clr-namespace:CTFD.ViewModel.Converter"
     xmlns:vm="clr-namespace:CTFD.ViewModel.Setup"
-  xmlns:Palette="clr-namespace:CTFD.View.Control.ColorPicket"
+    xmlns:Palette="clr-namespace:CTFD.View.Control.ColorPicket"
     mc:Ignorable="d"
     x:Name="Instance"
     d:DesignHeight="450" d:DesignWidth="800">
@@ -87,61 +87,90 @@
             <ComboBox Width="100" Height="20" ItemsSource="{Binding DataContext.Configuration.Detections,ElementName= Instance}"  Style="{StaticResource ComboBox}" FontSize="10" FontWeight="Normal" SelectedValue="{Binding Detection}"/>
         </DataTemplate>
     </UserControl.Resources>
-    <Viewbox>
-        <Canvas Width="1100" Height="650">
-            <Canvas.Resources>
+    <Viewbox Stretch="Fill" >
+        <Canvas Width="1100" Height="630">
+            <GroupBox Header="账户管理" Width="500" Height="600" Canvas.Left="20" Canvas.Top="20">
+                <Canvas  Margin="10">
+                    <DataGrid Style="{StaticResource DataGrid}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedAccount}" ItemsSource="{Binding Configuration.Accounts}" Canvas.Left="6" Height="400"  >
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Width="120" Header="用户名" Binding="{Binding UserName}"/>
+                            <DataGridTextColumn Width="120" Header="密码" Binding="{Binding Password}"/>
+                            <DataGridTextColumn Width="80" Header="权限" Binding="{Binding Role}"/>
+                            <DataGridTextColumn Width="130" Header="添加日期" Binding="{Binding DateTime,Mode=OneWay}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
 
-                <Style TargetType="TextBox" BasedOn="{StaticResource TextBox}">
-                    <Setter Property="Canvas.Left" Value="100"/>
-                    <Setter Property="Width" Value="80"/>
-                    <Setter Property="Height" Value="25"/>
-                </Style>
-            </Canvas.Resources>
-            <TreeView x:Name="TreeView_Groups" Style="{StaticResource TreeView}" ItemContainerStyle="{StaticResource TreeViewItem}" BorderBrush="{StaticResource WathetColor}" BorderThickness="3" Background="White" ItemsSource="{Binding Configuration.Groups}" ItemTemplate="{StaticResource TreeViewItem0}" Canvas.Left="40" Canvas.Top="40" Width="280" Height="516"/>
+                    <Canvas Canvas.Left="10" Canvas.Top="400" Width="454" Height="160">
+                        <TextBlock  Text="账户：" Width="50" Height="25" Canvas.Left="10" Canvas.Top="15"/>
+                        <TextBox Text="{Binding CurrentAccount.UserName}" Canvas.Left="70" Canvas.Top="15" Width="120"/>
 
-            <TabControl Canvas.Right="10" Width="721" Height="516" SelectedIndex="{Binding ViewIndex}" Background="{x:Null}" BorderBrush="{x:Null}" BorderThickness="0" Canvas.Left="339" Canvas.Top="40">
-                <!--<TabItem Width="0" Height=".1" Background="{x:Null}" BorderBrush="{x:Null}" BorderThickness="0">
-                    <Canvas Width="1100" Height="600">
-                        <Canvas.Resources>
-                            <local:RoleToInt32 x:Key="RoleToInt32"/>
-                            <local:RoleToString x:Key="RoleToString"/>
-                        </Canvas.Resources>
-                        <DataGrid Style="{StaticResource DataGrid}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedAccount}" ItemsSource="{Binding Configuration.Accounts}" Canvas.Left="38" Canvas.Top="19" Height="552"  >
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Width="120" Header="用户名" Binding="{Binding UserName}"/>
-                                <DataGridTextColumn Width="120" Header="密码" Binding="{Binding Password}"/>
-                                <DataGridTextColumn Width="80" Header="权限" Binding="{Binding Role,Converter={StaticResource RoleToString}}"/>
-                                <DataGridTextColumn Width="130" Header="添加日期" Binding="{Binding DateTime,Mode=OneWay}"/>
-                                <DataGridTextColumn Width="100" Header="备注" Binding="{Binding Remark}"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
+                        <TextBlock  Text="密码：" Width="50" Height="25" Canvas.Left="220" Canvas.Top="15"/>
+                        <TextBox Text="{Binding CurrentAccount.Password}" Canvas.Left="280" Canvas.Top="15" Width="120"/>
 
-                        <Canvas Canvas.Left="610" Canvas.Top="10" Width="300" Height="500">
-                            <TextBlock  Text="账户：" Width="50" Height="25" Canvas.Left="10" Canvas.Top="10"/>
-                            <TextBox Text="{Binding CurrentAccount.UserName}" Canvas.Left="70" Canvas.Top="10"/>
+                        <TextBlock  Text="权限：" Width="50" Height="25" Canvas.Left="10" Canvas.Top="60"/>
+                        <ComboBox Style="{StaticResource ComboBox}" ItemsSource="{Binding Roles}" SelectedItem="{Binding CurrentAccount.Role}" Width="120" Height="30" Canvas.Left="70" Canvas.Top="60" />
 
-                            <TextBlock  Text="密码：" Width="50" Height="25" Canvas.Left="10" Canvas.Top="40"/>
-                            <TextBox Text="{Binding CurrentAccount.Password}" Canvas.Left="70" Canvas.Top="40"/>
+                        <Button Command="{Binding AddAccount}" Width="130" Height="30" Content="{StaticResource AddAccount}" VerticalAlignment="Top" Canvas.Left="15" Canvas.Top="110"/>
+                        <Button Command="{Binding EditAccount}" Width="130" Height="30" Content="{StaticResource EditAccount}" VerticalAlignment="Top" Canvas.Left="160" Canvas.Top="110"/>
+                        <Button Command="{Binding DeleteAccount}" Width="130" Height="30" Content="{StaticResource RemoveAccount}" VerticalAlignment="Top" Canvas.Left="305" Canvas.Top="110"/>
 
-                            <TextBlock  Text="权限：" Width="50" Height="25" Canvas.Left="10" Canvas.Top="70"/>
-                            <ComboBox Style="{StaticResource ComboBox}" SelectedIndex="{Binding CurrentAccount.Role,Converter={StaticResource RoleToInt32}}" Width="150" Height="30" Canvas.Left="70" Canvas.Top="70" >
-                                <ComboBoxItem Content="工程师"/>
-                                <ComboBoxItem Content="管理员"/>
-                                <ComboBoxItem Content="操作员"/>
-                            </ComboBox>
 
-                            <TextBlock  Text="备注：" Width="50" Height="25" Canvas.Left="10" Canvas.Top="100"/>
-                            <TextBox Text="{Binding CurrentAccount.Remark}" Width="213" Height="100" TextWrapping="Wrap" Background="{StaticResource WathetColor3}" Canvas.Left="10" Canvas.Top="130"/>
 
-                            <Button Command="{Binding AddAccount}" Width="200" Height="30" Content="{StaticResource AddAccount}" VerticalAlignment="Top" Canvas.Left="15" Canvas.Top="250"/>
-                            <Button Command="{Binding EditAccount}" Width="200" Height="30" Content="{StaticResource EditAccount}" VerticalAlignment="Top" Canvas.Left="15" Canvas.Top="290"/>
-                            <Button Command="{Binding DeleteAccount}" Width="200" Height="30" Content="{StaticResource RemoveAccount}" VerticalAlignment="Top" Canvas.Left="15" Canvas.Top="330"/>
-
-                        </Canvas>
                     </Canvas>
-                </TabItem>-->
+                </Canvas>
+            </GroupBox>
 
-                <TabItem Width="0" Height=".1" Background="{x:Null}" BorderBrush="{x:Null}" BorderThickness="0">
+            <Canvas Canvas.Left="600" Canvas.Top="30" Width="721" Height="516">
+                <TextBlock Text="勾取需要展示给用户的信息字段" Canvas.Top="450" Canvas.Left="53"/>
+
+                <TextBlock Canvas.Left="100" Canvas.Top="70" LineStackingStrategy="BlockLineHeight" LineHeight="38" FontSize="17" Text="运行时间 ----&#xA;剩余时间 ----&#xA;实验名称 ----&#xA;项目名称 ----&#xA;实验人员 ----&#xA;实验状态 ----&#xD;电机转速 ----&#xA;上盖温度 ----&#xA;底座温度 ----&#xA;"/>
+
+                <StackPanel Orientation="Vertical" Canvas.Left="53" Canvas.Top="70">
+                    <StackPanel.Resources>
+                        <Style TargetType="Path" >
+                            <Setter Property="Stretch" Value="Fill"/>
+                            <Setter Property="Width" Value="26"/>
+                            <Setter Property="Height" Value="26"/>
+                            <Setter Property="Fill" Value="{StaticResource BlueColor}"/>
+                            <Setter Property="Margin" Value="0,12,0,0"/>
+                        </Style>
+
+                    </StackPanel.Resources>
+                    <Path Data="{StaticResource Clock}"  />
+                    <Path Data="{StaticResource Remain}" Width="19" Canvas.Left="3" />
+                    <Path  Data="{StaticResource Experiment}"  />
+                    <Path  Data="{StaticResource Project}"  Width="12"/>
+                    <Path  Data="{StaticResource UserName}"  />
+                    <Path  Data="{StaticResource Step}"  />
+                    <Path Data="{StaticResource Speed}" />
+                    <Path  Data="{StaticResource Thermoneter}" />
+                    <Path  Data="{StaticResource Thermoneter}" />
+                </StackPanel>
+
+                <StackPanel Orientation="Vertical" Canvas.Left="210" Canvas.Top="70">
+                    <StackPanel.Resources>
+                        <Style TargetType="CheckBox" BasedOn="{StaticResource ElipseCheckBox}">
+                            <Setter Property="Width" Value="26"/>
+                            <Setter Property="Margin" Value="0,12,0,0"/>
+                        </Style>
+                    </StackPanel.Resources>
+                    <CheckBox IsChecked="{Binding Configuration.Feedbacks[0].Status,Converter={StaticResource VisibilityToBool}}"/>
+                    <CheckBox IsChecked="{Binding Configuration.Feedbacks[1].Status,Converter={StaticResource VisibilityToBool}}"/>
+                    <CheckBox IsChecked="{Binding Configuration.Feedbacks[2].Status,Converter={StaticResource VisibilityToBool}}"/>
+                    <CheckBox IsChecked="{Binding Configuration.Feedbacks[3].Status,Converter={StaticResource VisibilityToBool}}"/>
+                    <CheckBox IsChecked="{Binding Configuration.Feedbacks[4].Status,Converter={StaticResource VisibilityToBool}}"/>
+                    <CheckBox IsChecked="{Binding Configuration.Feedbacks[5].Status,Converter={StaticResource VisibilityToBool}}"/>
+                    <CheckBox IsChecked="{Binding Configuration.Feedbacks[6].Status,Converter={StaticResource VisibilityToBool}}"/>
+                    <CheckBox IsChecked="{Binding Configuration.Feedbacks[7].Status,Converter={StaticResource VisibilityToBool}}"/>
+                    <CheckBox IsChecked="{Binding Configuration.Feedbacks[8].Status,Converter={StaticResource VisibilityToBool}}"/>
+                </StackPanel>
+            </Canvas>
+
+
+            <!--<TabControl Canvas.Right="10" Width="721" Height="516" SelectedIndex="{Binding ViewIndex}" Background="{x:Null}" BorderBrush="{x:Null}" BorderThickness="0" Canvas.Left="339" Canvas.Top="40">
+                
+
+                --><!--<TabItem Width="0" Height=".1" Background="{x:Null}" BorderBrush="{x:Null}" BorderThickness="0">
                     <Canvas  Width="721" Height="516">
                         <Palette:Palette x:Name="Palette1" Canvas.Left="30" Canvas.Top="182" />
                         <Canvas Width="50" Height="30" Canvas.Left="309" Canvas.Top="182" Background="{Binding ElementName=Palette1,Path=SelectedColor}"/>
@@ -228,83 +257,10 @@
                         </GroupBox>
 
                     </Canvas>
-                </TabItem>
+                </TabItem>-->
 
-                <TabItem Width="0" Height=".1" Background="{x:Null}" BorderBrush="{x:Null}" BorderThickness="0">
-                    <Canvas  Width="721" Height="516">
-                        <SampleRack:SampleRack Width="400" Canvas.Left="40" Canvas.Top="60"/>
-
-                        <DataGrid  Style="{StaticResource DataGrid2}" ItemsSource="{Binding Detections}" Background="White" AutoGenerateColumns="False" Width="230" Height="225" Canvas.Right="3">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn IsReadOnly="True" Width="60" Header="孔位号" Binding="{Binding HoleName}"/>
-                                <DataGridTemplateColumn Width="130" Header="检测内容" CellTemplate="{StaticResource DetectionColumn}" CellEditingTemplate="{StaticResource DetectionEditing}"/>
-                            </DataGrid.Columns>
-
-                        </DataGrid>
-
-                        <DataGrid Style="{StaticResource DataGrid}" ItemsSource="{Binding Configuration.Detections}" IsReadOnly="True" Background="White" AutoGenerateColumns="False" Width="230" Canvas.Right="3" Height="206" Canvas.Top="225">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Width="190" Header="检测内容" Binding="{Binding}"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
-
-                        <TextBlock Text="检测内容：" Canvas.Left="491" Canvas.Top="440"/>
-                        <TextBox Text="{Binding Detection}" Width="150" Canvas.Left="566" Canvas.Top="440"/>
-
-                        <Button Width="100" Height="30" Canvas.Bottom="0" Canvas.Left="490" Content="{StaticResource AddDye}" Command="{Binding AddDetection}" Canvas.Top="476"/>
-                        <Button Width="100" Height="30" Canvas.Bottom="0" Canvas.Right="0" Content="{StaticResource RemoveDye}" Command="{Binding RemoveDetection}" CommandParameter="{Binding SelectedItem,ElementName=DataGrid1}" Canvas.Top="476"/>
-
-                    </Canvas>
-                </TabItem>
-
-                <TabItem Width="0" Height=".1" Background="{x:Null}" BorderBrush="{x:Null}" BorderThickness="0">
-                    <Canvas  Width="721" Height="516">
-                        <TextBlock Text="勾取需要展示给用户的信息字段" Canvas.Top="450" Canvas.Left="53"/>
-
-                        <TextBlock Canvas.Left="100" Canvas.Top="70" LineStackingStrategy="BlockLineHeight" LineHeight="38" FontSize="17" Text="运行时间 ----&#xA;剩余时间 ----&#xA;实验名称 ----&#xA;项目名称 ----&#xA;实验人员 ----&#xA;实验状态 ----&#xD;电机转速 ----&#xA;上盖温度 ----&#xA;底座温度 ----&#xA;"/>
-
-                        <StackPanel Orientation="Vertical" Canvas.Left="53" Canvas.Top="70">
-                            <StackPanel.Resources>
-                                <Style TargetType="Path" >
-                                    <Setter Property="Stretch" Value="Fill"/>
-                                    <Setter Property="Width" Value="26"/>
-                                    <Setter Property="Height" Value="26"/>
-                                    <Setter Property="Fill" Value="{StaticResource BlueColor}"/>
-                                    <Setter Property="Margin" Value="0,12,0,0"/>
-                                </Style>
-
-
-                            </StackPanel.Resources>
-                            <Path Data="{StaticResource Clock}"  />
-                            <Path Data="{StaticResource Remain}" Width="19" Canvas.Left="3" />
-                            <Path  Data="{StaticResource Experiment}"  />
-                            <Path  Data="{StaticResource Project}"  Width="12"/>
-                            <Path  Data="{StaticResource UserName}"  />
-                            <Path  Data="{StaticResource Step}"  />
-                            <Path Data="{StaticResource Speed}" />
-                            <Path  Data="{StaticResource Thermoneter}" />
-                            <Path  Data="{StaticResource Thermoneter}" />
-                        </StackPanel>
-
-                        <StackPanel Orientation="Vertical" Canvas.Left="210" Canvas.Top="70">
-                            <StackPanel.Resources>
-                                <Style TargetType="CheckBox" BasedOn="{StaticResource ElipseCheckBox}">
-                                    <Setter Property="Width" Value="26"/>
-                                    <Setter Property="Margin" Value="0,12,0,0"/>
-                                </Style>
-                            </StackPanel.Resources>
-                            <CheckBox IsChecked="{Binding Configuration.Feedbacks[0].Status,Converter={StaticResource VisibilityToBool}}"/>
-                            <CheckBox IsChecked="{Binding Configuration.Feedbacks[1].Status,Converter={StaticResource VisibilityToBool}}"/>
-                            <CheckBox IsChecked="{Binding Configuration.Feedbacks[2].Status,Converter={StaticResource VisibilityToBool}}"/>
-                            <CheckBox IsChecked="{Binding Configuration.Feedbacks[3].Status,Converter={StaticResource VisibilityToBool}}"/>
-                            <CheckBox IsChecked="{Binding Configuration.Feedbacks[4].Status,Converter={StaticResource VisibilityToBool}}"/>
-                            <CheckBox IsChecked="{Binding Configuration.Feedbacks[5].Status,Converter={StaticResource VisibilityToBool}}"/>
-                            <CheckBox IsChecked="{Binding Configuration.Feedbacks[6].Status,Converter={StaticResource VisibilityToBool}}"/>
-                            <CheckBox IsChecked="{Binding Configuration.Feedbacks[7].Status,Converter={StaticResource VisibilityToBool}}"/>
-                            <CheckBox IsChecked="{Binding Configuration.Feedbacks[8].Status,Converter={StaticResource VisibilityToBool}}"/>
-                        </StackPanel>
-                    </Canvas>
-                </TabItem>
+                
+                
                 <!--<TabItem Width="0" Height=".1" Background="{x:Null}" BorderBrush="{x:Null}" BorderThickness="0">
                     <Canvas Background="White"  Width="721" Height="516">
                         <TextBlock Text="染料名称：" Canvas.Top="335" Canvas.Left="30"/>
@@ -341,12 +297,12 @@
 
                         <Button Content="装载曲线" Width="106" Height="30" Canvas.Right="300" Canvas.Bottom="100" Canvas.Left="330" Canvas.Top="444" Command="{Binding Test}"/>
                     </Canvas>
-                </TabItem>-->
-            </TabControl>
-            <Line Width="1040" Height="5" X1="0" X2="1040" StrokeThickness="3" Stroke="{StaticResource BlueColor}" Canvas.Left="30" Canvas.Bottom="50"/>
+                </TabItem>--><!--
+            </TabControl>-->
+            <!--<Line Width="1040" Height="5" X1="0" X2="1040" StrokeThickness="3" Stroke="{StaticResource BlueColor}" Canvas.Left="30" Canvas.Bottom="50"/>
             <Button Width="90" Height="30" Content="上一步" Canvas.Right="140" Canvas.Bottom="10" Command="{Binding SwitchView}" CommandParameter="-1"/>
 
-            <Button Width="90" Height="30" Content="下一步" Canvas.Right="40" Canvas.Bottom="10" Command="{Binding SwitchView}" CommandParameter="1"/>
+            <Button Width="90" Height="30" Content="下一步" Canvas.Right="40" Canvas.Bottom="10" Command="{Binding SwitchView}" CommandParameter="1"/>-->
         </Canvas>
 
     </Viewbox>

@@ -17,21 +17,9 @@ namespace CTFD.ViewModel.Setup
         public string ProjectName { get; set; }
         public string Detection { get; set; }
 
-        public Sample[] Detections { get; private set; }
+        public string[] Roles => new string[] { "操作员","管理员","工程师"};
 
-        private int viewIndex;
-        public int ViewIndex
-        {
-            get { return this.viewIndex; }
-            set
-            {
-                if (value >= 0 && value <= 3)
-                {
-                    this.viewIndex = value;
-                    this.RaisePropertyChanged(nameof(this.ViewIndex));
-                }
-            }
-        }
+        public Sample[] Detections { get; private set; }
 
         public Model.RuntimeData.Setup Configuration => General.WorkingData.Configuration;
 
@@ -112,13 +100,6 @@ namespace CTFD.ViewModel.Setup
 
         public RelayCommand SelectColor => new RelayCommand(() => this.IsPopupColorSelectionBox = true);
 
-        public RelayCommand Test => new RelayCommand(() =>
-        {
-
-        });
-
-        public RelayCommand<int> SwitchView => new RelayCommand<int>((index) => this.ViewIndex += index);
-
         public RelayCommand ReConnectServer => new RelayCommand(() =>
         {
             General.RaiseGlobalHandler(GlobalEvent.ResetTcpServer);
@@ -145,40 +126,6 @@ namespace CTFD.ViewModel.Setup
         private void WriteSetupFile()
         {
             General.WriteJsonFile((object)Configuration, $"{Environment.CurrentDirectory}{Properties.Resources.SetupFilePath}", Encoding.Default);
-        }
-    }
-
-    public class RoleToInt32 : IValueConverter
-    {
-        object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return Convert.ToInt32(value);
-        }
-
-        object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return (Role)value;
-        }
-    }
-
-    public class RoleToString : IValueConverter
-    {
-        object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            var result = string.Empty;
-            switch (Convert.ToInt32(value))
-            {
-                case 0: { result = "工程师"; break; }
-                case 1: { result = "管理员"; break; }
-                case 2: { result = "操作员"; break; }
-                default: break;
-            }
-            return result;
-        }
-
-        object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return (Role)value;
         }
     }
 }

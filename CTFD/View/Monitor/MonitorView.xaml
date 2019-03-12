@@ -13,8 +13,6 @@
     xmlns:cv="clr-namespace:CTFD.ViewModel.Converter"
     xmlns:validation="clr-namespace:CTFD.ViewModel.Validation"
     xmlns:LiveCharts="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
-    xmlns:gc="clr-namespace:LiveCharts.Geared;assembly=LiveCharts.Geared"
-    xmlns:lcu="http://schemas.arction.com/charting/ultimate/"
     x:Class="CTFD.View.Monitor.MonitorView"
     mc:Ignorable="d"
     x:Name="Instance"
@@ -23,20 +21,17 @@
     <Viewbox x:Name="Viewbox1" Stretch="Fill" >
         <Viewbox.Resources>
             <cv:BoolInversion x:Key="BoolInversion"/>
+
             <cv:ViewIndexToVisibility x:Key="ViewIndexToVisibility"/>
-            <Style TargetType="{x:Type GroupBox}">
-                <Setter Property="FontSize" Value="18"/>
-                <Setter Property="BorderThickness" Value="3"/>
-                <Setter Property="FontWeight" Value="Bold"/>
-                <Setter Property="Foreground" Value="{StaticResource GreenColor}"/>
-                <Setter Property="Width" Value="256"/>
-                <Setter Property="Canvas.Top" Value="60"/>
-            </Style>
+
             <validation:DissociationTemperatureRule x:Key="DissociationTemperatureRule"/>
+
             <cv:StackPanelHeightToGroupBoxHeight x:Key="StackPanelHeightToGroupBoxHeight"/>
+
             <DropShadowEffect x:Key="PanelEffect" Direction="180" BlurRadius="22" Color="#FFD8D8D8"/>
 
             <Style TargetType="{x:Type ToolTip}" BasedOn="{StaticResource ToolTip}"/>
+
             <StackPanel x:Key="SaveTemplate" Orientation="Horizontal">
                 <Canvas Width="38" Height="25">
                     <Path Data="{StaticResource Template}" Fill="White" Canvas.Left="14" />
@@ -92,14 +87,6 @@
                 <TextBlock Foreground="White" FontSize="14" Text="打印报告" Width="80" Margin="6,0,0,0"/>
             </StackPanel>
 
-            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource AnimationButton}">
-                <Setter Property="Height" Value="30"/>
-                <Setter Property="Width" Value="130"/>
-                <Setter Property="Background" Value="{StaticResource BlueColor}"/>
-                <Setter Property="Foreground" Value="White"/>
-                <Setter Property="FontWeight" Value="Bold"/>
-            </Style>
-
             <ContextMenu x:Key="SettingSample">
                 <MenuItem Header="编辑" Command="{Binding ShowSampleSettingView}" CommandParameter="{Binding SelectedItems, ElementName=DataGrid1}"/>
                 <Separator/>
@@ -147,23 +134,15 @@
         </Viewbox.Resources>
         <Canvas Background="{StaticResource WathetColor2}" Tag="0" Width="1100" Height="630" >
             <Canvas.Resources>
-                <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource TextBox}">
-                    <Setter Property="Background" Value="{StaticResource BlueColor}"/>
-                    <Setter Property="Foreground" Value="{StaticResource ChartColor1}"/>
-                    <Setter Property="Width" Value="130"/>
-                    <Setter Property="Height" Value="20"/>
-                    <Setter Property="FontSize" Value="16"/>
-                    <Setter Property="Canvas.Left" Value="368"/>
-                    <Setter Property="VerticalAlignment" Value="Bottom"/>
-                </Style>
-                <Style TargetType="{x:Type control:VerifyTextBox}" BasedOn="{StaticResource VerifyTextBox}">
+
+                <!--<Style TargetType="{x:Type control:VerifyTextBox}" BasedOn="{StaticResource VerifyTextBox}">
                     <Setter Property="Width" Value="60"/>
                     <Setter Property="Height" Value="20"/>
                     <Setter Property="FontSize" Value="16"/>
                     <Setter Property="Canvas.Left" Value="368"/>
                     <Setter Property="VerticalAlignment" Value="Bottom"/>
                     <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                </Style>
+                </Style>-->
 
                 <DrawingBrush x:Key="NumberDown">
                     <DrawingBrush.Drawing>
@@ -189,49 +168,42 @@
                         </GeometryDrawing>
                     </DrawingBrush.Drawing>
                 </DrawingBrush>
-                <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TextBlock}">
-                    <Setter Property="Foreground" Value="{StaticResource BlueColor}"/>
-                    <Setter Property="FontSize" Value="16"/>
-                    <Setter Property="FontWeight" Value="Bold"/>
-                </Style>
+
                 <Style TargetType="{x:Type Path}">
                     <Setter Property="Fill" Value="{StaticResource BlueColor}"/>
                 </Style>
             </Canvas.Resources>
             <TabControl SelectedIndex="{Binding StepIndex}" BorderThickness="0,0,0,3" BorderBrush="{StaticResource WathetColor}" Height="{Binding ExperimentViewHeight,FallbackValue=637}" Width="1100" Canvas.Top="-4">
                 <TabItem Height=".1">
-                    <Canvas>
-                        <!--<TextBlock Text="任务分支选择" FontSize="35" Canvas.Left="440" Canvas.Top="70" Foreground="{StaticResource GreenColor}"  />-->
-                        <Button Command="{Binding SwitchViewExperiment}" CommandParameter="1"  Background="{StaticResource BlueColor}" Foreground="White" Width="160" Height="180" Canvas.Left="320" Canvas.Top="220">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Button Command="{Binding SwitchViewExperiment}" CommandParameter="1"  Background="{StaticResource BlueColor}" Foreground="White" Width="160" Height="180" >
                             <StackPanel Orientation="Vertical">
                                 <Path Data="{StaticResource Experiment}" Fill="White" Stretch="Fill" Width="100" Height="100"/>
                                 <TextBlock Style="{StaticResource TextBlock}" FontSize="24" Text="新建实验" Margin="0,15,0,0"/>
                             </StackPanel>
                         </Button>
-                        <Button Background="{StaticResource BlueColor}" Command="{Binding SwitchViewExperiment}" CommandParameter="5" Foreground="White" Width="160" Height="180" Canvas.Left="600" Canvas.Top="220">
+                        <Button Background="{StaticResource BlueColor}" Command="{Binding SwitchViewExperiment}" CommandParameter="5" Foreground="White" Width="160" Height="180" Margin="50,0,0,0">
                             <StackPanel Orientation="Vertical">
                                 <Path Data="{StaticResource Search}" Fill="White" Stretch="Fill" Width="100" Height="100" />
                                 <TextBlock Style="{StaticResource TextBlock}" FontSize="24" Text="历史报告" Margin="0,15,0,0"/>
                             </StackPanel>
                         </Button>
-                    </Canvas>
+                        <Button Visibility="{Binding IsAccountManagementEnabled}" Background="{StaticResource BlueColor}" Command="{Binding }" CommandParameter="5" Foreground="White" Width="160" Height="180" Margin="50,0,0,0">
+                            <StackPanel Orientation="Vertical">
+                                <Path Data="{StaticResource AccountManage}" Fill="White" Stretch="Fill" Width="90" Height="90" Margin="0,5,0,0"/>
+                                <TextBlock Style="{StaticResource TextBlock}" FontSize="24" Text="账号管理" Margin="0,20,0,0"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Visibility="{Binding IsSystemSetupEnabled}" Background="{StaticResource BlueColor}"  CommandParameter="5" Foreground="White" Width="160" Height="180" Margin="50,0,0,0">
+                            <StackPanel Orientation="Vertical">
+                                <Path Data="{StaticResource Setup}" Fill="White" Stretch="Fill" Width="100" Height="100" />
+                                <TextBlock Style="{StaticResource TextBlock}" FontSize="24" Text="系统配置" Margin="0,15,0,0"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
                 </TabItem>
                 <TabItem Height=".1">
                     <Canvas >
-                        <Canvas.Resources>
-                            <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TextBlock}">
-                                <Setter Property="Foreground" Value="{StaticResource BlueColor}"/>
-                                <Setter Property="FontSize" Value="16"/>
-                                <Setter Property="FontWeight" Value="Bold"/>
-                            </Style>
-                            <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource TextBox}">
-                                <Setter Property="Background" Value="{StaticResource BlueColor}"/>
-                                <Setter Property="Foreground" Value="{StaticResource ChartColor1}"/>
-                                <Setter Property="FontSize" Value="16"/>
-                                <Setter Property="Width" Value="130"/>
-                            </Style>
-
-                        </Canvas.Resources>
                         <Canvas Width="320" Height="320" Canvas.Left="90" Canvas.Top="150">
                             <i:Interaction.Behaviors>
                                 <behavior:SampleMultiSelect ViewModel="{Binding ''}"/>
@@ -241,7 +213,7 @@
                         </Canvas>
                         <Path Data="{StaticResource Horn}" Fill="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" Width="26" Height="26" Stretch="Fill" Canvas.Top="60" Canvas.Left="60"/>
                         <TextBlock Foreground="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" Text="        您可以扫描试剂盒上二维码覆盖当前默认的基本信息以及修改这些信息来满足实验要求(当前默认信息为上一次实验的基本信息)" TextWrapping="Wrap" Canvas.Left="60" Canvas.Top="55" LineStackingStrategy="BlockLineHeight" LineHeight="30" Width="1004"/>
-                        <Button Command="{Binding Rollback}" Width="241" Content="恢复默认信息（上一次实验信息）" Canvas.Left="775" Canvas.Top="480"/>
+                        <Button  Command="{Binding Rollback}" Width="241" Content="恢复默认信息（上一次实验信息）" Canvas.Left="775" Canvas.Top="480"/>
                         <GroupBox Header="实验信息设置" Canvas.Left="470" Canvas.Top="120" Width="275" Height="120" FontSize="16" FontWeight="Bold" Foreground="{StaticResource GreenColor}">
                             <Canvas>
                                 <TextBlock LineStackingStrategy="BlockLineHeight" LineHeight="40"  Text="实验名称：&#xA;是否熔解：" Canvas.Left="10" Canvas.Top="10"/>
@@ -575,7 +547,7 @@
                                 </Canvas>
 
                                 <Canvas Visibility="{Binding Experiment.Feedbacks[3].Status}">
-                                    <Path  Data="{StaticResource Project}"  Width="15" Canvas.Left="6"/>
+                                    <Path  Data="{StaticResource Project}"  Width="30" Canvas.Left="-1"/>
                                     <TextBlock Text="{Binding Experiment.Feedbacks[3].Value, FallbackValue=未知项目, StringFormat=项目名称：\{0\}}" Foreground="{StaticResource ChartColor1}" />
                                 </Canvas>
 
@@ -614,7 +586,7 @@
                     </Canvas>
                 </TabItem>
                 <TabItem Height=".1">
-                    <Grid>
+                    <Grid x:Name="Grid1">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="10"/>
@@ -695,8 +667,9 @@
                                 </GroupBox>
                             </Grid>
                             <Grid >
+
                                 <LiveCharts:CartesianChart x:Name="FinalCurve"
-                                    Margin="10,10,5,0" 
+                                    Width="800" Height="500" MouseDown="FinalCurve_MouseDown" MouseUp="FinalCurve_MouseUp"
                                     DisableAnimations="True" LegendLocation="None" DataTooltip="{x:Null}" 
                                     HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Series="{Binding Experiment.Charts.FinalCurve}"
                                     Foreground="{StaticResource BlueColor}" FontSize="8" FontWeight="Bold" >
@@ -718,7 +691,12 @@
                                         </LiveCharts:Axis>
                                     </LiveCharts:CartesianChart.AxisY>
                                 </LiveCharts:CartesianChart>
-                                
+                                <Button Content="初始" Margin="0,0,0,0" Width="50" VerticalAlignment="Bottom" Click="Button_Click" />
+
+                                <Button x:Name="persent" Content="计算" Margin="150,0,0,0" Width="50" VerticalAlignment="Bottom" Click="persent_Click" />
+
+                                <Button x:Name="Reverse" Content="计算" Margin="150,0,0,0" Width="50" VerticalAlignment="Bottom" Click="persent_Click" />
+
                             </Grid>
                         </DockPanel>
                         <GridSplitter Style="{StaticResource GridSplitter}" ShowsPreview="True" Grid.Column="1" Grid.RowSpan="3" Width="10"  VerticalAlignment="Stretch" HorizontalAlignment="Center"/>
@@ -743,7 +721,7 @@
                                 <DataGridTextColumn MinWidth="80"  Header="TM值"  Binding="{Binding TmResult}"/>
                             </DataGrid.Columns>
                         </DataGrid>
-
+                      
                     </Grid>
                 </TabItem>
                 <TabItem Height=".1">
@@ -816,68 +794,48 @@
                             </DataGrid.Columns>
                         </DataGrid>
                         <Canvas Width="340" Height="80" Canvas.Left="740" Canvas.Bottom="0">
-                            <Button Style="{StaticResource AnimationButton}" Background="{StaticResource BlueColor}" Foreground="White" Command="{Binding OpenFluorescenceChart}" Width="100" Height="30" Content="打开" />
-                            <Button Style="{StaticResource AnimationButton}" Background="{StaticResource BlueColor}" Foreground="White" Command="{Binding SaveFluorescenceChart}" Width="100" Height="30" Content="导出" Canvas.Top="40"/>
+                            <Button Background="{StaticResource BlueColor}" Foreground="White" Command="{Binding OpenFluorescenceChart}" Width="100" Height="30" Content="打开" />
+                            <Button Background="{StaticResource BlueColor}" Foreground="White" Command="{Binding SaveFluorescenceChart}" Width="100" Height="30" Content="导出" Canvas.Top="40"/>
 
-                            <Button Style="{StaticResource AnimationButton}" Background="{StaticResource BlueColor}" Foreground="White" Width="100" Height="30" Content="打印报告" Canvas.Left="120" />
-                            <Button Style="{StaticResource AnimationButton}" Background="{StaticResource BlueColor}" Foreground="White" Width="100" Height="30" Content="全部打印" Canvas.Left="120"  Canvas.Top="40"/>
+                            <Button Background="{StaticResource BlueColor}" Foreground="White" Width="100" Height="30" Content="打印报告" Canvas.Left="120" />
+                            <Button Background="{StaticResource BlueColor}" Foreground="White" Width="100" Height="30" Content="全部打印" Canvas.Left="120"  Canvas.Top="40"/>
 
-                            <Button Style="{StaticResource AnimationButton}" Background="{StaticResource BlueColor}" Command="{Binding Test}" CommandParameter="0" Foreground="White" Width="100" Height="30" Content="发送" Canvas.Left="240" />
-                            <Button Style="{StaticResource AnimationButton}" Background="{StaticResource BlueColor}" Command="{Binding Test}" CommandParameter="1" Foreground="White" Width="100" Height="30" Content="连接" Canvas.Left="240"  Canvas.Top="40"/>
+                            <Button Background="{StaticResource BlueColor}" Command="{Binding Test}" CommandParameter="0" Foreground="White" Width="100" Height="30" Content="发送" Canvas.Left="240" />
+                            <Button Background="{StaticResource BlueColor}" Command="{Binding Test}" CommandParameter="1" Foreground="White" Width="100" Height="30" Content="连接" Canvas.Left="240"  Canvas.Top="40"/>
                         </Canvas>
                     </Canvas>
                 </TabItem>
-                <!--
                 <TabItem Height=".1">
-                            <Canvas>
-                                <TextBlock Text="扫描试剂盒上二维码覆盖当前实验基本信息" FontSize="29" Canvas.Left="300" Canvas.Top="70" Foreground="{StaticResource GreenColor}"  />
-                <Button Style="{StaticResource AnimationButton}" Command="{Binding ShowManualSettingView}" Width="120" Height="40" Canvas.Left="930" Background="{StaticResource BlueColor}" Foreground="White" Content="手动修改" Canvas.Top="392" FontSize="16"/>
-                <TextBlock Text="实验名称：" FontSize="26" Canvas.Left="390" Canvas.Top="188"   />
-                <TextBox Text="{Binding Experiment.Name,UpdateSourceTrigger=PropertyChanged}" CaretBrush="{StaticResource GreenColor}" SelectionBrush="{StaticResource GreenColor}" BorderBrush="{StaticResource BlueColor}" FontSize="23" Width="250" Height="35" Canvas.Left="525" Canvas.Top="187"/>
-                <TextBlock Text="{Binding Experiment.Project.GroupName, FallbackValue=所属分组： 未知, StringFormat=所属分类： \{0:C\}}" FontSize="26" Canvas.Left="390" Canvas.Top="258" />
-                <TextBlock Text="{Binding Experiment.Project.Name, FallbackValue=项目名称： 未知, StringFormat=项目名称： \{0:C\}}" FontSize="26" Canvas.Left="390" Canvas.Top="328" />
-                <TextBlock Text="是否熔解：" Canvas.Left="390" Canvas.Top="400" FontSize="26"/>
-                <ToggleButton Style="{StaticResource AnimationToggleButton}" IsChecked="{Binding Experiment.Project.Parameter.IsMelt}" Background="{StaticResource BlueColor}" Canvas.Left="531" Canvas.Top="402" Width="60" />
-        </Canvas>
-        </TabItem>
-        -->
+                    <Canvas  Margin="10">
+                        <DataGrid Style="{StaticResource DataGrid}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedAccount}" ItemsSource="{Binding Configuration.Accounts}" Canvas.Left="200" Canvas.Top="30" Height="400"  >
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Width="120" Header="用户名" Binding="{Binding UserName}"/>
+                                <DataGridTextColumn Width="120" Header="密码" Binding="{Binding Password}"/>
+                                <DataGridTextColumn Width="80" Header="权限" Binding="{Binding Role}"/>
+                                <DataGridTextColumn Width="130" Header="添加日期" Binding="{Binding DateTime,Mode=OneWay}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <Canvas Canvas.Left="200" Canvas.Top="430" Width="454" Height="160">
+                            <TextBlock  Text="账户：" Width="50" Height="25" Canvas.Left="10" Canvas.Top="15"/>
+                            <TextBox Text="{Binding CurrentAccount.UserName}" Canvas.Left="70" Canvas.Top="15" Width="120"/>
+
+                            <TextBlock  Text="密码：" Width="50" Height="25" Canvas.Left="220" Canvas.Top="15"/>
+                            <TextBox Text="{Binding CurrentAccount.Password}" Canvas.Left="280" Canvas.Top="15" Width="120"/>
+
+                            <TextBlock  Text="权限：" Width="50" Height="25" Canvas.Left="10" Canvas.Top="60"/>
+                            <ComboBox Style="{StaticResource ComboBox}" ItemsSource="{Binding Roles}" SelectedItem="{Binding CurrentAccount.Role}" Width="120" Height="30" Canvas.Left="70" Canvas.Top="60" />
+
+                            <Button Command="{Binding AddAccount}" Width="130" Height="30" Content="{StaticResource AddAccount}" VerticalAlignment="Top" Canvas.Left="15" Canvas.Top="110"/>
+                            <Button Command="{Binding EditAccount}" Width="130" Height="30" Content="{StaticResource EditAccount}" VerticalAlignment="Top" Canvas.Left="160" Canvas.Top="110"/>
+                            <Button Command="{Binding DeleteAccount}" Width="130" Height="30" Content="{StaticResource RemoveAccount}" VerticalAlignment="Top" Canvas.Left="305" Canvas.Top="110"/>
+                        </Canvas>
+                    </Canvas>
+                </TabItem>
             </TabControl>
-            <!--<Canvas Width="1100" Height="50" Canvas.Bottom="0">
-                <Line X1="0" X2="670" Width="670" Height="8" Canvas.Left="220" Canvas.Top="50" Stroke="{StaticResource WathetColor}" StrokeThickness="20"/>
-                <CheckBox Style="{StaticResource ColorTextSwitch}" IsChecked="{Binding IsStartView, Mode=OneWay}" IsEnabled="False" Background="{StaticResource BlueColor}" Content="开始" FontSize="28" Width="110" Height="50" Canvas.Left="50" />
-                <CheckBox Style="{StaticResource ColorTextSwitch}" IsChecked="{Binding IsBasicSetupView, Mode=OneWay}" IsEnabled="False" Background="{StaticResource BlueColor}" Content="基本设置" FontSize="28" Width="110" Height="50" Canvas.Left="200"  />
-                <CheckBox Style="{StaticResource ColorTextSwitch}" IsChecked="{Binding IsSampleSetupView, Mode=OneWay}" IsEnabled="False" Background="{StaticResource BlueColor}" Content="样本信息" FontSize="28" Width="110" Height="50" Canvas.Left="350"  />
-                <CheckBox Style="{StaticResource ColorTextSwitch}" IsChecked="{Binding IsExprimentView, Mode=OneWay}" IsEnabled="False" Background="{StaticResource BlueColor}" Content="运行实验" FontSize="28" Width="110" Height="50" Canvas.Left="500"/>
-                <CheckBox Style="{StaticResource ColorTextSwitch}" IsChecked="{Binding IsAnalysisView, Mode=OneWay}" IsEnabled="False" Background="{StaticResource BlueColor}" Content="结果分析" FontSize="28" Width="110" Height="50" Canvas.Left="650" />
-                <CheckBox Style="{StaticResource ColorTextSwitch}" IsChecked="{Binding IsReportView, Mode=OneWay}" IsEnabled="False" Background="{StaticResource BlueColor}" Content="报告" FontSize="28" Width="110" Height="50" Canvas.Left="800" />
-            </Canvas>-->
 
             <Button Content="上一步" Command="{Binding TurnPrevious}" Visibility="{Binding StepIndex, Converter={StaticResource ViewIndexToVisibility},FallbackValue=Hidden}" Width="100" Height="30" Canvas.Right="150" Canvas.Bottom="10"/>
             <Button Content="下一步" Command="{Binding TurnNext}" Visibility="{Binding StepIndex, Converter={StaticResource ViewIndexToVisibility},FallbackValue=Hidden}" Width="100" Height="30"  Canvas.Right="30" Canvas.Bottom="10"/>
-
-
-
-
-
-
-            <!--<StackPanel  Width="120" Canvas.Right="50" Canvas.Left="930" Canvas.Bottom="10">
-                <StackPanel.Resources>
-                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource Button}">
-                        <Setter Property="Width" Value="120"/>
-                        <Setter Property="Height" Value="40"/>
-                        <Setter Property="Margin" Value="0,15,0,0"/>
-                    </Style>
-                </StackPanel.Resources>
-                -->
-            <!--<Button Command="{Binding OpenFluorescenceChart}" Content="{StaticResource OpenChart}"/>
-                <Button Command="{Binding SaveFluorescenceChart}" Content="{StaticResource SaveChart}"/>-->
-            <!--
-
-                <Button Command="{Binding OpenTemplate}" Content="{StaticResource OpenTemplate}"/>
-                <Button Command="{Binding SaveTemplate}" Content="{StaticResource SaveTemplate}"/>
-                <Button Command="{Binding SaveTemplate}" CommandParameter="True" Content="{StaticResource Pinter}" />
-
-            </StackPanel>-->
 
             <Canvas Canvas.Right="30" Width="902"  Visibility="{Binding TempeInfoPanelState, FallbackValue=Collapsed}" >
                 <i:Interaction.Triggers>

@@ -23,20 +23,7 @@
 
         <convert:StringToBrush x:Key="StringToBrush"/>
 
-        <StackPanel x:Key="AddAccount" Orientation="Horizontal">
-            <Path Data="{StaticResource AddAccount}" Fill="White" Margin="15,-3,0,0"/>
-            <TextBlock Foreground="White" FontSize="14" Text="添加用户" Width="80" Margin="6,0,0,0"/>
-        </StackPanel>
-
-        <StackPanel x:Key="RemoveAccount" Orientation="Horizontal">
-            <Path Data="{StaticResource RemoveAccount}" Fill="White" Margin="5,-3,0,0"/>
-            <TextBlock Foreground="White" FontSize="14" Text="删除用户" Width="80" Margin="6,0,0,0"/>
-        </StackPanel>
-
-        <StackPanel x:Key="EditAccount" Orientation="Horizontal">
-            <Path Data="{StaticResource EditAccount}" Fill="White" Margin="5,-3,0,0"/>
-            <TextBlock Foreground="White" FontSize="14" Text="编辑用户" Width="80" Margin="6,0,0,0"/>
-        </StackPanel>
+      
 
         <StackPanel x:Key="AddDye" Orientation="Horizontal">
             <Path Data="{StaticResource CircleOutlineAdd}" Fill="White" Margin="10,-1,0,0"/>
@@ -89,38 +76,8 @@
     </UserControl.Resources>
     <Viewbox Stretch="Fill" >
         <Canvas Width="1100" Height="630">
-            <GroupBox Header="账户管理" Width="500" Height="600" Canvas.Left="20" Canvas.Top="20">
-                <Canvas  Margin="10">
-                    <DataGrid Style="{StaticResource DataGrid}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedAccount}" ItemsSource="{Binding Configuration.Accounts}" Canvas.Left="6" Height="400"  >
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Width="120" Header="用户名" Binding="{Binding UserName}"/>
-                            <DataGridTextColumn Width="120" Header="密码" Binding="{Binding Password}"/>
-                            <DataGridTextColumn Width="80" Header="权限" Binding="{Binding Role}"/>
-                            <DataGridTextColumn Width="130" Header="添加日期" Binding="{Binding DateTime,Mode=OneWay}"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-
-                    <Canvas Canvas.Left="10" Canvas.Top="400" Width="454" Height="160">
-                        <TextBlock  Text="账户：" Width="50" Height="25" Canvas.Left="10" Canvas.Top="15"/>
-                        <TextBox Text="{Binding CurrentAccount.UserName}" Canvas.Left="70" Canvas.Top="15" Width="120"/>
-
-                        <TextBlock  Text="密码：" Width="50" Height="25" Canvas.Left="220" Canvas.Top="15"/>
-                        <TextBox Text="{Binding CurrentAccount.Password}" Canvas.Left="280" Canvas.Top="15" Width="120"/>
-
-                        <TextBlock  Text="权限：" Width="50" Height="25" Canvas.Left="10" Canvas.Top="60"/>
-                        <ComboBox Style="{StaticResource ComboBox}" ItemsSource="{Binding Roles}" SelectedItem="{Binding CurrentAccount.Role}" Width="120" Height="30" Canvas.Left="70" Canvas.Top="60" />
-
-                        <Button Command="{Binding AddAccount}" Width="130" Height="30" Content="{StaticResource AddAccount}" VerticalAlignment="Top" Canvas.Left="15" Canvas.Top="110"/>
-                        <Button Command="{Binding EditAccount}" Width="130" Height="30" Content="{StaticResource EditAccount}" VerticalAlignment="Top" Canvas.Left="160" Canvas.Top="110"/>
-                        <Button Command="{Binding DeleteAccount}" Width="130" Height="30" Content="{StaticResource RemoveAccount}" VerticalAlignment="Top" Canvas.Left="305" Canvas.Top="110"/>
-
-
-
-                    </Canvas>
-                </Canvas>
-            </GroupBox>
-
-            <Canvas Canvas.Left="600" Canvas.Top="30" Width="721" Height="516">
+            
+            <Canvas Canvas.Left="600" Canvas.Top="30" Width="422" Height="516">
                 <TextBlock Text="勾取需要展示给用户的信息字段" Canvas.Top="450" Canvas.Left="53"/>
 
                 <TextBlock Canvas.Left="100" Canvas.Top="70" LineStackingStrategy="BlockLineHeight" LineHeight="38" FontSize="17" Text="运行时间 ----&#xA;剩余时间 ----&#xA;实验名称 ----&#xA;项目名称 ----&#xA;实验人员 ----&#xA;实验状态 ----&#xD;电机转速 ----&#xA;上盖温度 ----&#xA;底座温度 ----&#xA;"/>

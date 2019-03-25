@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-    mc:Ignorable="d" 
+    mc:Ignorable="d" x:Name="Instance"
     xmlns:cv="clr-namespace:CTFD.ViewModel.Converter"
     xmlns:LiveCharts="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
     xmlns:vm="clr-namespace:CTFD.ViewModel.History"
@@ -15,25 +15,37 @@
     <Viewbox Stretch="Fill" >
         <Canvas Width="1100" Height="630">
             <Canvas.Resources>
+                
                 <cv:DateTimeToString x:Key="DateTimeToString"/>
                 <Style TargetType="TextBlock" BasedOn="{StaticResource TextBlock}">
                     <Setter Property="Foreground" Value="{StaticResource BlueColor}"/>
                     <Setter Property="FontSize" Value="16"/>
                 </Style>
+                <DataTemplate x:Key="Detail">
+                    <Button Style="{StaticResource Button}" Height="20" Width="66" FontSize="14" Content="查看" Command="{Binding DataContext.SearchDetail,ElementName=Instance}" CommandParameter="{Binding}"/>
+                </DataTemplate>
             </Canvas.Resources>
-            <DataGrid Style="{StaticResource DataGrid}" ItemsSource="{Binding Experiments}" HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="348" Height="530" Canvas.Top="20" Canvas.Left="20">
-
+            <DataGrid Style="{StaticResource DataGrid}" ItemsSource="{Binding Experiments}" AutoGenerateColumns="False" HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="390" Height="530" Canvas.Top="20" Canvas.Left="15">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="110" Header="实验名称" Binding="{Binding Name}"/>
+                    <DataGridTextColumn Width="80" Header="实验人员" Binding="{Binding User}"/>
+                    <DataGridTextColumn Width="130" Header="实验时间" Binding="{Binding StartTime}"/>
+                    <DataGridTemplateColumn Width="66" Header="实验信息" CellTemplate="{StaticResource Detail}"/>
+                </DataGrid.Columns>
             </DataGrid>
 
-            <GroupBox Header="实验参数"  Canvas.Top="10" Width="700" Height="174" FontSize="16" FontWeight="Bold" Foreground="{StaticResource GreenColor}" Canvas.Left="385">
+            <GroupBox Header="实验参数" Canvas.Right="15"  Canvas.Top="10" Width="660" Height="174" FontSize="16" FontWeight="Bold" Foreground="{StaticResource GreenColor}" >
                 <Canvas>
-                    <TextBlock LineStackingStrategy="BlockLineHeight" LineHeight="32"  Text="裂解温度：          (℃)        裂解时间：          (分钟)      扩增温度：          (℃)&#xA;扩增时间：          (分钟)     低速转速：          (rpm)     低速用时：          (分钟)&#xA;高速转速：          (rpm)     高速用时：          (分钟)     熔解用时：          (分钟)" Canvas.Left="15" Canvas.Top="10"/>
+                    <TextBlock LineStackingStrategy="BlockLineHeight" LineHeight="32"  Text="实验名称：                        实验人员：                         实验时间：&#xA;裂解温度：          (℃)        裂解时间：          (分钟)      扩增温度：          (℃)&#xA;扩增时间：          (分钟)     低速转速：          (rpm)     低速用时：          (分钟)&#xA;高速转速：          (rpm)     高速用时：          (分钟)     熔解用时：          (分钟)" Canvas.Left="15" Canvas.Top="5"/>
+                    <TextBox Text="{Binding Experiment.Name}" Canvas.Left="90" Canvas.Top="18" Width="100" IsReadOnly="True" />
+                    <TextBox Text="{Binding Experiment.User}" Canvas.Left="283" Canvas.Top="18" Width="100" IsReadOnly="True" />
+                    <TextBox Text="{Binding Experiment.StartTime}" Canvas.Left="483" Canvas.Top="18" Width="150" IsReadOnly="True" />
 
-                    <Canvas Width="580" Height="115" Canvas.Left="90" Canvas.Top="20">
-                        <TextBox Text="{Binding DT}" Canvas.Left="0" Width="50"/>
-                        <TextBox Text="{Binding DD}" Canvas.Left="194" Width="50"/>
-                        <TextBox Text="{Binding AT}" Canvas.Left="394" Width="50"/>
-                        <TextBox Text="{Binding AD}" Canvas.Left="0" Canvas.Top="32" Width="50"/>
+                    <Canvas Width="550" Height="90" Canvas.Left="90" Canvas.Top="50">
+                        <TextBox Text="{Binding Experiment.Parameter.LysisTemperature}" Canvas.Left="0" Width="50" IsReadOnly="True"/>
+                        <TextBox Text="{Binding Experiment.Parameter.LysisDuration}" Canvas.Left="194" Width="50"/>
+                        <TextBox Text="{Binding Experiment.Parameter.AmplificationTemperature}" Canvas.Left="394" Width="50"/>
+                        <TextBox Text="{Binding Experiment.Parameter.AmplificationDuration}" Canvas.Left="0" Canvas.Top="32" Width="50"/>
                         <TextBox Text="{Binding Experiment.Parameter.LowSpeed}" Canvas.Left="194" Canvas.Top="32" Width="50"/>
                         <TextBox Text="{Binding Experiment.Parameter.LowSpeedDuration}" Canvas.Left="394" Canvas.Top="32" Width="50"/>
                         <TextBox Text="{Binding Experiment.Parameter.HighSpeed}" Canvas.Left="0" Canvas.Top="64" Width="50"/>
@@ -43,8 +55,44 @@
                 </Canvas>
             </GroupBox>
 
-            <GroupBox Header="实验曲线"  Canvas.Top="200" Width="700" Height="350" FontSize="16" FontWeight="Bold" Foreground="{StaticResource GreenColor}" Canvas.Left="385">
-                <LiveCharts:CartesianChart IsHitTestVisible="False" DisableAnimations="True"  LegendLocation="None"    Canvas.Right="20" Canvas.Top="246" Width="681" Height="304" Canvas.Left="393" />
+            <GroupBox Header="实验曲线"  Canvas.Top="200" Width="660" Height="350" FontSize="16" FontWeight="Bold" Foreground="{StaticResource GreenColor}" Canvas.Right="15">
+                <Grid>
+                    <Grid.Resources>
+                        <Style TargetType="RadioButton" BasedOn="{StaticResource RadioButton}">
+                            <Setter Property="Background" Value="{StaticResource BlueColor}"/>
+                            <Setter Property="HorizontalAlignment" Value="Left"/>
+                            <Setter Property="VerticalAlignment" Value="Top"/>
+                            <Setter Property="Width" Value="25"/>
+                            <Setter Property="Height" Value="25"/>
+                        </Style>
+                    </Grid.Resources>
+                    <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="60,15" Text="扩增曲线            标准熔解            求导熔解"/>
+                    <RadioButton IsChecked="{Binding IsAmplificationSeries}" Margin="30,13,0,0"/>
+                    <RadioButton IsChecked="{Binding IsMelting1Series}" Margin="150,13,0,0"/>
+                    <RadioButton IsChecked="{Binding IsMelting2Series}" Margin="270,13,0,0"/>
+                    <LiveCharts:CartesianChart 
+                    DisableAnimations="True" LegendLocation="None" DataTooltip="{x:Null}" 
+                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Series="{Binding Experiment.Charts.FinalCurve}"
+                    Foreground="{StaticResource BlueColor}" FontWeight="Bold" Margin="10,50,10,10">
+                        <LiveCharts:CartesianChart.AxisX>
+                            <LiveCharts:Axis Title="{Binding Experiment.Charts.FinalXTitle}" MinValue="0" MaxValue="{Binding Experiment.Charts.FinalXMaxValue}"  FontSize="14" LabelFormatter="{Binding Experiment.Charts.FinalXFormatter}" Foreground="{StaticResource BlueColor}" FontWeight="Bold" >
+                                <LiveCharts:Axis.Separator>
+                                    <LiveCharts:Separator Tag="x" Stroke="{StaticResource WathetColor2}" StrokeThickness="1" Step="{Binding Experiment.Charts.AnalysisXStep}"/>
+                                </LiveCharts:Axis.Separator>
+                            </LiveCharts:Axis>
+                        </LiveCharts:CartesianChart.AxisX>
+                        <LiveCharts:CartesianChart.AxisY >
+                            <LiveCharts:Axis  Title="{Binding Experiment.Charts.FinalYTitle}" FontSize="14" MinValue="0"  Foreground="{StaticResource BlueColor}" FontWeight="Bold" LabelFormatter="{Binding Experiment.Charts.FinalYFormatter,Mode=OneTime}">
+                                <LiveCharts:Axis.Sections >
+                                    <LiveCharts:AxisSection x:Name="Section" Cursor="SizeNS" Visibility="{Binding SectionVisibility}" IsHitTestVisible="True" Draggable="True" Value="{Binding Experiment.Charts.Threshold,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Stroke="Green" StrokeThickness="2" StrokeDashArray="3,2"/>
+                                </LiveCharts:Axis.Sections>
+                                <LiveCharts:Axis.Separator>
+                                    <LiveCharts:Separator Tag="y" Stroke="{StaticResource WathetColor2}" StrokeThickness="1" />
+                                </LiveCharts:Axis.Separator>
+                            </LiveCharts:Axis>
+                        </LiveCharts:CartesianChart.AxisY>
+                    </LiveCharts:CartesianChart>
+                </Grid>
             </GroupBox>
 
             <TextBlock Text="实验名：                     实验员：                              起点：                                终点：" Canvas.Left="50" Canvas.Top="585"/>
@@ -58,7 +106,6 @@
             <TextBox Width="141" Canvas.Top="587" Canvas.Left="665" Text="{Binding Query.EndDateTime}"/>
             <Button Command="{Binding Search}" Content="查询" FontWeight="Bold" Width="100" Height="30" Canvas.Left="938" Canvas.Top="578"/>
 
-            <Button Command="{Binding Search2}" Content="曲线" FontWeight="Bold" Width="100" Height="30" Canvas.Left="800" Canvas.Top="578"/>
 
         </Canvas>
     </Viewbox>

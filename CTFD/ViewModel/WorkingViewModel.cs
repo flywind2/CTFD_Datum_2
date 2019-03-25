@@ -44,7 +44,7 @@ namespace CTFD.ViewModel
             {
                 if (value)
                 {
-                    this.ContentView = this.historyView;
+                    this.ContentView = this.helpView;
                     this.viewState = ViewState.HelpView;
                     this.RaiseViewState();
                 }
@@ -60,15 +60,15 @@ namespace CTFD.ViewModel
             }
         }
 
-        public bool IsSetupView
+        public bool IsHistoryView
         {
-            get => this.viewState == ViewState.SettingView ? true : false;
+            get => this.viewState == ViewState.HistoryView ? true : false;
             set
             {
                 if (value)
                 {
-                    this.ContentView = this.setupView;
-                    this.viewState = ViewState.SettingView;
+                    this.ContentView = this.historyView;
+                    this.viewState = ViewState.HistoryView;
                     this.RaiseViewState();
                 }
             }
@@ -96,7 +96,7 @@ namespace CTFD.ViewModel
             this.RaisePropertyChanged(nameof(this.IsRunningView));
             this.RaisePropertyChanged(nameof(this.IsHelpView));
             this.RaisePropertyChanged(nameof(this.IsLoginView));
-            this.RaisePropertyChanged(nameof(this.IsSetupView));
+            this.RaisePropertyChanged(nameof(this.IsHistoryView));
         }
     }
 }

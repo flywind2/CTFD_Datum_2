@@ -56,48 +56,41 @@
             <Ellipse Stroke="White" Width="160" Height="160" Canvas.Top="20" Canvas.Left="20" Fill="{DynamicResource WathetColor}"/>
             <Path  StrokeThickness="1" Fill="White" Width="50" Height="48" Canvas.Top="75" Canvas.Left="75" Data="M 20 7 A5.5 7 0 0 1 30 7 H38 A16 20 0 0 1 38 45 H12 A16 20 0 0 1 12 7Z"/>
 
-            <ContentControl DataContext="{Binding Samples[0]}" Canvas.Left="44" Canvas.Top="18" />
+            <ContentControl Canvas.Left="19" Canvas.Top="142"   DataContext="{Binding Samples[0]}" />
+            <ContentControl Canvas.Left="11" Canvas.Top="129"   DataContext="{Binding Samples[1]}" />
+            <ContentControl Canvas.Left="6" Canvas.Top="115"     DataContext="{Binding Samples[2]}" />
+            <ContentControl Canvas.Left="4" Canvas.Top="100"     DataContext="{Binding Samples[3]}" />
+            <ContentControl Canvas.Left="3" Canvas.Top="85"       DataContext="{Binding Samples[4]}" />
+            <ContentControl Canvas.Left="6" Canvas.Top="70"       DataContext="{Binding Samples[5]}" />
+            <ContentControl Canvas.Left="11" Canvas.Top="56"     DataContext="{Binding Samples[6]}" />
+            <ContentControl Canvas.Left="18" Canvas.Top="43"     DataContext="{Binding Samples[7]}" />
+            
+            <ContentControl Canvas.Left="44" Canvas.Top="18"     DataContext="{Binding Samples[8]}"/>
+            <ContentControl Canvas.Left="57"   Canvas.Top="11"   DataContext="{Binding Samples[9]}" />
+            <ContentControl Canvas.Left="71"   Canvas.Top="6"     DataContext="{Binding Samples[10]}" />
+            <ContentControl Canvas.Left="86" Canvas.Top="3"       DataContext="{Binding Samples[11]}" />
+            <ContentControl Canvas.Left="101" Canvas.Top="3"     DataContext="{Binding Samples[12]}" />
+            <ContentControl Canvas.Left="116" Canvas.Top="6"     DataContext="{Binding Samples[13]}" />
+            <ContentControl Canvas.Left="130" Canvas.Top="11"   DataContext="{Binding Samples[14]}" />
+            <ContentControl Canvas.Left="143" Canvas.Top="18"   DataContext="{Binding Samples[15]}" />
+            
+            <ContentControl Canvas.Left="167" Canvas.Top="42"   DataContext="{Binding Samples[16]}" />
+            <ContentControl Canvas.Left="174" Canvas.Top="55"   DataContext="{Binding Samples[17]}" />
+            <ContentControl Canvas.Left="180" Canvas.Top="69"   DataContext="{Binding Samples[18]}" />
+            <ContentControl Canvas.Left="182" Canvas.Top="84"   DataContext="{Binding Samples[19]}" />
+            <ContentControl Canvas.Left="182" Canvas.Top="99"   DataContext="{Binding Samples[20]}" />
+            <ContentControl Canvas.Left="180" Canvas.Top="114" DataContext="{Binding Samples[21]}" />
+            <ContentControl Canvas.Left="175" Canvas.Top="128" DataContext="{Binding Samples[22]}" />
+            <ContentControl Canvas.Left="168" Canvas.Top="141" DataContext="{Binding Samples[23]}" />
 
-            <ContentControl DataContext="{Binding Samples[1]}"  Canvas.Left="57"   Canvas.Top="11" />
-
-            <ContentControl DataContext="{Binding Samples[2]}" Canvas.Left="71"   Canvas.Top="6"/>
-
-            <ContentControl DataContext="{Binding Samples[3]}" Canvas.Left="86" Canvas.Top="3"/>
-
-            <ContentControl DataContext="{Binding Samples[4]}"  Canvas.Left="101" Canvas.Top="3" />
-
-            <ContentControl DataContext="{Binding Samples[5]}" Canvas.Left="116" Canvas.Top="6"/>
-
-            <ContentControl Canvas.Left="130" Canvas.Top="11"   DataContext="{Binding Samples[6]}" />
-            <ContentControl Canvas.Left="143" Canvas.Top="18"   DataContext="{Binding Samples[7]}" />
-
-            <ContentControl Canvas.Left="167" Canvas.Top="42"   DataContext="{Binding Samples[8]}" />
-            <ContentControl Canvas.Left="174" Canvas.Top="55"   DataContext="{Binding Samples[9]}" />
-            <ContentControl Canvas.Left="180" Canvas.Top="69"   DataContext="{Binding Samples[10]}" />
-            <ContentControl Canvas.Left="182" Canvas.Top="84"   DataContext="{Binding Samples[11]}" />
-            <ContentControl Canvas.Left="182" Canvas.Top="99"   DataContext="{Binding Samples[12]}" />
-            <ContentControl Canvas.Left="180" Canvas.Top="114" DataContext="{Binding Samples[13]}" />
-            <ContentControl Canvas.Left="175" Canvas.Top="128" DataContext="{Binding Samples[14]}" />
-            <ContentControl Canvas.Left="168" Canvas.Top="141" DataContext="{Binding Samples[15]}" />
-
-            <ContentControl Canvas.Left="44" Canvas.Top="169"   DataContext="{Binding Samples[16]}" />
-            <ContentControl Canvas.Left="58" Canvas.Top="175"   DataContext="{Binding Samples[17]}" />
-            <ContentControl Canvas.Left="72" Canvas.Top="180"   DataContext="{Binding Samples[18]}" />
-            <ContentControl Canvas.Left="87" Canvas.Top="183"   DataContext="{Binding Samples[19]}" />
-            <ContentControl Canvas.Left="102" Canvas.Top="183" DataContext="{Binding Samples[20]}" />
-            <ContentControl Canvas.Left="116" Canvas.Top="179" DataContext="{Binding Samples[21]}" />
-            <ContentControl Canvas.Left="130" Canvas.Top="174" DataContext="{Binding Samples[22]}" />
-            <ContentControl Canvas.Left="143" Canvas.Top="167" DataContext="{Binding Samples[23]}" />
-
-            <ContentControl Canvas.Left="18" Canvas.Top="43"     DataContext="{Binding Samples[24]}" />
-            <ContentControl Canvas.Left="11" Canvas.Top="56"     DataContext="{Binding Samples[25]}" />
-            <ContentControl Canvas.Left="6" Canvas.Top="70"       DataContext="{Binding Samples[26]}" />
-            <ContentControl Canvas.Left="3" Canvas.Top="85"       DataContext="{Binding Samples[27]}" />
-            <ContentControl Canvas.Left="4" Canvas.Top="100"     DataContext="{Binding Samples[28]}" />
-            <ContentControl Canvas.Left="6" Canvas.Top="115"     DataContext="{Binding Samples[29]}" />
-            <ContentControl Canvas.Left="11" Canvas.Top="129"   DataContext="{Binding Samples[30]}" />
-            <ContentControl Canvas.Left="19" Canvas.Top="142"   DataContext="{Binding Samples[31]}" />
-
+            <ContentControl Canvas.Left="143" Canvas.Top="167" DataContext="{Binding Samples[24]}" />
+            <ContentControl Canvas.Left="130" Canvas.Top="174" DataContext="{Binding Samples[25]}" />
+            <ContentControl Canvas.Left="116" Canvas.Top="179" DataContext="{Binding Samples[26]}" />
+            <ContentControl Canvas.Left="102" Canvas.Top="183" DataContext="{Binding Samples[27]}" />
+            <ContentControl Canvas.Left="87" Canvas.Top="183"   DataContext="{Binding Samples[28]}" />
+            <ContentControl Canvas.Left="72" Canvas.Top="180"   DataContext="{Binding Samples[29]}" />
+            <ContentControl Canvas.Left="58" Canvas.Top="175"   DataContext="{Binding Samples[30]}" />
+            <ContentControl Canvas.Left="44" Canvas.Top="169"   DataContext="{Binding Samples[31]}" />
         </Canvas>
     </Viewbox>
 </UserControl>

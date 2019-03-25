@@ -12,7 +12,7 @@ namespace CTFD.Model.RuntimeData
     {
         public Setup Configuration { get; set; } = new Setup();
 
-        public Experiment DefaultExperiment { get; set; }
+        //public Experiment DefaultExperiment { get; set; }
 
         public Query Query { get; set; } = new Query();
 

@@ -29,13 +29,7 @@
                     <EventTrigger RoutedEvent="ContentControl.Loaded">
                         <BeginStoryboard>
                             <Storyboard>
-                                <DoubleAnimation 
-                                Storyboard.TargetName  ="SpinnerRotate" 
-                                Storyboard.TargetProperty="(RotateTransform.Angle)"  
-                                From="0" 
-                                To="360" 
-                                Duration="0:0:05" 
-                                RepeatBehavior="Forever" />
+                                <DoubleAnimation Storyboard.TargetName  ="SpinnerRotate"  Storyboard.TargetProperty="(RotateTransform.Angle)" From="0" To="360" Duration="0:0:05" RepeatBehavior="Forever" />
                             </Storyboard>
                         </BeginStoryboard>
                     </EventTrigger>

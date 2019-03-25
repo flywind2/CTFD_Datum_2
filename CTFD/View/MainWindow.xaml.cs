@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CTFD.Global.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,11 @@ namespace CTFD.View
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void Fault_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            General.ShowFault(false);
         }
     }
 }

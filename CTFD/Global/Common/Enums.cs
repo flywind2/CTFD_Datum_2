@@ -11,7 +11,7 @@ namespace CTFD.Global.Common
         ShowWorkingView = 1,
         RaiseSelectedSamplesFromRack = 2,
         RaiseSelectedSamplesFromTable = 3,
-        ResetTcpServer = 4,
+        ResetTcpClient = 4,
         ShowToast = 5,
         CurveVisibilityChanged = 6,
         SectionChanged = 7,
@@ -20,7 +20,8 @@ namespace CTFD.Global.Common
         HistoryCurve1 = 10,
         HistoryCurve2 = 11,
         HistoryCurve3 = 12,
-        LoadRole = 13
+        LoadRole = 13,
+        ShowFault = 14
     }
 
     [Flags]
@@ -57,7 +58,7 @@ namespace CTFD.Global.Common
         End = 0x03,
 
         [Description("荧光曲线")]
-        RealtimeFluorescenceCurve = 0x04,
+        RealtimeAmplificationCurve = 0x04,
 
         [Description("上盖温度")]
         UpperTemperature = 0x05,
@@ -81,7 +82,7 @@ namespace CTFD.Global.Common
         QueryChart = 0x0B,
 
         [Description("扩增曲线")]
-        AmplificationCurve = 0x0C,
+        FinalAmplificationCurve = 0x0C,
 
         [Description("标准熔解曲线")]
         RealtimeMeltingCurve = 0x0D,
@@ -95,20 +96,29 @@ namespace CTFD.Global.Common
         [Description("CT值")]
         CtValue = 0x11,
 
+        [Description("TM值")]
+        TmValue = 0x12,
+
         [Description("查询曲线1")]
-        HistoryCurve1 = 19,
+        HistoryCurve1 = 0x13,
 
         [Description("查询曲线2")]
-        HistoryCurve2 = 20,
+        HistoryCurve2 = 0x14,
 
         [Description("查询曲线3")]
-        HistoryCurve3 = 21,
+        HistoryCurve3 = 0x15,
+
+        [Description("阈值")]
+        Threshold = 0x16,
+
+        [Description("故障")]
+        Fault = 0x17
     }
 
     [Flags]
     public enum Step
     {
-        [Description("就绪")]
+        [Description("温升")]
         CoolUp = 0x00,
 
         [Description("裂解")]

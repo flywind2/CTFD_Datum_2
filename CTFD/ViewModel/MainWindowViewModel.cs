@@ -1,19 +1,10 @@
-﻿using CTFD.Global;
-using CTFD.Global.Common;
-using CTFD.Model.Base;
+﻿using CTFD.Global.Common;
 using CTFD.Model.RuntimeData;
 using CTFD.View;
+using CTFD.View.Login;
 using CTFD.ViewModel.Base;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO.Ports;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace CTFD.ViewModel
 {
@@ -44,6 +35,28 @@ namespace CTFD.ViewModel
         public bool IsNotified { get; set; }
         public string Message { get; private set; }
 
+        private Visibility faultStatus = Visibility.Collapsed;
+        public Visibility FaultStatus
+        {
+            get { return this.faultStatus; }
+            set
+            {
+                this.faultStatus = value;
+                this.RaisePropertyChanged(nameof(this.FaultStatus));
+            }
+        }
+
+        private int faultZIndex;
+        public int FaultZIndex
+        {
+            get { return this.faultZIndex; }
+            set
+            {
+                this.faultZIndex = value;
+                this.RaisePropertyChanged(nameof(this.FaultZIndex));
+            }
+        }
+
         public RelayCommand Test => new RelayCommand(() => this.workingViewModel.MonitorViewModel.Test());
 
         public RelayCommand Close => new RelayCommand(() =>
@@ -58,7 +71,7 @@ namespace CTFD.ViewModel
             this.ContentView = this.loginView;
             General.GlobalHandler += General_GlobalHandler;
             this.InitializeLog();
-            this.InitializeDataBaseOperation();
+            //this.InitializeDataBaseOperation();
             this.workingView = new WorkingView();
         }
 
@@ -80,8 +93,10 @@ namespace CTFD.ViewModel
                 case GlobalEvent.Test: { break; }
                 case GlobalEvent.ShowLoginView: { this.ShowLoginView(); break; }
                 case GlobalEvent.ShowWorkingView: { this.ShowWorkingView(); break; }
+                case GlobalEvent.ResetTcpClient: { this.workingViewModel.MonitorViewModel.ResetTcpClient();break; }
                 case GlobalEvent.ShowToast: { this.ShowToast(e.Value.ToString()); break; };
                 case GlobalEvent.CurveVisibilityChanged: { this.RaiseCurveVisibility(e.Value as Tuple<int, bool>); break; }
+                case GlobalEvent.ShowFault: { this.ShowFault((bool)e.Value);break; }
                 default: break;
             }
         }
@@ -128,6 +143,12 @@ namespace CTFD.ViewModel
             this.RaisePropertyChanged(nameof(this.Message));
             this.IsNotified = true;
             this.RaisePropertyChanged(nameof(this.IsNotified));
+        }
+
+        public void ShowFault(bool isShow)
+        {
+            this.FaultStatus = isShow ? Visibility.Visible : Visibility.Collapsed;
+            this.FaultZIndex = isShow ? 2 : 0;
         }
     }
 }

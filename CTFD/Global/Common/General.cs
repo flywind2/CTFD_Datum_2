@@ -16,26 +16,13 @@ namespace CTFD.Global.Common
     public static partial class General
     {
 
+        public static void RaiseGlobalHandler(GlobalEvent globalEvent, object value = null) => General.GlobalHandler?.Invoke(null, new GlobalEventArgs(globalEvent, value));
 
-        public static void RaiseGlobalHandler(GlobalEvent globalEvent, object value = null)
-        {
-            General.GlobalHandler?.Invoke(null, new GlobalEventArgs(globalEvent, value));
-        }
+        public static string FindStringResource(string resourceKey) => General.FindResource(resourceKey).ToString();
 
-        public static string FindStringResource(string resourceKey)
-        {
-            return General.FindResource(resourceKey).ToString();
-        }
+        public static PathGeometry FindPathResource(string resourceKey) => (General.FindResource(resourceKey) as PathGeometry);
 
-        public static PathGeometry FindPathResource(string resourceKey)
-        {
-            return (General.FindResource(resourceKey) as PathGeometry);
-        }
-
-        public static object FindResource(string resourceKey)
-        {
-            return App.Current.FindResource(resourceKey);
-        }
+        public static object FindResource(string resourceKey) => App.Current.FindResource(resourceKey);
 
         public static T GetParentElement<T>(DependencyObject obj) where T : FrameworkElement
         {
@@ -110,11 +97,7 @@ namespace CTFD.Global.Common
             General.SetBinding(source.GetLastThermalUnit(), target.GetFirstThermalUnit());
         }
 
-        public static void WriteJsonFile(object obj, string fileName, Encoding encoding)
-        {
-            var aaa = General.JsonSerializeToString(obj);
-            File.WriteAllText(fileName,aaa, encoding);
-        }
+        public static void WriteJsonFile(object obj, string fileName, Encoding encoding) => File.WriteAllText(fileName, General.JsonSerializeToString(obj), encoding);
 
         public static T ReadJsonFile<T>(string fileName, Encoding encoding) => General.JsonDeserializeFromString<T>(File.ReadAllText(fileName, encoding));
 
@@ -177,9 +160,9 @@ namespace CTFD.Global.Common
             return $"{rowLetter}{columnName}";
         }
 
-        public static void ShowToast(string message)
-        {
-            General.RaiseGlobalHandler(GlobalEvent.ShowToast, message);
-        }
+        public static void ShowToast(string message) => General.RaiseGlobalHandler(GlobalEvent.ShowToast, message);
+
+        public static void ShowFault(bool isShow) => General.RaiseGlobalHandler(GlobalEvent.ShowFault, isShow);
+
     }
 }

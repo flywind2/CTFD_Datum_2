@@ -13,13 +13,14 @@ using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
 namespace CTFD.ViewModel.Monitor
 {
-    public class MonitorViewModel : Base.ViewModel, ISample
+    public partial class MonitorViewModel : Base.ViewModel, ISample
     {
         public Visibility IsAccountManagementEnabled { get; set; }
 
@@ -298,11 +299,6 @@ namespace CTFD.ViewModel.Monitor
             //}
         });
 
-        public RelayCommand EditSample => new RelayCommand((o) =>
-        {
-            if (this.CurrentSample != null) this.EditCurreentSample(this.CurrentSample, false);
-        });
-
         public RelayCommand OpenFluorescenceChart => new RelayCommand(() =>
         {
             var openFileDialog = new System.Windows.Forms.OpenFileDialog { Filter = "Csv（*.csv）|*.csv", FilterIndex = 1, RestoreDirectory = true };
@@ -344,34 +340,6 @@ namespace CTFD.ViewModel.Monitor
             }
         });
 
-        public RelayCommand RunOrPause => new RelayCommand(() =>
-        {
-            switch (General.Status)
-            {
-                case Status.Stop:
-                {
-                    Task.Factory.StartNew(() => this.TransmitData(Token.Parameter));
-                    General.Status = Status.CoolDown;
-                    this.CoolDownTimer.Restart();
-                    this.StartButtonContent = General.CoolDown;
-                    break;
-                }
-                case Status.Run:
-                {
-                    this.TransmitData(Token.End);
-                    break;
-                }
-                case Status.CoolDown:
-                {
-                    General.Status = Status.Stop;
-                    this.StartButtonContent = General.Stop;
-                    this.CoolDownTimer.Restart();
-                    break;
-                }
-                default: break;
-            }
-        });
-
         public RelayCommand PrintReport => new RelayCommand(async () =>
         {
             var aa = await Func();
@@ -397,27 +365,13 @@ namespace CTFD.ViewModel.Monitor
             this.SwitchExperimentView(this.StepIndex);
         });
 
-        public RelayCommand Rollback => new RelayCommand(() =>
-        {
-            this.Experiment.Rollback();
-            this.RaisePropertyChanged(nameof(this.AD));
-            this.RaisePropertyChanged(nameof(this.AT));
-            this.RaisePropertyChanged(nameof(this.DD));
-            this.RaisePropertyChanged(nameof(this.DT));
-            this.holeName = string.Empty;
-            this.RaisePropertyChanged(nameof(this.HoleName));
-            this.detection = string.Empty;
-            this.RaisePropertyChanged(nameof(this.Detection));
-            //(ISample)
-        });
-
         public RelayCommand LostFocus => new RelayCommand(() =>
         {
             General.WriteSetup();
             this.Experiment.ChangeExperimentViewSeries(0);
         });
 
-        public async ValueTask<int> Func()
+        public async Task<int> Func()
         {
             await Task.Delay(3000);
             return 100;
@@ -425,11 +379,14 @@ namespace CTFD.ViewModel.Monitor
 
         public MonitorViewModel()
         {
-            this.InitializeTcpClient();
+            this.InitializeTcpClient(General.WorkingData.Configuration.CurrentTcpServerIPAddress, General.WorkingData.Configuration.TcpServerPort);
             this.InitializeSerialPort();
             this.Experiment.Initialize();
             this.CoolDownTimer = new BackgroundTimer(new DateTime(1, 1, 1, 0, 0, 10), "ss", -1);
             this.CoolDownTimer.Stopped += CoolDownTimer_Stopped;
+
+            this.AddAccount = new RelayCommand(this.ExecuteAddAccount, this.CanExecuteAddAccount);
+            this.DeleteAccount = new RelayCommand(this.ExecuteDeleteAccount, this.CanExecuteDeleteAccount);
         }
 
         private void CoolDownTimer_Stopped(object sender, EventArgs e)
@@ -456,8 +413,17 @@ namespace CTFD.ViewModel.Monitor
 
         private void SwitchExperimentView(int viewIndex)
         {
-            if (viewIndex < 0) viewIndex = 0;
-            else if (viewIndex > 5) viewIndex = 5;
+            if (viewIndex > 10)
+            {
+                viewIndex = viewIndex % 10;
+                this.ExperimentViewHeight = 637;
+            }
+            else
+            {
+                if (viewIndex < 0) viewIndex = 0;
+                else if (viewIndex > 5) viewIndex = 5;
+                this.ExperimentViewHeight = viewIndex > 0 ? 580 : 637;
+            }
             this.StepIndex = viewIndex;
             this.RaisePropertyChanged(nameof(this.StepIndex));
             this.RaisePropertyChanged(nameof(this.IsStartView));
@@ -466,13 +432,13 @@ namespace CTFD.ViewModel.Monitor
             this.RaisePropertyChanged(nameof(this.IsExprimentView));
             this.RaisePropertyChanged(nameof(this.IsAnalysisView));
             this.RaisePropertyChanged(nameof(this.IsReportView));
-
-            this.ExperimentViewHeight = this.StepIndex > 0 ? 580 : 637;
-
             switch (viewIndex)
             {
                 case 0:
                 {
+                    this.Experiment.Feedbacks[4].Value = General.WorkingData.Configuration.Account.UserName;
+                    this.Experiment.User = General.WorkingData.Configuration.Account.UserName;
+                    this.Experiment.Feedbacks[3].Value = this.Experiment.ProjectName;
                     break;
                 }
                 case 1:
@@ -526,11 +492,6 @@ namespace CTFD.ViewModel.Monitor
             var jbo = aa.Skip(jobStartIndex).Take(jobSize).ToArray();
         }
 
-        public void ChangeExperimentStatus(int status)
-        {
-            this.StartButtonContent = status == 0 ? General.Stop : General.Run;
-        }
-
         //public static IList<Object[]> ReadDataFromCSV(string filePathName)
         //{
         //    List<Object[]> ls = new List<Object[]>();
@@ -548,32 +509,14 @@ namespace CTFD.ViewModel.Monitor
         //    return ls;
         //}
 
-        private void TransmitData(Token token)
+        private void InitializeTcpClient(string serverIPAddress, int serverPort)
         {
-            byte id = 1;
-            var result = new List<byte> { (byte)token, id };
-            if (this.Experiment != null)
+            if (General.TcpClient != null)
             {
-                switch (token)
-                {
-                    case Token.Parameter:
-                    {
-                        byte[] data = General.JsonSerialize(this.Experiment);
-                        var aaa = General.JsonSerializeToString(this.Experiment);
-                        if (data != null) result.AddRange(data);
-                        break;
-                    }
-                    case Token.Query: { byte[] data = General.JsonSerialize(General.WorkingData.Query); if (data != null) result.AddRange(data); break; }
-                    default: break;
-                }
+                General.TcpClient.ReceiveHandle -= this.DataReceived;
+                General.TcpClient.Close();
             }
-            General.TcpClient.SendMsg(result.ToArray());
-        }
-
-        private void InitializeTcpClient()
-        {
-            if (General.TcpClient != null) General.TcpClient.Close();
-            General.TcpClient = new Communication.SocketClient(General.WorkingData.Configuration.CurrentTcpServerIPAddress, General.WorkingData.Configuration.TcpServerPort, true);
+            General.TcpClient = new Communication.SocketClient(serverIPAddress, serverPort, true);
             General.TcpClient.ReceiveHandle += this.DataReceived;
             General.TcpClient.StartConnecte();
         }
@@ -596,7 +539,6 @@ namespace CTFD.ViewModel.Monitor
                     General.ShowToast("实验停止");
                     General.WriteSetup();
                     this.Experiment.Stop();
-
                 }
             }
         }
@@ -657,7 +599,7 @@ namespace CTFD.ViewModel.Monitor
                 {
                     case Token.Start:
                     case Token.End: { this.SwitchStatus(token, value[0]); break; }
-                    case Token.RealtimeFluorescenceCurve:
+                    case Token.RealtimeAmplificationCurve:
                     {
                         int[] curveData = General.JsonDeserialize<int[]>(value);
                         if (curveData != null) this.Experiment.AddRealtimeAmplificationValue(curveData);
@@ -680,10 +622,15 @@ namespace CTFD.ViewModel.Monitor
                     case Token.HistoryCurve1: { General.RaiseGlobalHandler(GlobalEvent.HistoryCurve1, value); break; }
                     case Token.HistoryCurve2: { General.RaiseGlobalHandler(GlobalEvent.HistoryCurve2, value); break; }
                     case Token.HistoryCurve3: { General.RaiseGlobalHandler(GlobalEvent.HistoryCurve3, value); break; }
-                    case Token.AmplificationCurve:
+                    case Token.FinalAmplificationCurve:
                     {
                         var curveData = General.JsonDeserialize<List<int[]>>(value);
-                        if (curveData != null) this.Experiment.AddAmplificationCurve(curveData);
+                        if (curveData != null)
+                        {
+                            this.Experiment.AddAmplificationCurve(curveData);
+                            this.Experiment.SetSectionEnabled(true);
+                            this.OnViewChanged();
+                        }
                         break;
                     }
                     case Token.RealtimeMeltingCurve:
@@ -703,6 +650,18 @@ namespace CTFD.ViewModel.Monitor
                     {
                         var ctResult = General.JsonDeserialize<string[]>(value);
                         for (int i = 0; i < this.Experiment.Samples.Length; i++) this.Experiment.Samples[i].CtResult = ctResult[i];
+                        break;
+                    }
+                    case Token.TmValue:
+                    {
+                        var tmResult = General.JsonDeserialize<string[]>(value);
+                        for (int i = 0; i < this.Experiment.Samples.Length; i++) this.Experiment.Samples[i].TmResult = tmResult[i];
+                        break;
+                    }
+                    case Token.Fault:
+                    {
+
+                        General.ShowFault(true);
                         break;
                     }
                     default: break;
@@ -751,6 +710,21 @@ namespace CTFD.ViewModel.Monitor
             return result.ToString();
         }
 
+        private string GetCtValue()
+        {
+            var result = new StringBuilder();
+            var firstRow = new StringBuilder();
+            var secondRow = new StringBuilder();
+            foreach (var item in this.Experiment.Samples)
+            {
+                firstRow.AppendFormat($"{item.HoleName},");
+                secondRow.AppendFormat($"{item.CtResult ?? string.Empty},");
+            }
+            result.AppendLine(firstRow.ToString());
+            result.AppendLine(secondRow.ToString());
+            return result.ToString();
+        }
+
         private string GetAllCurveDataToString()
         {
             var result = new StringBuilder();
@@ -760,6 +734,8 @@ namespace CTFD.ViewModel.Monitor
             result.AppendLine(this.GetMeltingCurveDataToString(this.Experiment.GetAmplificationData(1).ToList()));
             result.AppendLine("导数熔解曲线");
             result.AppendLine(this.GetMeltingCurveDataToString(this.Experiment.GetAmplificationData(2).ToList()));
+            result.AppendLine("CT值");
+            result.AppendLine(this.GetCtValue());
             return result.ToString();
         }
 
@@ -783,6 +759,14 @@ namespace CTFD.ViewModel.Monitor
             return result;
         }
 
+        private void WriteSetupFile()
+        {
+            var message = "保存设置成功";
+            try { General.WriteJsonFile((object)Configuration, $"{Environment.CurrentDirectory}{Properties.Resources.SetupFilePath}", Encoding.Default); }
+            catch (Exception exception) { message = exception.Message; }
+            General.ShowToast(message);
+        }
+
         private void SetAllStringToCurveData(List<string> data)
         {
             this.Experiment.AddAmplificationCurve(this.SetStringToCurveData(data.Skip(1).Take(33).ToList()));
@@ -794,6 +778,7 @@ namespace CTFD.ViewModel.Monitor
 
         public void SetRoleButton()
         {
+            this.IsAccountManagementEnabled = Visibility.Visible; this.IsSystemSetupEnabled = Visibility.Visible;
             switch (General.WorkingData.Configuration.Account.Role)
             {
                 case "管理员": { this.IsSystemSetupEnabled = Visibility.Collapsed; break; }
@@ -802,13 +787,13 @@ namespace CTFD.ViewModel.Monitor
             }
             this.RaisePropertyChanged(nameof(this.IsAccountManagementEnabled));
             this.RaisePropertyChanged(nameof(this.IsSystemSetupEnabled));
+            this.SwitchExperimentView(0);
         }
 
         public void Test()
         {
-
-
-            General.RaiseGlobalHandler(GlobalEvent.Test);
+            //General.ShowFault(true);
+            //General.RaiseGlobalHandler(GlobalEvent.Test);
         }
 
         void ISample.ResetSelection()

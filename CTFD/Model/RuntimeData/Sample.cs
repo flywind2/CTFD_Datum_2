@@ -27,6 +27,7 @@ namespace CTFD.Model.RuntimeData
         private bool isLoaded;
         private bool isCurveDisplayed = true;
         private string ctResult = string.Empty;
+        private string tmResult = string.Empty;
 
         [IgnoreDataMember]
         public Patient Patient { get; set; }
@@ -112,7 +113,15 @@ namespace CTFD.Model.RuntimeData
         }
 
         [IgnoreDataMember]
-        public string TmResult { get; set; }
+        public string TmResult
+        {
+            get => this.tmResult;
+            set
+            {
+                this.tmResult = value;
+                this.RaisePropertyChanged(nameof(this.TmResult));
+            }
+        }
 
         public Sample(int id, string holeName, string detection)
         {

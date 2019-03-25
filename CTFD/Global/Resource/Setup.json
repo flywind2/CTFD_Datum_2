@@ -1,6 +1,7 @@
 ﻿{
   "Experiment": {
     "Name": "实验5",
+    "User": "admin",
     "StartTime": "20190306121031",
     "Feedbacks": [
       { "Status": 0 },
@@ -162,34 +163,30 @@
   },
   "Account": {
     "DateTime": null,
-    "Password": "sc123456",
-    "Remark": null,
+    "Password": "",
     "Role": "工程师",
-    "UserName": "sc"
+    "UserName": "admin"
   },
   "Accounts": [
     {
       "DateTime": null,
       "Password": "sc123456",
-      "Remark": null,
       "Role": "工程师",
       "UserName": "sc"
     },
     {
       "DateTime": null,
       "Password": "sx123456",
-      "Remark": null,
       "Role": "管理员",
       "UserName": "sx"
     },
     {
       "DateTime": null,
-      "Password": "123456",
-      "Remark": null,
+      "Password": "",
       "Role": "操作员",
-      "UserName": "牟其中"
+      "UserName": "admin"
     }
   ],
-  "CurrentTcpServerIPAddress": "127.0.0.1",
+  "CurrentTcpServerIPAddress": "192.168.27.40",
   "TcpServerPort": 4510
 }

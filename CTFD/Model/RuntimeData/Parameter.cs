@@ -1,11 +1,5 @@
 ﻿using CTFD.Model.Base;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CTFD.Model.RuntimeData
 {
@@ -73,10 +67,10 @@ namespace CTFD.Model.RuntimeData
         /// 熔解时间
         /// </summary>
         [DataMember]
-        public int MeltDuration { get; set; }
+        public int MeltDuration { get; set; } = 30 * 60;
 
         [IgnoreDataMember]
-        public int CooldownDuration { get; set; } = 30;
+        public int CooldownDuration { get; set; } = 10 * 60;
 
         /// <summary>
         /// 是否熔解
@@ -115,15 +109,23 @@ namespace CTFD.Model.RuntimeData
             this.MeltDuration = parameter.MeltDuration;
         }
 
-        public int GetTimeAxis() => (this.AmplificationDuration / 60+2) * 2;
+        public int GetTimeAxis() => (this.AmplificationDuration / 60 + 2) * 2;
 
-        public void RaisePropertyChanged(int index)
+        public void Synchronous()
         {
-            switch (index)
-            {
-                case 0: { this.RaisePropertyChanged(nameof(LysisTemperature)); break; }
-                default: break;
-            }
+            this.RaisePropertyChanged(nameof(LysisTemperature));
+            this.RaisePropertyChanged(nameof(LysisDuration));
+            this.RaisePropertyChanged(nameof(AmplificationTemperature));
+            this.RaisePropertyChanged(nameof(AmplificationDuration));
+            this.RaisePropertyChanged(nameof(LowSpeed));
+            this.RaisePropertyChanged(nameof(LowSpeedDuration));
+            this.RaisePropertyChanged(nameof(LowSpeedTimes));
+            this.RaisePropertyChanged(nameof(HighSpeed));
+            this.RaisePropertyChanged(nameof(HighSpeedDuration));
+            this.RaisePropertyChanged(nameof(HighSpeedTimes));
+            this.RaisePropertyChanged(nameof(MeltDuration));
+            this.RaisePropertyChanged(nameof(CooldownDuration));
+            this.RaisePropertyChanged(nameof(IsMelt));
         }
     }
 }

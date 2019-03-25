@@ -18,10 +18,10 @@ namespace CTFD.Model.RuntimeData
         public string Account { get; set; } = "老王";
 
         [DataMember]
-        public string StartDateTime { get; set; } = "201903061210";
+        public string StartDateTime { get; set; } = "201903250910";
 
         [DataMember]
-        public string EndDateTime { get; set; } = "201903061210";
+        public string EndDateTime { get; set; } = "201903251210";
 
         public void Clear()
         {

@@ -23,8 +23,9 @@
         <DropShadowEffect x:Key="PanelEffect" Direction="180" BlurRadius="22" Color="#FFD8D8D8"/>
     </Window.Resources>
     <Grid>
-        <control:Toast Panel.ZIndex="0" IsPopup="{Binding IsNotified,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Message="{Binding Message}" Opacity="0" Effect="{StaticResource PanelEffect}"  />
+        <control:Toast Panel.ZIndex="0" Margin="50,-150,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" IsPopup="{Binding IsNotified,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,FallbackValue=true}" Message="{Binding Message}" Opacity="0" Effect="{StaticResource PanelEffect}"  />
         <ContentControl Panel.ZIndex="1" Content="{Binding ContentView}"/>
+        <control:Fault Panel.ZIndex="{Binding FaultZIndex}" Margin="50,150,0,0" Visibility="{Binding FaultStatus}" HorizontalAlignment="Center" VerticalAlignment="Center" Effect="{StaticResource PanelEffect}" MouseUp="Fault_MouseUp"/>
     </Grid>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Closed">

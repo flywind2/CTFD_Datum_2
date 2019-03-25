@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Windows;
@@ -62,7 +63,9 @@ namespace CtfdSimulator
                         case 0: { this.RaiseUpperMessage("初始化↙"); break; }
                         case 1: { this.RaiseUpperMessage("参数设置↙"); break; }
                         case 2: { this.RaiseUpperMessage("开始实验↙"); break; }
-                        case 3: { this.RaiseUpperMessage("结束实验"); break; }
+                        case 3: { this.RaiseUpperMessage("结束实验↙"); break; }
+                        case 8: { this.RaiseUpperMessage("查询实验↙"); break; }
+                        case 9: { this.RaiseUpperMessage("查询曲线↙"); break; }
                     }
                 };
                 this.tcpServer.Start();
@@ -151,7 +154,7 @@ namespace CtfdSimulator
                     break;
                 }
             }
-            this.SendMessage(token, 0, result, $"发送 '{this.ComboBoxChartType.SelectedValue.ToString().Split(':')[1]}' 给上位机↗");
+            this.SendMessage(token, 0, result, $"发送 '{this.ComboBoxChartType.SelectedValue.ToString().Split(':')[1]}' 给上位机 ↗");
         }
 
         private static byte[] JsonSerialize<T>(T entity)
@@ -166,12 +169,135 @@ namespace CtfdSimulator
             return result;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Query_Click(object sender, RoutedEventArgs e)
         {
-            var chartData = new List<string>(32);
-            for (int i = 0; i < 32; i++) chartData.Add($"Aa{i}");
-            var result = JsonSerialize(chartData);
-            this.SendMessage(0x11, 0, result, "发送Ct值给上位机 ↗");
+            var result = JsonSerialize(this.GetTestQueryData());
+            this.SendMessage(0x09, 0, result, "发送实验结果给上位机 ↗");
         }
+
+        private List<Experiment> GetTestQueryData()
+        {
+            var result = new List<Experiment>(3);
+
+            var parameters = new Parameter[] { new Parameter { LysisTemperature = 96 }, new Parameter { LysisTemperature = 97 }, new Parameter { LysisTemperature = 98 } };
+            for (int i = 0; i < 3; i++)
+            {
+                //var feedBacks = new Feedback[5] { new Feedback(), new Feedback(), new Feedback(), new Feedback(), new Feedback { Value = $"操作员{i}" } };
+                var experiment = new Experiment { Name = $"实验{i}", GroupName = $"组{i}", ProjectName = $"项目{i}", User=$"实验员{i}", StartTime = DateTime.Now.ToString("yyyyMMdd-HH:mm"), Parameter = parameters[i] };
+                result.Add(experiment);
+            }
+            return result;
+        }
+    }
+
+    [DataContract]
+    public class Experiment
+    {
+        [DataMember]
+        public string StartTime { get; set; }
+
+        [DataMember]
+        public string Name { get; set; }
+
+        [DataMember]
+        public string User { get; set; }
+
+        [DataMember]
+        public string GroupName { get; set; }
+
+        [DataMember]
+        public string ProjectName { get; set; }
+
+        [DataMember]
+        public Parameter Parameter { get; set; } = new Parameter();
+
+        [DataMember]
+        public Feedback[] Feedbacks { get; set; }
+
+        [DataMember]
+        public Sample[] Samples { get; set; }
+    }
+
+    [DataContract]
+    public class Parameter
+    {
+        /// <summary>
+        /// 裂解温度
+        /// </summary>
+        [DataMember]
+        public int LysisTemperature { get; set; }
+
+        /// <summary>
+        /// 裂解时间
+        /// </summary>
+        [DataMember]
+        public int LysisDuration { get; set; }
+
+        /// <summary>
+        /// 扩增温度
+        /// </summary>
+        [DataMember]
+        public int AmplificationTemperature { get; set; }
+
+        /// <summary>
+        /// 扩增时间
+        /// </summary>
+        [DataMember]
+        public int AmplificationDuration { get; set; }
+
+        /// <summary>
+        /// 低转速
+        /// </summary>
+        [DataMember]
+        public int LowSpeed { get; set; } = 1600;
+
+        /// <summary>
+        /// 低速时间
+        /// </summary>
+        [DataMember]
+        public int LowSpeedDuration { get; set; } = 10;
+
+        /// <summary>
+        /// 高转速
+        /// </summary>
+        [DataMember]
+        public int HighSpeed { get; set; } = 4600;
+
+        /// <summary>
+        /// 高速时间
+        /// </summary>
+        [DataMember]
+        public int HighSpeedDuration { get; set; } = 30;
+
+        /// <summary>
+        /// 熔解时间
+        /// </summary>
+        [DataMember]
+        public int MeltDuration { get; set; } = 30 * 60;
+
+        /// <summary>
+        /// 是否熔解
+        /// </summary>
+        [DataMember]
+        public bool IsMelt { get; set; }
+    }
+
+    [DataContract]
+    public class Feedback
+    {
+        [DataMember]
+        public Visibility Status { get; set; }
+
+        public string Value { get; set; }
+    }
+
+    [DataContract]
+    public class Sample
+    {
+        [DataMember]
+        public string HoleName { get; private set; }
+
+        [DataMember]
+        public string Detection { get; private set; }
     }
 }

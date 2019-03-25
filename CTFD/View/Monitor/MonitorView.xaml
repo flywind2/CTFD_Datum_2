@@ -134,6 +134,21 @@
         </Viewbox.Resources>
         <Canvas Background="{StaticResource WathetColor2}" Tag="0" Width="1100" Height="630" >
             <Canvas.Resources>
+                <cv:VisibilityToBool x:Key="VisibilityToBool"/>
+                <StackPanel x:Key="AddAccount" Orientation="Horizontal">
+                    <Path Data="{StaticResource AddAccount}" Fill="White" Margin="8,-3,0,0"/>
+                    <TextBlock Foreground="White" FontSize="14" Text="添加用户" Width="80" Margin="6,0,0,0"/>
+                </StackPanel>
+
+                <StackPanel x:Key="RemoveAccount" Orientation="Horizontal">
+                    <Path Data="{StaticResource RemoveAccount}" Fill="White" Margin="5,-3,0,0"/>
+                    <TextBlock Foreground="White" FontSize="14" Text="删除用户" Width="80" Margin="6,0,0,0"/>
+                </StackPanel>
+
+                <StackPanel x:Key="EditAccount" Orientation="Horizontal">
+                    <Path Data="{StaticResource EditAccount}" Fill="White" Margin="5,-3,0,0"/>
+                    <TextBlock Foreground="White" FontSize="14" Text="编辑用户" Width="80" Margin="6,0,0,0"/>
+                </StackPanel>
 
                 <!--<Style TargetType="{x:Type control:VerifyTextBox}" BasedOn="{StaticResource VerifyTextBox}">
                     <Setter Property="Width" Value="60"/>
@@ -176,25 +191,25 @@
             <TabControl SelectedIndex="{Binding StepIndex}" BorderThickness="0,0,0,3" BorderBrush="{StaticResource WathetColor}" Height="{Binding ExperimentViewHeight,FallbackValue=637}" Width="1100" Canvas.Top="-4">
                 <TabItem Height=".1">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <Button Command="{Binding SwitchViewExperiment}" CommandParameter="1"  Background="{StaticResource BlueColor}" Foreground="White" Width="160" Height="180" >
+                        <Button Style="{StaticResource MyButtonBigCornerRadius}" Command="{Binding SwitchViewExperiment}" CommandParameter="1"  Background="{StaticResource BlueColor}" Foreground="White" Width="160" Height="180" >
                             <StackPanel Orientation="Vertical">
                                 <Path Data="{StaticResource Experiment}" Fill="White" Stretch="Fill" Width="100" Height="100"/>
-                                <TextBlock Style="{StaticResource TextBlock}" FontSize="24" Text="新建实验" Margin="0,15,0,0"/>
+                                <TextBlock Style="{StaticResource TextBlock}" FontSize="24" Text="实验任务" Margin="0,15,0,0"/>
                             </StackPanel>
                         </Button>
-                        <Button Background="{StaticResource BlueColor}" Command="{Binding SwitchViewExperiment}" CommandParameter="5" Foreground="White" Width="160" Height="180" Margin="50,0,0,0">
+                        <Button Style="{StaticResource MyButtonBigCornerRadius}" Background="{StaticResource BlueColor}" Command="{Binding SwitchViewExperiment}" CommandParameter="5" Foreground="White" Width="160" Height="180" Margin="50,0,0,0">
                             <StackPanel Orientation="Vertical">
-                                <Path Data="{StaticResource Search}" Fill="White" Stretch="Fill" Width="100" Height="100" />
-                                <TextBlock Style="{StaticResource TextBlock}" FontSize="24" Text="历史报告" Margin="0,15,0,0"/>
+                                <Path Data="{StaticResource Report}" Fill="White" Stretch="Fill" Width="100" Height="100" />
+                                <TextBlock Style="{StaticResource TextBlock}" FontSize="24" Text="实验报告" Margin="0,15,0,0"/>
                             </StackPanel>
                         </Button>
-                        <Button Visibility="{Binding IsAccountManagementEnabled}" Background="{StaticResource BlueColor}" Command="{Binding }" CommandParameter="5" Foreground="White" Width="160" Height="180" Margin="50,0,0,0">
+                        <Button Style="{StaticResource MyButtonBigCornerRadius}" Visibility="{Binding IsAccountManagementEnabled}" Background="{StaticResource BlueColor}" Command="{Binding SwitchViewExperiment}" CommandParameter="16" Foreground="White" Width="160" Height="180" Margin="50,0,0,0">
                             <StackPanel Orientation="Vertical">
                                 <Path Data="{StaticResource AccountManage}" Fill="White" Stretch="Fill" Width="90" Height="90" Margin="0,5,0,0"/>
                                 <TextBlock Style="{StaticResource TextBlock}" FontSize="24" Text="账号管理" Margin="0,20,0,0"/>
                             </StackPanel>
                         </Button>
-                        <Button Visibility="{Binding IsSystemSetupEnabled}" Background="{StaticResource BlueColor}"  CommandParameter="5" Foreground="White" Width="160" Height="180" Margin="50,0,0,0">
+                        <Button Style="{StaticResource MyButtonBigCornerRadius}" Visibility="{Binding IsSystemSetupEnabled}" Background="{StaticResource BlueColor}"  Command="{Binding SwitchViewExperiment}" CommandParameter="17" Foreground="White" Width="160" Height="180" Margin="50,0,0,0">
                             <StackPanel Orientation="Vertical">
                                 <Path Data="{StaticResource Setup}" Fill="White" Stretch="Fill" Width="100" Height="100" />
                                 <TextBlock Style="{StaticResource TextBlock}" FontSize="24" Text="系统配置" Margin="0,15,0,0"/>
@@ -208,7 +223,6 @@
                             <i:Interaction.Behaviors>
                                 <behavior:SampleMultiSelect ViewModel="{Binding ''}"/>
                             </i:Interaction.Behaviors>
-                            <TextBlock Text="{Binding Experiment.Samples[0].Detection}"/>
                             <sample:SampleRack DataContext="{Binding Experiment}" Width="320"  />
                         </Canvas>
                         <Path Data="{StaticResource Horn}" Fill="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" Width="26" Height="26" Stretch="Fill" Canvas.Top="60" Canvas.Left="60"/>
@@ -242,7 +256,6 @@
                                 </TextBox>
                             </Canvas>
                         </GroupBox>
-
 
                         <GroupBox Header="芯片信息设置" Canvas.Left="470" Canvas.Top="400" Width="275" Height="120" FontSize="16" FontWeight="Bold" Foreground="{StaticResource GreenColor}">
                             <Canvas>
@@ -392,6 +405,9 @@
                                     <Setter Property="FontSize" Value="14"/>
                                     <Setter Property="Padding" Value="0,2,0,-2"/>
                                     <Setter Property="Background" Value="{StaticResource BlueColor}"/>
+                                    <Setter Property="Foreground" Value="{StaticResource ChartColor1}"/>
+                                    <Setter Property="FontSize" Value="16"/>
+                                    <Setter Property="Width" Value="130"/>
                                 </Style>
 
                             </Canvas.Resources>
@@ -490,16 +506,16 @@
 
                         <Button Command="{Binding RunOrPause}" Content="{Binding StartButtonContent}" Height="40" Width="130"  Canvas.Left="945" Canvas.Top="28"/>
 
-                        <LiveCharts:CartesianChart Series="{Binding Experiment.Charts.RealtimeCurve}" IsHitTestVisible="False" DisableAnimations="True"  LegendLocation="None"    Canvas.Left="25" Canvas.Top="85" Width="810" Height="493" >
+                        <LiveCharts:CartesianChart Series="{Binding Experiment.Charts.RealtimeCurve}" IsHitTestVisible="False" DisableAnimations="True"  LegendLocation="None"    Canvas.Left="25" Canvas.Top="85" Width="780" Height="493" >
                             <LiveCharts:CartesianChart.AxisX>
                                 <LiveCharts:Axis 
                                     Title="{Binding Experiment.Charts.RealtimeXTitle}"
-                                    MinValue="0"
+                                    MinValue="0" 
                                     MaxValue="{Binding Experiment.Charts.RealtimeXMaxValue}" 
                                     LabelFormatter="{Binding Experiment.Charts.RealtimeXFomatter}" 
                                     Foreground="{StaticResource ChartColor1}"  FontSize="14" FontWeight="Bold">
                                     <LiveCharts:Axis.Separator >
-                                        <LiveCharts:Separator  Stroke="{StaticResource GrayColor}" StrokeDashArray="3,2" StrokeThickness="1" Step="{Binding Experiment.Charts.RealtimeXStep}"/>
+                                        <LiveCharts:Separator Stroke="{StaticResource GrayColor}" StrokeDashArray="3,2" StrokeThickness="1" Step="{Binding Experiment.Charts.RealtimeXStep}"/>
                                     </LiveCharts:Axis.Separator>
                                 </LiveCharts:Axis>
                             </LiveCharts:CartesianChart.AxisX>
@@ -516,71 +532,93 @@
                             </LiveCharts:CartesianChart.AxisY>
                         </LiveCharts:CartesianChart>
 
-                        <GroupBox Width="230" Height="460" Header="实时状态" FontSize="15"  Canvas.Left="850" Canvas.Top="90">
-                            <StackPanel Orientation="Vertical" Width="200">
-                                <StackPanel.Resources>
-                                    <Style TargetType="{x:Type Canvas}">
-                                        <Setter Property="Height" Value="28"/>
-                                        <Setter Property="Margin" Value="0,10,0,0"/>
-                                        <Setter Property="Width" Value="200"/>
-                                    </Style>
+                        <GroupBox Width="270" Height="460" Header="实时状态" FontSize="15"  Canvas.Left="810" Canvas.Top="90">
+                            <ScrollViewer Margin="0,10,0,0" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                                <StackPanel Orientation="Vertical" Width="270" >
+                                    <StackPanel.Resources>
+                                        <Style TargetType="{x:Type Canvas}">
+                                            <Setter Property="Height" Value="28"/>
+                                            <Setter Property="Margin" Value="0,10,0,0"/>
+                                            <Setter Property="Width" Value="200"/>
+                                        </Style>
 
-                                    <Style TargetType="{x:Type Path}" >
-                                        <Setter Property="Stretch" Value="Fill"/>
-                                        <Setter Property="Width" Value="26"/>
-                                        <Setter Property="Height" Value="26"/>
-                                        <Setter Property="Fill" Value="{StaticResource BlueColor}"/>
-                                    </Style>
+                                        <Style TargetType="{x:Type Path}" >
+                                            <Setter Property="Stretch" Value="Fill"/>
+                                            <Setter Property="Width" Value="26"/>
+                                            <Setter Property="Height" Value="26"/>
+                                            <Setter Property="Fill" Value="{StaticResource BlueColor}"/>
+                                        </Style>
 
-                                    <Style TargetType="{x:Type TextBlock}">
-                                        <Setter Property="Foreground" Value="{StaticResource ChartColor1}"/>
-                                        <Setter Property="FontSize" Value="16"/>
-                                        <Setter Property="FontWeight" Value="Bold"/>
-                                        <Setter Property="Canvas.Left" Value="40"/>
-                                        <Setter Property="Canvas.Top" Value="5"/>
-                                    </Style>
-                                </StackPanel.Resources>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Setter Property="Foreground" Value="{StaticResource ChartColor1}"/>
+                                            <Setter Property="FontSize" Value="16"/>
+                                            <Setter Property="FontWeight" Value="Bold"/>
+                                            <Setter Property="Canvas.Left" Value="40"/>
+                                            <Setter Property="Canvas.Top" Value="5"/>
+                                        </Style>
 
-                                <Canvas Visibility="{Binding Experiment.Feedbacks[2].Status}">
-                                    <Path Data="{StaticResource Experiment}"  />
-                                    <TextBlock Text="{Binding Experiment.Name, FallbackValue=未知实验, StringFormat=实验名称：\{0\}}" Foreground="{StaticResource ChartColor1}" />
-                                </Canvas>
+                                        <Style TargetType="Line" >
+                                            <Setter Property="Width" Value="200"/>
+                                            <Setter Property="Height" Value="1"/>
+                                            <Setter Property="X1" Value="0"/>
+                                            <Setter Property="X2" Value="200"/>
+                                            <Setter Property="HorizontalAlignment" Value="Left"/>
+                                            <Setter Property="VerticalAlignment" Value="Bottom"/>
+                                            <Setter Property="StrokeThickness" Value="1"/>
+                                            <Setter Property="Stroke" Value="{StaticResource GrayColor}"/>
+                                            <Setter Property="StrokeDashArray" Value="1,2,3,2"/>
+                                        </Style>
+                                    </StackPanel.Resources>
 
-                                <Canvas Visibility="{Binding Experiment.Feedbacks[3].Status}">
-                                    <Path  Data="{StaticResource Project}"  Width="30" Canvas.Left="-1"/>
-                                    <TextBlock Text="{Binding Experiment.Feedbacks[3].Value, FallbackValue=未知项目, StringFormat=项目名称：\{0\}}" Foreground="{StaticResource ChartColor1}" />
-                                </Canvas>
+                                    <Grid Visibility="{Binding Experiment.Feedbacks[2].Status}" Width="230"  Margin="0,10,0,3">
+                                        <Path Data="{StaticResource Experiment}"  HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                        <TextBlock Margin="28,4,0,0" TextWrapping="Wrap" Width="180" Text="{Binding Experiment.Name, FallbackValue=实验名称：未知实验, StringFormat=实验名称：\{0\}}" Foreground="{StaticResource ChartColor1}" />
+                                        <Line Margin="10,0,0,-7"/>
+                                    </Grid>
 
-                                <Canvas Visibility="{Binding Experiment.Feedbacks[4].Status}">
-                                    <Path Data="{StaticResource UserName}" />
-                                    <TextBlock Text="{Binding Experiment.Feedbacks[4].Value, FallbackValue=未知人员, StringFormat=操作人员：\{0\}}" Foreground="{StaticResource ChartColor1}" />
-                                </Canvas>
+                                    <Canvas Visibility="{Binding Experiment.Feedbacks[3].Status}" Width="230">
+                                        <Path  Data="{StaticResource Project}"  Width="30" Canvas.Left="-1"/>
+                                        <TextBlock Text="{Binding Experiment.Feedbacks[3].Value, FallbackValue=项目名称：未知项目, StringFormat=项目名称：\{0\}}" Foreground="{StaticResource ChartColor1}" />
+                                        <Line Canvas.Left="10" Canvas.Bottom="-7"/>
+                                    </Canvas>
 
-                                <Canvas Visibility="{Binding Experiment.Feedbacks[5].Status}">
-                                    <Path  Data="{StaticResource Step}" />
-                                    <TextBlock Text="{Binding Experiment.Feedbacks[5].Value, FallbackValue=未知阶段, StringFormat=实验阶段：\{0\}}" Foreground="{StaticResource ChartColor1}" />
-                                </Canvas>
+                                    <Canvas Visibility="{Binding Experiment.Feedbacks[4].Status}" Width="230">
+                                        <Path Data="{StaticResource UserName}" />
+                                        <TextBlock Text="{Binding Experiment.Feedbacks[4].Value, FallbackValue=操作人员：未知人员, StringFormat=操作人员：\{0\}}" Foreground="{StaticResource ChartColor1}" />
+                                        <Line Canvas.Left="10" Canvas.Bottom="-7"/>
+                                    </Canvas>
 
-                                <Canvas Visibility="{Binding Experiment.Feedbacks[6].Status}">
-                                    <Path  Data="{StaticResource Speed}" />
-                                    <TextBlock Text="{Binding Experiment.Feedbacks[6].Value, FallbackValue=未知转速, StringFormat=电机转速：\{0\}（rpm）}" Foreground="{StaticResource ChartColor1}" />
-                                </Canvas>
+                                    <Canvas Visibility="{Binding Experiment.Feedbacks[5].Status}" Width="230">
+                                        <Path  Data="{StaticResource Step}" />
+                                        <TextBlock Text="{Binding Experiment.Feedbacks[5].Value, FallbackValue=实验阶段：未知阶段, StringFormat=实验阶段：\{0\}}" Foreground="{StaticResource ChartColor1}" />
+                                        <Line Canvas.Left="10" Canvas.Bottom="-7"/>
+                                    </Canvas>
 
-                                <Canvas Visibility="{Binding Experiment.Feedbacks[7].Status}">
-                                    <Path  Data="{StaticResource Thermoneter}" />
-                                    <TextBlock Text="{Binding Experiment.Feedbacks[7].Value, FallbackValue=未知温度, StringFormat=上盖温度：\{0\}（℃）}" Foreground="{StaticResource ChartColor1}" />
-                                </Canvas>
+                                    <Canvas Visibility="{Binding Experiment.Feedbacks[6].Status}" Width="230">
+                                        <Path  Data="{StaticResource Speed}" />
+                                        <TextBlock Text="{Binding Experiment.Feedbacks[6].Value, FallbackValue=电机转速：未知转速, StringFormat=电机转速：\{0\}（rpm）}" Foreground="{StaticResource ChartColor1}" />
+                                        <Line Canvas.Left="10" Canvas.Bottom="-7"/>
+                                    </Canvas>
 
-                                <Canvas Visibility="{Binding Experiment.Feedbacks[8].Status}">
-                                    <Path Data="{StaticResource Thermoneter}" />
-                                    <TextBlock Text="{Binding Experiment.Feedbacks[8].Value, FallbackValue=未知温度, StringFormat=内圈温度：\{0\}（℃）}" Foreground="{StaticResource ChartColor1}" />
-                                </Canvas>
+                                    <Canvas Visibility="{Binding Experiment.Feedbacks[7].Status}" Width="230">
+                                        <Path  Data="{StaticResource Thermoneter}" />
+                                        <TextBlock Text="{Binding Experiment.Feedbacks[7].Value, FallbackValue=上盖温度：未知温度, StringFormat=上盖温度：\{0\}（℃）}" Foreground="{StaticResource ChartColor1}" />
+                                        <Line Canvas.Left="10" Canvas.Bottom="-7"/>
+                                    </Canvas>
 
-                                <Canvas Visibility="{Binding Experiment.Feedbacks[9].Status}">
-                                    <Path Data="{StaticResource Thermoneter}" />
-                                    <TextBlock Text="{Binding Experiment.Feedbacks[9].Value, FallbackValue=未知温度, StringFormat=外圈温度：\{0\}（℃）}" Foreground="{StaticResource ChartColor1}" />
-                                </Canvas>
-                            </StackPanel>
+                                    <Canvas Visibility="{Binding Experiment.Feedbacks[8].Status}" Width="230">
+                                        <Path Data="{StaticResource Thermoneter}" />
+                                        <TextBlock Text="{Binding Experiment.Feedbacks[8].Value, FallbackValue=内圈温度：未知温度, StringFormat=内圈温度：\{0\}（℃）}" Foreground="{StaticResource ChartColor1}" />
+                                        <Line Canvas.Left="10" Canvas.Bottom="-7"/>
+                                    </Canvas>
+
+                                    <Canvas Visibility="{Binding Experiment.Feedbacks[9].Status}" Width="230" Height="40">
+                                        <Path Data="{StaticResource Thermoneter}" />
+                                        <TextBlock Text="{Binding Experiment.Feedbacks[9].Value, FallbackValue=外圈温度：未知温度, StringFormat=外圈温度：\{0\}（℃）}" Foreground="{StaticResource ChartColor1}" />
+                                        <Line Canvas.Left="10" Canvas.Bottom="5"/>
+                                    </Canvas>
+                                </StackPanel>
+                            </ScrollViewer>
 
                         </GroupBox>
                     </Canvas>
@@ -599,14 +637,25 @@
                         </Grid.ColumnDefinitions>
                         <DockPanel Visibility="{Binding Test2}" LastChildFill="True" Grid.Column="0" Grid.RowSpan="3" >
                             <Grid Height="60" HorizontalAlignment="Stretch" DockPanel.Dock="Top" Margin="0,15,0,0">
-                                <GroupBox Header="阈值设定" FontSize="15" Width="180" Height="58" HorizontalAlignment="Left" Margin="10,0,0,0">
+                                <GroupBox IsEnabled="{Binding Experiment.Charts.IsThresholdEnabled}" Header="阈值设定" FontSize="15" Width="266" Height="58" HorizontalAlignment="Left" Margin="10,0,0,0">
                                     <Canvas>
-                                        <TextBlock Text="阈值基准线：" Canvas.Left="10" Canvas.Top="6"/>
-                                        <TextBox Text="{Binding Experiment.Charts.B,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="50" FontSize="13" Canvas.Left="104" Canvas.Top="6"/>
+                                        <CheckBox Style="{StaticResource AnimationCheckBox}" IsChecked="{Binding Experiment.Charts.IsDisplaySection}" Width="36" Height="35" Background="{StaticResource BlueColor}" Foreground="White" Canvas.Left="11" RenderTransformOrigin="0.5,0.5" Canvas.Top="-1">
+                                            <CheckBox.RenderTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform ScaleX="0.8" ScaleY="0.8"/>
+                                                    <SkewTransform/>
+                                                    <RotateTransform/>
+                                                    <TranslateTransform/>
+                                                </TransformGroup>
+                                            </CheckBox.RenderTransform>
+                                        </CheckBox>
+                                        <TextBlock Text="阈值：" Canvas.Left="50" Canvas.Top="6"/>
+                                        <TextBox Text="{Binding Experiment.Charts.Threshold,StringFormat={}{0:F2},Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="60" FontSize="13" Canvas.Left="96" Canvas.Top="8"/>
+                                        <Button Style="{StaticResource MyButton}" Canvas.Left="162" Height="28" Background="{StaticResource BlueColor}" Foreground="White" Content="计算CT" Click="Button_Click"/>
                                     </Canvas>
                                 </GroupBox>
 
-                                <GroupBox Header="曲线切换" FontSize="15" Width="420" Height="58" HorizontalAlignment="Left" Margin="200,0,0,0">
+                                <GroupBox Header="曲线切换" FontSize="15" Width="326" Height="58" HorizontalAlignment="Left" Margin="290,0,0,0">
                                     <Canvas>
                                         <Canvas.Resources>
                                             <Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource RadioButton}">
@@ -617,11 +666,11 @@
                                             </Style>
                                         </Canvas.Resources>
                                         <RadioButton Canvas.Left="15" Canvas.Top="3" IsChecked="{Binding Experiment.IsAmplificationSeries}" />
-                                        <TextBlock Text="扩增曲线" Canvas.Left="48" Canvas.Top="5"/>
-                                        <RadioButton Canvas.Left="128" Canvas.Top="3" IsChecked="{Binding Experiment.IsMelting1Series}" />
-                                        <TextBlock Text="标准熔解曲线" Canvas.Left="158" Canvas.Top="5"/>
-                                        <RadioButton Canvas.Left="268" Canvas.Top="3" IsChecked="{Binding Experiment.IsMelting2Series}"/>
-                                        <TextBlock Text="导数熔解曲线" Canvas.Left="298" Canvas.Top="5"/>
+                                        <TextBlock Text="扩增" Canvas.Left="48" Canvas.Top="5"/>
+                                        <RadioButton Cursor="Hand" Canvas.Left="98" Canvas.Top="3" IsChecked="{Binding Experiment.IsMelting1Series}" />
+                                        <TextBlock Text="标准熔解" Canvas.Left="128" Canvas.Top="5"/>
+                                        <RadioButton Canvas.Left="208" Canvas.Top="3" IsChecked="{Binding Experiment.IsMelting2Series}"/>
+                                        <TextBlock Text="导数熔解" Canvas.Left="238" Canvas.Top="5"/>
                                     </Canvas>
                                 </GroupBox>
 
@@ -667,36 +716,28 @@
                                 </GroupBox>
                             </Grid>
                             <Grid >
-
                                 <LiveCharts:CartesianChart x:Name="FinalCurve"
-                                    Width="800" Height="500" MouseDown="FinalCurve_MouseDown" MouseUp="FinalCurve_MouseUp"
                                     DisableAnimations="True" LegendLocation="None" DataTooltip="{x:Null}" 
                                     HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Series="{Binding Experiment.Charts.FinalCurve}"
-                                    Foreground="{StaticResource BlueColor}" FontSize="8" FontWeight="Bold" >
+                                    Foreground="{StaticResource BlueColor}" FontWeight="Bold" >
                                     <LiveCharts:CartesianChart.AxisX>
-                                        <LiveCharts:Axis Title="{Binding Experiment.Charts.FinalXTitle}" MinValue="0" MaxValue="{Binding Experiment.Charts.FinalXMaxValue}"  FontSize="16" LabelFormatter="{Binding Experiment.Charts.FinalXFormatter}" Foreground="{StaticResource BlueColor}" FontWeight="Bold" >
+                                        <LiveCharts:Axis Title="{Binding Experiment.Charts.FinalXTitle}" MinValue="0" MaxValue="{Binding Experiment.Charts.FinalXMaxValue}"  FontSize="14" LabelFormatter="{Binding Experiment.Charts.FinalXFormatter}" Foreground="{StaticResource BlueColor}" FontWeight="Bold" >
                                             <LiveCharts:Axis.Separator>
-                                                <LiveCharts:Separator Stroke="{StaticResource WathetColor2}" StrokeThickness="1" />
+                                                <LiveCharts:Separator Tag="x" Stroke="{StaticResource WathetColor2}" StrokeThickness="1" Step="{Binding Experiment.Charts.AnalysisXStep}"/>
                                             </LiveCharts:Axis.Separator>
                                         </LiveCharts:Axis>
                                     </LiveCharts:CartesianChart.AxisX>
                                     <LiveCharts:CartesianChart.AxisY >
-                                        <LiveCharts:Axis Title="荧光值" FontSize="16" MinValue="0"  Foreground="{StaticResource BlueColor}" FontWeight="Bold" LabelFormatter="{Binding Experiment.Charts.FinalYFormatter,Mode=OneTime}">
+                                        <LiveCharts:Axis  Title="{Binding Experiment.Charts.FinalYTitle}" FontSize="14" MinValue="0"  Foreground="{StaticResource BlueColor}" FontWeight="Bold" LabelFormatter="{Binding Experiment.Charts.FinalYFormatter,Mode=OneTime}">
                                             <LiveCharts:Axis.Sections >
-                                                <LiveCharts:AxisSection x:Name="Section" IsHitTestVisible="True" Draggable="True" Cursor="ScrollNS"  Value="{Binding Experiment.Charts.B,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Stroke="Red" StrokeThickness="2" StrokeDashArray="3,2"/>
+                                                <LiveCharts:AxisSection x:Name="Section" Cursor="Hand" Visibility="{Binding Experiment.Charts.SectionVisibility}" IsHitTestVisible="True" Draggable="True" Value="{Binding Experiment.Charts.Threshold,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Stroke="Green" StrokeThickness="2" />
                                             </LiveCharts:Axis.Sections>
                                             <LiveCharts:Axis.Separator>
-                                                <LiveCharts:Separator Stroke="{StaticResource WathetColor2}" StrokeThickness="1" />
+                                                <LiveCharts:Separator Tag="y" Stroke="{StaticResource WathetColor2}" StrokeThickness="1" />
                                             </LiveCharts:Axis.Separator>
                                         </LiveCharts:Axis>
                                     </LiveCharts:CartesianChart.AxisY>
                                 </LiveCharts:CartesianChart>
-                                <Button Content="初始" Margin="0,0,0,0" Width="50" VerticalAlignment="Bottom" Click="Button_Click" />
-
-                                <Button x:Name="persent" Content="计算" Margin="150,0,0,0" Width="50" VerticalAlignment="Bottom" Click="persent_Click" />
-
-                                <Button x:Name="Reverse" Content="计算" Margin="150,0,0,0" Width="50" VerticalAlignment="Bottom" Click="persent_Click" />
-
                             </Grid>
                         </DockPanel>
                         <GridSplitter Style="{StaticResource GridSplitter}" ShowsPreview="True" Grid.Column="1" Grid.RowSpan="3" Width="10"  VerticalAlignment="Stretch" HorizontalAlignment="Center"/>
@@ -721,93 +762,93 @@
                                 <DataGridTextColumn MinWidth="80"  Header="TM值"  Binding="{Binding TmResult}"/>
                             </DataGrid.Columns>
                         </DataGrid>
-                      
+
                     </Grid>
                 </TabItem>
                 <TabItem Height=".1">
                     <Canvas>
-                        <ScrollViewer Height="590" Width="700" Canvas.Left="20" Canvas.Top="8">
-                            <StackPanel Orientation="Vertical" Width="700" >
-                                <TextBlock Foreground="#FF878787" FontWeight="Bold" FontSize="30" Text="速创职工医院" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,0"/>
-                                <TextBlock Foreground="#FF878787" FontSize="23" FontWeight="Normal" Text="核酸扩增荧光定量PCR检测报告" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,10,0,0"/>
-                                <Canvas DataContext="{Binding SelectedItem, ElementName=DataGrid3}" Margin="0,10,0,0"  Height="80">
-                                    <Canvas.Resources>
-                                        <Style TargetType="{x:Type TextBlock}" />
-                                    </Canvas.Resources>
-                                    <TextBlock Canvas.Left="25" Canvas.Top="10" Foreground="#FF878787" FontSize="16" LineHeight="20" LineStackingStrategy="BlockLineHeight" 
+                        <Border Margin="20,8,0,0" BorderBrush="{StaticResource WathetColor3}" BorderThickness="2" Height="560" Width="700" >
+                            <ScrollViewer Height="556" Width="696" >
+                                <StackPanel Orientation="Vertical" Width="700" >
+                                    <TextBlock Foreground="#FF878787" FontWeight="Bold" FontSize="30" Text="速创职工医院" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,0"/>
+                                    <TextBlock Foreground="#FF878787" FontSize="23" FontWeight="Normal" Text="核酸扩增荧光定量PCR检测报告" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,10,0,0"/>
+                                    <Canvas DataContext="{Binding SelectedItem, ElementName=DataGrid3}" Margin="0,10,0,0"  Height="80">
+                                        <Canvas.Resources>
+                                            <Style TargetType="{x:Type TextBlock}" />
+                                        </Canvas.Resources>
+                                        <TextBlock Canvas.Left="25" Canvas.Top="10" Foreground="#FF878787" FontSize="16" LineHeight="20" LineStackingStrategy="BlockLineHeight" 
                                            Text="姓        名：                    病  历  号：                    临床诊断：                    样本编号：                    &#xA;性        别：                    病  床  号：                    住  院  号：                    采样日期：               &#xA;年        龄：                    门  诊  号：                    送检科室：                    样本类型：          " FontFamily="Microsoft JhengHei UI"/>
-                                    <TextBlock Text="{Binding Patient.Name, FallbackValue=未知}" Canvas.Left="110" Canvas.Top="12"/>
-                                    <TextBlock Text="{Binding Patient.Sex, FallbackValue=未知}" Canvas.Left="110" Canvas.Top="32"/>
-                                    <TextBlock Text="{Binding Patient.Age, FallbackValue=未知}" Canvas.Left="110" Canvas.Top="52"/>
+                                        <TextBlock Text="{Binding Patient.Name, FallbackValue=未知}" Canvas.Left="110" Canvas.Top="12"/>
+                                        <TextBlock Text="{Binding Patient.Sex, FallbackValue=未知}" Canvas.Left="110" Canvas.Top="32"/>
+                                        <TextBlock Text="{Binding Patient.Age, FallbackValue=未知}" Canvas.Left="110" Canvas.Top="52"/>
 
-                                    <TextBlock Text="{Binding Patient.CaseId, FallbackValue=未知}" Canvas.Left="270" Canvas.Top="12"/>
-                                    <TextBlock Text="{Binding Patient.BedId, FallbackValue=未知}" Canvas.Left="270" Canvas.Top="32"/>
-                                    <TextBlock Text="{Binding Patient.OutPatientId, FallbackValue=未知}" Canvas.Left="270" Canvas.Top="52"/>
+                                        <TextBlock Text="{Binding Patient.CaseId, FallbackValue=未知}" Canvas.Left="270" Canvas.Top="12"/>
+                                        <TextBlock Text="{Binding Patient.BedId, FallbackValue=未知}" Canvas.Left="270" Canvas.Top="32"/>
+                                        <TextBlock Text="{Binding Patient.OutPatientId, FallbackValue=未知}" Canvas.Left="270" Canvas.Top="52"/>
 
-                                    <TextBlock Text="{Binding Patient.Diagnosis, FallbackValue=未知}" Canvas.Left="430" Canvas.Top="12"/>
-                                    <TextBlock Text="{Binding Patient.HospitalizationId, FallbackValue=未知}" Canvas.Left="430" Canvas.Top="32"/>
-                                    <TextBlock Text="{Binding Patient.Office, FallbackValue=未知}" Canvas.Left="430" Canvas.Top="52"/>
+                                        <TextBlock Text="{Binding Patient.Diagnosis, FallbackValue=未知}" Canvas.Left="430" Canvas.Top="12"/>
+                                        <TextBlock Text="{Binding Patient.HospitalizationId, FallbackValue=未知}" Canvas.Left="430" Canvas.Top="32"/>
+                                        <TextBlock Text="{Binding Patient.Office, FallbackValue=未知}" Canvas.Left="430" Canvas.Top="52"/>
 
-                                    <TextBlock Text="{Binding Patient.SampleId, FallbackValue=未知}" Canvas.Left="590" Canvas.Top="12"/>
-                                    <TextBlock Text="{Binding Patient.SamplingDate, FallbackValue=未知}" Canvas.Left="590" Canvas.Top="32"/>
-                                    <TextBlock Text="{Binding Patient.SampleType, FallbackValue=未知}" Canvas.Left="590" Canvas.Top="52"/>
-                                </Canvas>
+                                        <TextBlock Text="{Binding Patient.SampleId, FallbackValue=未知}" Canvas.Left="590" Canvas.Top="12"/>
+                                        <TextBlock Text="{Binding Patient.SamplingDate, FallbackValue=未知}" Canvas.Left="590" Canvas.Top="32"/>
+                                        <TextBlock Text="{Binding Patient.SampleType, FallbackValue=未知}" Canvas.Left="590" Canvas.Top="52"/>
+                                    </Canvas>
 
-                                <Line X1="0" X2="630" Stroke="Black" StrokeThickness="1" Width="650" Height="3" VerticalAlignment="Top" Margin="0,10,0,0"/>
-                                <TextBlock Foreground="#FF878787" FontSize="16" VerticalAlignment="Top" Margin="0,10,0,0" Text="检测项目                        测量结果                        参  考  值                        单        位                        " FontFamily="Microsoft JhengHei UI"/>
-                                <Line X1="0" X2="630" Stroke="Black" StrokeThickness="1" Width="650" Height="3" VerticalAlignment="Top" Margin="0,10,0,0"/>
-                                <Line X1="0" X2="630" Stroke="Black" StrokeThickness="1" Width="650" Height="3" VerticalAlignment="Top" Margin="0,80,0,0"/>
-                                <LiveCharts:CartesianChart VerticalAlignment="Top"
+                                    <Line X1="0" X2="630" Stroke="Black" StrokeThickness="1" Width="650" Height="3" VerticalAlignment="Top" Margin="0,10,0,0"/>
+                                    <TextBlock Foreground="#FF878787" FontSize="16" VerticalAlignment="Top" Margin="25,10,0,0" Text="检测项目                      测量结果                      参  考  值                      单        位                    " FontFamily="Microsoft JhengHei UI"/>
+                                    <Line X1="0" X2="630" Stroke="Black" StrokeThickness="1" Width="650" Height="3" VerticalAlignment="Top" Margin="0,10,0,0"/>
+                                    <Line X1="0" X2="630" Stroke="Black" StrokeThickness="1" Width="650" Height="3" VerticalAlignment="Top" Margin="0,80,0,0"/>
+                                    <LiveCharts:CartesianChart VerticalAlignment="Top"
                                     Margin="30,20,50,0" IsHitTestVisible="False" 
                                     DisableAnimations="True" LegendLocation="None" 
                                     DataTooltip="{x:Null}"  Foreground="{StaticResource BlueColor}" FontSize="8" Height="300" Canvas.Left="736" Canvas.Top="10">
-                                    <LiveCharts:CartesianChart.AxisX >
-                                        <LiveCharts:Axis Title="周期数" Foreground="#FF878787" FontWeight="Bold">
-                                            <LiveCharts:Axis.Separator>
-                                                <LiveCharts:Separator  Stroke="#FFDADADA" StrokeThickness=".5" />
-                                            </LiveCharts:Axis.Separator>
-                                        </LiveCharts:Axis>
-                                    </LiveCharts:CartesianChart.AxisX>
-                                    <LiveCharts:CartesianChart.AxisY >
-                                        <LiveCharts:Axis Title="荧光值" Foreground="#FF878787"  FontWeight="Bold">
-                                            <LiveCharts:Axis.Separator>
-                                                <LiveCharts:Separator  Stroke="#FFDADADA" StrokeThickness=".5" />
-                                            </LiveCharts:Axis.Separator>
-                                        </LiveCharts:Axis>
-                                    </LiveCharts:CartesianChart.AxisY>
-                                </LiveCharts:CartesianChart>
+                                        <LiveCharts:CartesianChart.AxisX >
+                                            <LiveCharts:Axis Title="周期数" Foreground="#FF878787" FontWeight="Bold">
+                                                <LiveCharts:Axis.Separator>
+                                                    <LiveCharts:Separator  Stroke="#FFDADADA" StrokeThickness=".5" />
+                                                </LiveCharts:Axis.Separator>
+                                            </LiveCharts:Axis>
+                                        </LiveCharts:CartesianChart.AxisX>
+                                        <LiveCharts:CartesianChart.AxisY >
+                                            <LiveCharts:Axis Title="荧光值" Foreground="#FF878787"  FontWeight="Bold">
+                                                <LiveCharts:Axis.Separator>
+                                                    <LiveCharts:Separator  Stroke="#FFDADADA" StrokeThickness=".5" />
+                                                </LiveCharts:Axis.Separator>
+                                            </LiveCharts:Axis>
+                                        </LiveCharts:CartesianChart.AxisY>
+                                    </LiveCharts:CartesianChart>
 
-                                <TextBlock Foreground="#FF878787" FontSize="16" LineHeight="20" LineStackingStrategy="BlockLineHeight" VerticalAlignment="Bottom" Margin="0,20,0,0" 
+                                    <TextBlock Foreground="#FF878787" FontSize="16" LineHeight="20" LineStackingStrategy="BlockLineHeight" VerticalAlignment="Bottom" Margin="0,20,0,0" 
                                            Text="送检医师：                    检验日期：                    检  验  者：                    审核者：                    " FontFamily="Microsoft JhengHei UI"/>
 
-                                <Canvas Height="50">
-                                    <TextBlock Text="医师结论：" FontFamily="Microsoft JhengHei UI" Foreground="#FF878787" FontSize="16" Canvas.Top="10" Canvas.Left="38"/>
-                                    <TextBox Background="#FF878787" FontFamily="Microsoft JhengHei UI" BorderBrush="#FF878787" Canvas.Left="130" Canvas.Top="8" Width="500" Height="25"/>
-                                </Canvas>
-                            </StackPanel>
-                        </ScrollViewer>
-                        <DataGrid x:Name="DataGrid3" Style="{StaticResource DataGrid}" ItemsSource="{Binding Experiment.Samples}" SelectionMode="Single" AutoGenerateColumns="False" Height="470" Width="350" Canvas.Left="735" Canvas.Top="10"  >
+                                    <Canvas Height="50">
+                                        <TextBlock Text="医师结论：" FontFamily="Microsoft JhengHei UI" Foreground="#FF878787" FontSize="16" Canvas.Top="10" Canvas.Left="38"/>
+                                        <TextBox Background="#FF878787" FontFamily="Microsoft JhengHei UI" BorderBrush="#FF878787" Canvas.Left="130" Canvas.Top="8" Width="500" Height="25"/>
+                                    </Canvas>
+                                </StackPanel>
+                            </ScrollViewer>
+
+                        </Border>
+                        <DataGrid x:Name="DataGrid3" Style="{StaticResource DataGrid}" ItemsSource="{Binding Experiment.Samples}" SelectionMode="Single" AutoGenerateColumns="False" Height="510" Width="350" Canvas.Left="735" Canvas.Top="10"  >
                             <DataGrid.Columns>
                                 <DataGridTextColumn Width="90" IsReadOnly="True" Header="检测项目"  Binding="{Binding HoleName}"/>
                                 <DataGridTextColumn Width="80" IsReadOnly="True" Header="操作人员"/>
                                 <DataGridTextColumn MinWidth="130" Header="实验日期"  Binding="{Binding Name}"/>
                             </DataGrid.Columns>
                         </DataGrid>
-                        <Canvas Width="340" Height="80" Canvas.Left="740" Canvas.Bottom="0">
-                            <Button Background="{StaticResource BlueColor}" Foreground="White" Command="{Binding OpenFluorescenceChart}" Width="100" Height="30" Content="打开" />
-                            <Button Background="{StaticResource BlueColor}" Foreground="White" Command="{Binding SaveFluorescenceChart}" Width="100" Height="30" Content="导出" Canvas.Top="40"/>
+                        <Canvas Width="340" Height="40" Canvas.Left="740" Canvas.Bottom="0">
+                            <Button Background="{StaticResource BlueColor}" Foreground="White" Command="{Binding OpenFluorescenceChart}" Width="100" Height="30" Content="导入报告" />
+                            <Button Background="{StaticResource BlueColor}" Foreground="White" Command="{Binding SaveFluorescenceChart}" Width="100" Height="30" Content="导出报告" Canvas.Left="120"/>
 
-                            <Button Background="{StaticResource BlueColor}" Foreground="White" Width="100" Height="30" Content="打印报告" Canvas.Left="120" />
-                            <Button Background="{StaticResource BlueColor}" Foreground="White" Width="100" Height="30" Content="全部打印" Canvas.Left="120"  Canvas.Top="40"/>
+                            <Button Background="{StaticResource BlueColor}" Command="{Binding PrintReport}" Foreground="White" Width="100" Height="30" Content="打印报告" Canvas.Left="240" />
 
-                            <Button Background="{StaticResource BlueColor}" Command="{Binding Test}" CommandParameter="0" Foreground="White" Width="100" Height="30" Content="发送" Canvas.Left="240" />
-                            <Button Background="{StaticResource BlueColor}" Command="{Binding Test}" CommandParameter="1" Foreground="White" Width="100" Height="30" Content="连接" Canvas.Left="240"  Canvas.Top="40"/>
                         </Canvas>
                     </Canvas>
                 </TabItem>
                 <TabItem Height=".1">
-                    <Canvas  Margin="10">
-                        <DataGrid Style="{StaticResource DataGrid}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedAccount}" ItemsSource="{Binding Configuration.Accounts}" Canvas.Left="200" Canvas.Top="30" Height="400"  >
+                    <Canvas>
+                        <DataGrid Style="{StaticResource DataGrid}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedAccount}" ItemsSource="{Binding Configuration.Accounts}" Canvas.Left="78" Canvas.Top="62" Height="360"  >
                             <DataGrid.Columns>
                                 <DataGridTextColumn Width="120" Header="用户名" Binding="{Binding UserName}"/>
                                 <DataGridTextColumn Width="120" Header="密码" Binding="{Binding Password}"/>
@@ -816,46 +857,107 @@
                             </DataGrid.Columns>
                         </DataGrid>
 
-                        <Canvas Canvas.Left="200" Canvas.Top="430" Width="454" Height="160">
-                            <TextBlock  Text="账户：" Width="50" Height="25" Canvas.Left="10" Canvas.Top="15"/>
-                            <TextBox Text="{Binding CurrentAccount.UserName}" Canvas.Left="70" Canvas.Top="15" Width="120"/>
+                        <Canvas Canvas.Left="582" Canvas.Top="62" Width="454" Height="160">
+                            <TextBlock  Text="账户：" Width="50" Height="25" Canvas.Left="20" Canvas.Top="15"/>
+                            <TextBox Text="{Binding CurrentAccount.UserName,UpdateSourceTrigger=PropertyChanged}" Canvas.Left="80" Canvas.Top="15" Width="120">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="TextChanged">
+                                        <i:InvokeCommandAction Command="{Binding ChangeText}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </TextBox>
 
-                            <TextBlock  Text="密码：" Width="50" Height="25" Canvas.Left="220" Canvas.Top="15"/>
-                            <TextBox Text="{Binding CurrentAccount.Password}" Canvas.Left="280" Canvas.Top="15" Width="120"/>
+                            <TextBlock  Text="密码：" Width="50" Height="25" Canvas.Left="230" Canvas.Top="15"/>
+                            <TextBox Text="{Binding CurrentAccount.Password,UpdateSourceTrigger=PropertyChanged}" Canvas.Left="290" Canvas.Top="15" Width="120">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="TextChanged">
+                                        <i:InvokeCommandAction Command="{Binding ChangeText}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </TextBox>
 
-                            <TextBlock  Text="权限：" Width="50" Height="25" Canvas.Left="10" Canvas.Top="60"/>
-                            <ComboBox Style="{StaticResource ComboBox}" ItemsSource="{Binding Roles}" SelectedItem="{Binding CurrentAccount.Role}" Width="120" Height="30" Canvas.Left="70" Canvas.Top="60" />
+                            <TextBlock  Text="权限：" Width="50" Height="25" Canvas.Left="20" Canvas.Top="60"/>
+                            <ComboBox Style="{StaticResource ComboBox}" ItemsSource="{Binding Roles}" SelectedItem="{Binding CurrentAccount.Role}" Width="120" Height="30" Canvas.Left="80" Canvas.Top="60" >
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="DropDownClosed">
+                                        <i:InvokeCommandAction Command="{Binding ChangeText}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </ComboBox>
 
-                            <Button Command="{Binding AddAccount}" Width="130" Height="30" Content="{StaticResource AddAccount}" VerticalAlignment="Top" Canvas.Left="15" Canvas.Top="110"/>
-                            <Button Command="{Binding EditAccount}" Width="130" Height="30" Content="{StaticResource EditAccount}" VerticalAlignment="Top" Canvas.Left="160" Canvas.Top="110"/>
-                            <Button Command="{Binding DeleteAccount}" Width="130" Height="30" Content="{StaticResource RemoveAccount}" VerticalAlignment="Top" Canvas.Left="305" Canvas.Top="110"/>
+                            <Button Command="{Binding AddAccount}" Width="130" Height="32" Content="{StaticResource AddAccount}" VerticalAlignment="Top" Canvas.Left="15" Canvas.Top="110"/>
+                            <!--<Button Command="{Binding EditAccount}" Width="130" Height="32" Content="{StaticResource EditAccount}" VerticalAlignment="Top" Canvas.Left="160" Canvas.Top="110"/>-->
+                            <Button Command="{Binding DeleteAccount}" Width="130" Height="32" Content="{StaticResource RemoveAccount}" VerticalAlignment="Top" Canvas.Left="170" Canvas.Top="110" />
                         </Canvas>
+                        <Border BorderThickness="0,3,0,0" BorderBrush="{StaticResource WathetColor}" Background="{StaticResource WathetColor2}" Height="56" Width="1100" Canvas.Left="-2" Canvas.Bottom="-2"/>
+                        <Button Command="{Binding SwitchViewExperiment}" CommandParameter="0"  Content="返回"  Width="100" Height="30"  Canvas.Right="30" Canvas.Bottom="10"/>
+
+                    </Canvas>
+                </TabItem>
+                <TabItem Height=".1">
+                    <Canvas>
+                        <GroupBox Header="实验信息标签" Width="260" Canvas.Left="10" Canvas.Top="10">
+                            <Canvas  Width="221" Height="400">
+                                <TextBlock Text="勾取要反馈的实验信息标签" Canvas.Top="370" />
+                                <TextBlock Canvas.Left="46" LineStackingStrategy="BlockLineHeight" LineHeight="38" FontSize="17" Text="运行时间 ----&#xA;剩余时间 ----&#xA;实验名称 ----&#xA;项目名称 ----&#xA;实验人员 ----&#xA;实验状态 ----&#xD;电机转速 ----&#xA;上盖温度 ----&#xA;底座温度 ----&#xA;"/>
+                                <StackPanel Orientation="Vertical"  >
+                                    <StackPanel.Resources>
+                                        <Style TargetType="Path" >
+                                            <Setter Property="Stretch" Value="Fill"/>
+                                            <Setter Property="Width" Value="26"/>
+                                            <Setter Property="Height" Value="26"/>
+                                            <Setter Property="Fill" Value="{StaticResource BlueColor}"/>
+                                            <Setter Property="Margin" Value="0,12,0,0"/>
+                                        </Style>
+
+                                    </StackPanel.Resources>
+                                    <Path Data="{StaticResource Clock}"  />
+                                    <Path Data="{StaticResource Remain}" Width="19" Canvas.Left="3" />
+                                    <Path  Data="{StaticResource Experiment}"  />
+                                    <Path  Data="{StaticResource Project}"  Width="12"/>
+                                    <Path  Data="{StaticResource UserName}"  />
+                                    <Path  Data="{StaticResource Step}"  />
+                                    <Path Data="{StaticResource Speed}" />
+                                    <Path  Data="{StaticResource Thermoneter}" />
+                                    <Path  Data="{StaticResource Thermoneter}" />
+                                </StackPanel>
+                                <StackPanel Orientation="Vertical" Canvas.Left="157">
+                                    <StackPanel.Resources>
+                                        <Style TargetType="CheckBox" BasedOn="{StaticResource ElipseCheckBox}">
+                                            <Setter Property="Width" Value="26"/>
+                                            <Setter Property="Margin" Value="0,12,0,0"/>
+                                        </Style>
+                                    </StackPanel.Resources>
+                                    <CheckBox IsChecked="{Binding Configuration.Experiment.Feedbacks[0].Status,Converter={StaticResource VisibilityToBool}}"/>
+                                    <CheckBox IsChecked="{Binding Configuration.Experiment.Feedbacks[1].Status,Converter={StaticResource VisibilityToBool}}"/>
+                                    <CheckBox IsChecked="{Binding Configuration.Experiment.Feedbacks[2].Status,Converter={StaticResource VisibilityToBool}}"/>
+                                    <CheckBox IsChecked="{Binding Configuration.Experiment.Feedbacks[3].Status,Converter={StaticResource VisibilityToBool}}"/>
+                                    <CheckBox IsChecked="{Binding Configuration.Experiment.Feedbacks[4].Status,Converter={StaticResource VisibilityToBool}}"/>
+                                    <CheckBox IsChecked="{Binding Configuration.Experiment.Feedbacks[5].Status,Converter={StaticResource VisibilityToBool}}"/>
+                                    <CheckBox IsChecked="{Binding Configuration.Experiment.Feedbacks[6].Status,Converter={StaticResource VisibilityToBool}}"/>
+                                    <CheckBox IsChecked="{Binding Configuration.Experiment.Feedbacks[7].Status,Converter={StaticResource VisibilityToBool}}"/>
+                                    <CheckBox IsChecked="{Binding Configuration.Experiment.Feedbacks[8].Status,Converter={StaticResource VisibilityToBool}}"/>
+                                </StackPanel>
+                            </Canvas>
+                        </GroupBox>
+                        <GroupBox Header="服务端地址" Canvas.Left="10" Canvas.Top="450" Width="260" Height="110">
+                            <Canvas>
+                                <TextBlock LineStackingStrategy="BlockLineHeight" LineHeight="38" FontSize="17" Text="IP：&#xA;Port：" Canvas.Left="10" Canvas.Top="-6"/>
+                                <TextBox Text="{Binding Configuration.CurrentTcpServerIPAddress}" Canvas.Left="65" Canvas.Top="10" Width="150"/>
+                                <TextBox Text="{Binding Configuration.TcpServerPort}" Canvas.Left="65" Canvas.Top="50" Width="60"/>
+                                <Button Content="连接" Command="{Binding ReConnect}" Canvas.Left="130" Canvas.Top="38" Width="85" />
+                            </Canvas>
+                        </GroupBox>
+                        <Border BorderThickness="0,3,0,0" BorderBrush="{StaticResource WathetColor}" Background="{StaticResource WathetColor2}" Height="56" Width="1100" Canvas.Left="-2" Canvas.Bottom="-2"/>
+                        <Button Command="{Binding ApplySetup}" CommandParameter="0"  Content="应用"  Width="100" Height="30"  Canvas.Right="150" Canvas.Bottom="10"/>
+
+                        <Button Command="{Binding SwitchViewExperiment}" CommandParameter="0"  Content="返回"  Width="100" Height="30"  Canvas.Right="30" Canvas.Bottom="10"/>
                     </Canvas>
                 </TabItem>
             </TabControl>
 
             <Button Content="上一步" Command="{Binding TurnPrevious}" Visibility="{Binding StepIndex, Converter={StaticResource ViewIndexToVisibility},FallbackValue=Hidden}" Width="100" Height="30" Canvas.Right="150" Canvas.Bottom="10"/>
             <Button Content="下一步" Command="{Binding TurnNext}" Visibility="{Binding StepIndex, Converter={StaticResource ViewIndexToVisibility},FallbackValue=Hidden}" Width="100" Height="30"  Canvas.Right="30" Canvas.Bottom="10"/>
-
-            <Canvas Canvas.Right="30" Width="902"  Visibility="{Binding TempeInfoPanelState, FallbackValue=Collapsed}" >
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="MouseLeftButtonUp">
-                        <EventCommand:EventCommand Command="{Binding ClickInfoPanel}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorLevel=1, AncestorType={x:Type Canvas}, Mode=FindAncestor}}"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-                <Rectangle Effect="{StaticResource PanelEffect}" Width="904" Height="550" Canvas.Top="40" Fill="{StaticResource WathetColor3}" Stroke="{StaticResource BlueColor}" StrokeThickness="2"/>
-                <Thermal:ThermalRegion Canvas.Left="2" Canvas.Top="42"/>
-            </Canvas>
-
-            <Canvas Canvas.Right="30" Width="902" Visibility="{Binding SpeedInfoPanelState, FallbackValue=Collapsed}" >
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="MouseLeftButtonUp">
-                        <EventCommand:EventCommand Command="{Binding ClickInfoPanel}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorLevel=1, AncestorType={x:Type Canvas}, Mode=FindAncestor}}"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-                <Rectangle Effect="{StaticResource PanelEffect}" Width="904" Height="550" Canvas.Top="40" Fill="{StaticResource WathetColor3}" Stroke="{StaticResource BlueColor}" StrokeThickness="2"/>
-                <Rpmunit:RpmRegion Canvas.Left="2" Canvas.Top="42" Height="550"/>
-            </Canvas>
 
         </Canvas>
     </Viewbox>

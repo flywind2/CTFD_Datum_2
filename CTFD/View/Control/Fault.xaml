@@ -1,0 +1,38 @@
+﻿<UserControl 
+    x:Class="CTFD.View.Control.Fault"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    mc:Ignorable="d" 
+    x:Name="Instance"
+    d:DesignHeight="160" d:DesignWidth="500" >
+    <Border RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="5" BorderBrush="White" CornerRadius="17" Background="Red">
+        <Border.RenderTransform>
+            <TransformGroup>
+                <ScaleTransform x:Name="Scale" CenterX="1" CenterY="1" ScaleX="1" ScaleY="1"/>
+                <!--<TranslateTransform x:Name="myButtonTranslate" X="0" Y="0" />-->
+            </TransformGroup>
+        </Border.RenderTransform>
+        <TextBlock Margin="30,15,30,15" Text="温度异常" Foreground="WhiteSmoke" FontSize="50" FontWeight="Bold"/>
+        <Border.Triggers>
+            <EventTrigger RoutedEvent="ContentControl.Loaded">
+                <EventTrigger.Actions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation 
+                                To="1.2" RepeatBehavior="Forever" Duration="0:0:0.5" 
+                                AutoReverse="True" Storyboard.TargetName="Scale" Storyboard.TargetProperty="(ScaleTransform.ScaleX)"/>
+                            <DoubleAnimation 
+                                To="1.2" RepeatBehavior="Forever" Duration="0:0:0.5" 
+                                AutoReverse="True" Storyboard.TargetName="Scale" Storyboard.TargetProperty="(ScaleTransform.ScaleY)"/>
+                            <!--<DoubleAnimation 
+                                To="2.3"  RepeatBehavior="Forever"  Duration="0:0:3" 
+                                AutoReverse="True" Storyboard.TargetName="myButtonTranslate" Storyboard.TargetProperty="(TranslateTransform.X)" />-->
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger.Actions>
+            </EventTrigger>
+        </Border.Triggers>
+    </Border>
+</UserControl>

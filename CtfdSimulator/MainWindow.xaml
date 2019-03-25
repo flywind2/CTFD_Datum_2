@@ -96,7 +96,7 @@
                     </Setter>
                 </Style>
             </Canvas.Resources>
-          
+
             <GroupBox Header="基本信息" Foreground="White" Width="230" Height="110" Canvas.Top="10" Canvas.Right="10">
                 <Canvas>
                     <TextBlock Text="本地IP：" Canvas.Left="5" Canvas.Top="10"/>
@@ -121,10 +121,10 @@
                     <TextBox x:Name="TbxTem" Width="65" Text="139.6" Canvas.Left="150" Canvas.Top="10"/>
                 </Canvas>
             </GroupBox>
-            
-           
 
-          
+
+
+
             <GroupBox Header="启停控制" Foreground="White" Width="230" Height="60" Canvas.Top="190" Canvas.Right="10">
                 <Canvas>
                     <Button Content="启停" Canvas.Left="5" Canvas.Top="10" Click="ClickSendingStartFeedback"/>
@@ -139,14 +139,14 @@
                 </Canvas>
             </GroupBox>
 
-            <GroupBox Header="转速控制" Foreground="White" Width="230" Height="60" Canvas.Top="255" Canvas.Right="10">
+            <GroupBox Header="转速控制" Foreground="White" Width="162" Height="60" Canvas.Top="255" Canvas.Right="10" Canvas.Left="290">
                 <Canvas>
                     <Button Content="转速" Canvas.Left="5" Canvas.Top="10" Click="SendRpm" />
                     <TextBox x:Name="TextBoxRpm" Width="65" Text="4200" Canvas.Left="80" Canvas.Top="10"/>
                 </Canvas>
             </GroupBox>
-            
-            <GroupBox Header="实验阶段" Foreground="White" Width="230" Height="60" Canvas.Top="320" Canvas.Right="10">
+
+            <GroupBox Header="实验阶段" Foreground="White" Width="162" Height="60" Canvas.Top="320" Canvas.Right="10" Canvas.Left="290">
                 <Canvas>
                     <Button Content="阶段"  Canvas.Left="5" Canvas.Top="10" Click="SendStep"/>
                     <ComboBox x:Name="ComboBoxStep" SelectedIndex="0" Canvas.Left="80" Canvas.Top="10" Width="65" >
@@ -162,7 +162,7 @@
                 </Canvas>
             </GroupBox>
 
-            <GroupBox Header="曲线控制" Foreground="White" Width="230" Height="60" Canvas.Top="385" Canvas.Right="10">
+            <GroupBox Header="曲线控制" Foreground="White" Width="162" Height="60" Canvas.Top="385" Canvas.Right="10" Canvas.Left="290">
                 <Canvas>
                     <Button Content="曲线" Canvas.Left="5" Canvas.Top="10"  Click="SendChartData"/>
                     <ComboBox x:Name="ComboBoxChartType" SelectedIndex="0" Canvas.Left="80" Canvas.Top="10" Width="65">
@@ -172,7 +172,9 @@
                         <ComboBoxItem Content="导数熔解"/>
                     </ComboBox>
 
-                    <Button Content="Ct" Canvas.Top="10" Canvas.Right="10" Width="50" Click="Button_Click"/>
+                    <Button x:Name="Query" Content="查询" Canvas.Top="-137" Canvas.Right="10" Width="50"  Canvas.Left="170" Click="Query_Click"/>
+
+                    <Button x:Name="QueryChart" Content="详细" Canvas.Top="-110" Canvas.Right="10" Width="50"  Canvas.Left="170"/>
                 </Canvas>
             </GroupBox>
 

@@ -47,9 +47,9 @@
         <DockPanel LastChildFill="True" Width="1200" Height="636">
             <Canvas  Width="110" DockPanel.Dock="Left" Height="636" Background="{StaticResource BlueColor}">
                 <CheckBox Style="{StaticResource ElipseTextSwitch}" IsChecked="{Binding IsRunningView}" Content="{StaticResource Task}"     Width="100" Canvas.Top="10" Canvas.Left="5"/>
-                <CheckBox Style="{StaticResource ElipseTextSwitch}" IsChecked="{Binding IsHelpView}"       Content="{StaticResource Help}"     Width="100" Canvas.Top="120" Canvas.Left="5"/>
-                <CheckBox Style="{StaticResource ElipseTextSwitch}" IsChecked="{Binding IsSetupView}"     Content="{StaticResource Setup}"    Width="100" Canvas.Top="340" Canvas.Left="5"/>
-                <CheckBox Style="{StaticResource ElipseTextSwitch}" IsChecked="{Binding IsLoginView}"     Content="{StaticResource User}"       Width="100" Canvas.Top="230" Canvas.Left="5"/>
+                <CheckBox Style="{StaticResource ElipseTextSwitch}" IsChecked="{Binding IsHistoryView}"     Content="{StaticResource History}"    Width="100" Canvas.Top="120" Canvas.Left="5"/>
+                <CheckBox Style="{StaticResource ElipseTextSwitch}" IsChecked="{Binding IsHelpView}"       Content="{StaticResource Help}"     Width="100" Canvas.Top="230" Canvas.Left="5"/>
+                <CheckBox Style="{StaticResource ElipseTextSwitch}" IsChecked="{Binding IsLoginView}"     Content="{StaticResource User}"       Width="100" Canvas.Top="340" Canvas.Left="5"/>
 
                 <Path Stretch="Uniform" Fill="White" Height="100" Canvas.Left="15" Canvas.Bottom="10" Data="{StaticResource Logo}"  />
             </Canvas>

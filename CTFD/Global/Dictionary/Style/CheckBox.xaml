@@ -44,77 +44,6 @@
         </Setter>
     </Style>
 
-    <Style x:Key="TextSwitch" TargetType="CheckBox">
-        <Setter Property="FontSize" Value="40"/>
-        <Setter Property="FontWeight" Value="Bold"/>
-        <Setter Property="Foreground" Value="White"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type CheckBox}">
-                    <Viewbox Stretch="Fill">
-                        <Grid Width="200" Height="100">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <Rectangle x:Name="B1" Fill="{TemplateBinding Background}" Grid.Column="0" RadiusX="50" RadiusY="50" Width="100" Height="100"/>
-                            <Rectangle x:Name="B2" Fill="{TemplateBinding Background}" Grid.Column="0" Grid.ColumnSpan="3" Margin="50,0,50,0" Height="100"/>
-                            <Rectangle x:Name="B3" Fill="{TemplateBinding Background}" Grid.Column="2" Margin="-35,0,0,0" RadiusX="50" RadiusY="50" Width="100" Height="100"/>
-                            <ContentPresenter Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                        </Grid>
-                    </Viewbox>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsEnabled" Value="false">
-                            <Setter Property="Background" Value="{StaticResource WathetColor}"/>
-                        </Trigger>
-                        <Trigger Property="IsChecked" Value="false">
-                            <Setter Property="Background" Value="{StaticResource GrayColor}"/>
-                        </Trigger>
-                        <Trigger Property="IsChecked" Value="true">
-                            <Setter Property="Background" Value="{StaticResource BlueColor}"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                    <!--<ControlTemplate.Triggers>
-                        <Trigger Property="IsEnabled" Value="false">
-                            <Setter Property="Background" Value="{StaticResource WathetColor}"/>
-                        </Trigger>
-                        <MultiTrigger>
-                            <MultiTrigger.Conditions>
-                                <Condition Property="IsChecked" Value="true"/>
-                                <Condition Property="IsMouseOver" Value="true"/>
-                            </MultiTrigger.Conditions>
-                            <Setter Property="Background" Value="{StaticResource GreenColor}"/>
-                        </MultiTrigger>
-
-                        <MultiTrigger>
-                            <MultiTrigger.Conditions>
-                                <Condition Property="IsChecked" Value="false"/>
-                                <Condition Property="IsMouseOver" Value="true"/>
-                            </MultiTrigger.Conditions>
-                            <Setter Property="Background" Value="{StaticResource WathetColor2}"/>
-                        </MultiTrigger>
-
-                        <MultiTrigger>
-                            <MultiTrigger.Conditions>
-                                <Condition Property="IsChecked" Value="false"/>
-                                <Condition Property="IsMouseOver" Value="false"/>
-                            </MultiTrigger.Conditions>
-                            <Setter Property="Background" Value="{StaticResource GrayColor}"/>
-                        </MultiTrigger>
-                        <MultiTrigger>
-                            <MultiTrigger.Conditions>
-                                <Condition Property="IsChecked" Value="true"/>
-                                <Condition Property="IsMouseOver" Value="false"/>
-                            </MultiTrigger.Conditions>
-                            <Setter Property="Background" Value="{StaticResource BlueColor}"/>
-                        </MultiTrigger>
-                    </ControlTemplate.Triggers>-->
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
     <Style x:Key="ElipseTextSwitch" TargetType="CheckBox">
         <Setter Property="FontSize" Value="40"/>
         <Setter Property="FontWeight" Value="Bold"/>
@@ -152,48 +81,6 @@
                             <Setter Property="Foreground" Value="White"/>
                         </MultiTrigger>
                     </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <Style x:Key="ColorTextSwitch" TargetType="CheckBox">
-        <Setter Property="FontSize" Value="40"/>
-        <Setter Property="FontWeight" Value="Bold"/>
-        <Setter Property="Foreground" Value="White"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type CheckBox}">
-                    <Viewbox Stretch="Fill">
-                        <Grid Width="200" Height="100">
-                            <Rectangle x:Name="B1" Fill="{StaticResource BlueColor}" RadiusX="50" RadiusY="50" Width="200" Height="100"/>
-                            <ContentPresenter Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                        </Grid>
-                    </Viewbox>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsChecked" Value="false">
-                            <Setter TargetName="B1" Property="Fill" Value="{StaticResource BlueColor}"/>
-                        </Trigger>
-                        <Trigger Property="IsChecked" Value="true">
-                            <Setter TargetName="B1" Property="Fill" Value="{StaticResource GreenColor}"/>
-                        </Trigger>
-                        <!--<MultiTrigger>
-                            <MultiTrigger.Conditions>
-                                <Condition Property="IsChecked" Value="true"/>
-                                <Condition Property="IsMouseOver" Value="true"/>
-                            </MultiTrigger.Conditions>
-                            <Setter TargetName="B1" Property="Fill" Value="{StaticResource GreenColor}"/>
-                        </MultiTrigger>
-
-                        <MultiTrigger>
-                            <MultiTrigger.Conditions>
-                                <Condition Property="IsChecked" Value="false"/>
-                                <Condition Property="IsMouseOver" Value="true"/>
-                            </MultiTrigger.Conditions>
-                            <Setter TargetName="B1" Property="Fill" Value="{StaticResource WathetColor}"/>
-                        </MultiTrigger>-->
-                    </ControlTemplate.Triggers>
-             
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -246,105 +133,6 @@
                             <Setter Property="Margin" TargetName="Toggle" Value="19,3,0,0"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <Style x:Key="AnimationCheckBox" TargetType="{x:Type ToggleButton}">
-        <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidForegroundBrush}"/>
-        <Setter Property="Background" Value="{DynamicResource PrimaryHueMidBrush}"/>
-        <Setter Property="Width" Value="32"/>
-        <Setter Property="Height" Value="32"/>
-        <Setter Property="FontSize" Value="18"/>
-        <Setter Property="HorizontalContentAlignment" Value="Center"  />
-        <Setter Property="VerticalContentAlignment" Value="Center"  />
-        <Setter Property="BorderThickness" Value="1"/>
-        
-        <Setter Property="Cursor" Value="Hand" />
-        <Setter Property="Effect">
-            <Setter.Value>
-                <DropShadowEffect ShadowDepth="2" Color="Gainsboro" Direction="0"/>
-            </Setter.Value>
-        </Setter>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type ToggleButton}">
-                    <Grid>
-                        <VisualStateManager.VisualStateGroups>
-                            <VisualStateGroup x:Name="CommonStates">
-                                <VisualState x:Name="Normal"/>
-                                <VisualState x:Name="Disabled">
-                                    <Storyboard>
-                                        <DoubleAnimation Duration="0" To="0.23" Storyboard.TargetProperty="(UIElement.Opacity)" />
-                                    </Storyboard>
-                                </VisualState>
-                            </VisualStateGroup>
-                            <VisualStateGroup x:Name="CheckStates">
-                                <VisualStateGroup.Transitions>
-                                    <VisualTransition From="*" To="Checked">
-                                        <Storyboard FillBehavior="HoldEnd">
-                                            <DoubleAnimationUsingKeyFrames Duration="0:0:0.2" Storyboard.TargetProperty="ScaleX" Storyboard.TargetName="OffScaleTransform">
-                                                <LinearDoubleKeyFrame Value="1" KeyTime="0:0:0.0" />
-                                                <LinearDoubleKeyFrame Value="0" KeyTime="0:0:0.1" />
-                                            </DoubleAnimationUsingKeyFrames>
-                                            <DoubleAnimationUsingKeyFrames Duration="0:0:0.2" Storyboard.TargetProperty="ScaleX" Storyboard.TargetName="OnScaleTransform">
-                                                <LinearDoubleKeyFrame Value="0" KeyTime="0:0:0.1" />
-                                                <LinearDoubleKeyFrame Value="1" KeyTime="0:0:0.2" />
-                                            </DoubleAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </VisualTransition>
-                                    <VisualTransition From="Checked" To="Unchecked">
-                                        <Storyboard FillBehavior="HoldEnd">
-                                            <DoubleAnimationUsingKeyFrames Duration="0:0:0.2" Storyboard.TargetProperty="ScaleX" Storyboard.TargetName="OnScaleTransform">
-                                                <LinearDoubleKeyFrame Value="1" KeyTime="0:0:0.0" />
-                                                <LinearDoubleKeyFrame Value="0" KeyTime="0:0:0.1" />
-                                            </DoubleAnimationUsingKeyFrames>
-                                            <DoubleAnimationUsingKeyFrames Duration="0:0:0.2" Storyboard.TargetProperty="ScaleX" Storyboard.TargetName="OffScaleTransform">
-                                                <LinearDoubleKeyFrame Value="0" KeyTime="0:0:0.1" />
-                                                <LinearDoubleKeyFrame Value="1" KeyTime="0:0:0.2" />
-                                            </DoubleAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </VisualTransition>
-                                </VisualStateGroup.Transitions>
-                                <VisualState x:Name="Checked">
-                                    <Storyboard>
-                                        <DoubleAnimation Duration="0" Storyboard.TargetProperty="ScaleX" Storyboard.TargetName="OffScaleTransform" To="0" />
-                                        <DoubleAnimation Duration="0" Storyboard.TargetProperty="ScaleX" Storyboard.TargetName="OnScaleTransform" To="1" />
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState x:Name="Unchecked">
-                                    <Storyboard>
-                                        <DoubleAnimation Duration="0" Storyboard.TargetProperty="ScaleX" Storyboard.TargetName="OffScaleTransform" To="1" />
-                                        <DoubleAnimation Duration="0" Storyboard.TargetProperty="ScaleX" Storyboard.TargetName="OnScaleTransform" To="0" />
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState x:Name="Indeterminate">
-                                    <Storyboard>
-                                        <DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="IndeterminateCheck"/>
-                                    </Storyboard>
-                                </VisualState>
-                            </VisualStateGroup>
-                        </VisualStateManager.VisualStateGroups>
-                        <Grid x:Name="OffGrid" RenderTransformOrigin="0.5,0.5" Background="{TemplateBinding Background}">
-                            <ContentPresenter ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" HorizontalAlignment="Center"   VerticalAlignment="Center"  FlowDirection="LeftToRight"/>
-                            <Grid.Clip>
-                                <EllipseGeometry RadiusX="16" RadiusY="16" Center="16,16"/>
-                            </Grid.Clip>
-                            <Grid.RenderTransform>
-                                <ScaleTransform x:Name="OffScaleTransform" ScaleX="1" ScaleY="1" />
-                            </Grid.RenderTransform>
-                        </Grid>
-                        <Grid x:Name="OnGrid" RenderTransformOrigin=".5,.5" Background="{TemplateBinding Background}">
-                            <Path HorizontalAlignment="Center"  VerticalAlignment="Center" Stretch="Uniform" Fill="{TemplateBinding Foreground}" Width="20" Height="20" Data="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"/>
-                            <Grid.Clip>
-                                <EllipseGeometry RadiusX="16" RadiusY="16" Center="16,16"/>
-                            </Grid.Clip>
-                            <Grid.RenderTransform>
-                                <ScaleTransform x:Name="OnScaleTransform" ScaleX="1" ScaleY="1" />
-                            </Grid.RenderTransform>
-                        </Grid>
-                    </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -474,4 +262,101 @@
         </Setter>
     </Style>
 
+    <Style x:Key="AnimationCheckBox" TargetType="{x:Type ToggleButton}">
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidForegroundBrush}"/>
+        <Setter Property="Background" Value="{DynamicResource PrimaryHueMidBrush}"/>
+        <Setter Property="Width" Value="32"/>
+        <Setter Property="Height" Value="32"/>
+        <Setter Property="FontSize" Value="18"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"  />
+        <Setter Property="VerticalContentAlignment" Value="Center"  />
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect ShadowDepth="2" Color="Gainsboro" Direction="0"/>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <Grid>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal"/>
+                                <VisualState x:Name="Disabled">
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0" To="0.23" Storyboard.TargetProperty="(UIElement.Opacity)" />
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="CheckStates">
+                                <VisualStateGroup.Transitions>
+                                    <VisualTransition From="*" To="Checked">
+                                        <Storyboard FillBehavior="HoldEnd">
+                                            <DoubleAnimationUsingKeyFrames Duration="0:0:0.2" Storyboard.TargetProperty="ScaleX" Storyboard.TargetName="OffScaleTransform">
+                                                <LinearDoubleKeyFrame Value="1" KeyTime="0:0:0.0" />
+                                                <LinearDoubleKeyFrame Value="0" KeyTime="0:0:0.1" />
+                                            </DoubleAnimationUsingKeyFrames>
+                                            <DoubleAnimationUsingKeyFrames Duration="0:0:0.2" Storyboard.TargetProperty="ScaleX" Storyboard.TargetName="OnScaleTransform">
+                                                <LinearDoubleKeyFrame Value="0" KeyTime="0:0:0.1" />
+                                                <LinearDoubleKeyFrame Value="1" KeyTime="0:0:0.2" />
+                                            </DoubleAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualTransition>
+                                    <VisualTransition From="Checked" To="Unchecked">
+                                        <Storyboard FillBehavior="HoldEnd">
+                                            <DoubleAnimationUsingKeyFrames Duration="0:0:0.2" Storyboard.TargetProperty="ScaleX" Storyboard.TargetName="OnScaleTransform">
+                                                <LinearDoubleKeyFrame Value="1" KeyTime="0:0:0.0" />
+                                                <LinearDoubleKeyFrame Value="0" KeyTime="0:0:0.1" />
+                                            </DoubleAnimationUsingKeyFrames>
+                                            <DoubleAnimationUsingKeyFrames Duration="0:0:0.2" Storyboard.TargetProperty="ScaleX" Storyboard.TargetName="OffScaleTransform">
+                                                <LinearDoubleKeyFrame Value="0" KeyTime="0:0:0.1" />
+                                                <LinearDoubleKeyFrame Value="1" KeyTime="0:0:0.2" />
+                                            </DoubleAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualTransition>
+                                </VisualStateGroup.Transitions>
+                                <VisualState x:Name="Checked">
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0" Storyboard.TargetProperty="ScaleX" Storyboard.TargetName="OffScaleTransform" To="0" />
+                                        <DoubleAnimation Duration="0" Storyboard.TargetProperty="ScaleX" Storyboard.TargetName="OnScaleTransform" To="1" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Unchecked">
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0" Storyboard.TargetProperty="ScaleX" Storyboard.TargetName="OffScaleTransform" To="1" />
+                                        <DoubleAnimation Duration="0" Storyboard.TargetProperty="ScaleX" Storyboard.TargetName="OnScaleTransform" To="0" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Indeterminate">
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="IndeterminateCheck"/>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <Grid x:Name="OffGrid" RenderTransformOrigin="0.5,0.5" Background="{TemplateBinding Background}">
+                            <ContentPresenter ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" HorizontalAlignment="Center"   VerticalAlignment="Center"  FlowDirection="LeftToRight"/>
+                            <Grid.Clip>
+                                <EllipseGeometry RadiusX="16" RadiusY="16" Center="16,16"/>
+                            </Grid.Clip>
+                            <Grid.RenderTransform>
+                                <ScaleTransform x:Name="OffScaleTransform" ScaleX="1" ScaleY="1" />
+                            </Grid.RenderTransform>
+                        </Grid>
+                        <Grid x:Name="OnGrid" RenderTransformOrigin=".5,.5" Background="{TemplateBinding Background}">
+                            <Path HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Stretch="Uniform" Margin="0,0,3,2" Fill="{TemplateBinding Foreground}" Width="18" Height="18" Data="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"/>
+                            <Grid.Clip>
+                                <EllipseGeometry RadiusX="16" RadiusY="16" Center="16,16"/>
+                            </Grid.Clip>
+                            <Grid.RenderTransform>
+                                <ScaleTransform x:Name="OnScaleTransform" ScaleX="1" ScaleY="1" />
+                            </Grid.RenderTransform>
+                        </Grid>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

@@ -205,8 +205,15 @@
     <Compile Include="ViewModel\Converter\StringToBrush.cs" />
     <Compile Include="ViewModel\Converter\ViewIndexToVisibility.cs" />
     <Compile Include="ViewModel\History\HistoryViewModel.cs" />
-    <Compile Include="ViewModel\LoginViewModel.cs" />
+    <Compile Include="ViewModel\Login\LoginViewModel.cs" />
+    <Compile Include="ViewModel\Monitor\AccountManageViewModel.cs" />
+    <Compile Include="ViewModel\Monitor\BasicSetupViewModel.cs" />
+    <Compile Include="ViewModel\Monitor\ExperimentViewModel.cs" />
+    <Compile Include="ViewModel\Monitor\AnalysisViewModel.cs" />
     <Compile Include="ViewModel\Monitor\MonitorViewModel.cs" />
+    <Compile Include="ViewModel\Monitor\SampleSetupViewModel.cs" />
+    <Compile Include="ViewModel\Monitor\SetupViewModel.cs" />
+    <Compile Include="ViewModel\Monitor\SystemSetupViewModel.cs" />
     <Compile Include="ViewModel\Setup\SettingViewModel.cs" />
     <Compile Include="ViewModel\Validation\DissociationTemperatureRule.cs" />
     <Compile Include="ViewModel\WorkingViewModel.cs" />
@@ -218,6 +225,9 @@
     </Compile>
     <Compile Include="View\Control\ColorPicket\Palette.xaml.cs">
       <DependentUpon>Palette.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Control\Fault.xaml.cs">
+      <DependentUpon>Fault.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Control\Sample\Hole.xaml.cs">
       <DependentUpon>Hole.xaml</DependentUpon>
@@ -247,7 +257,7 @@
     <Compile Include="View\History\HistoryView.xaml.cs">
       <DependentUpon>HistoryView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\LoginView.xaml.cs">
+    <Compile Include="View\Login\LoginView.xaml.cs">
       <DependentUpon>LoginView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Monitor\MonitorView.xaml.cs">
@@ -338,6 +348,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\Control\Fault.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\Control\Sample\Hole.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -374,7 +388,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\LoginView.xaml">
+    <Page Include="View\Login\LoginView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -430,9 +444,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Content Include="Global\Resource\DefaultInfo.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Resource Include="Global\Resource\Image\Desktop2.ico" />
     <Content Include="Global\Resource\Dll\FluorAlgorithm.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -462,9 +473,7 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ViewModel\Admin\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="Global\Resource\Dll\LiveCharts.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

@@ -18,7 +18,7 @@ namespace CTFD.Model.RuntimeData
         private string name;
 
         [DataMember]
-        public string StartTime { get; set; } 
+        public string StartTime { get; set; }
 
         private DateTime startTime;
 
@@ -32,6 +32,9 @@ namespace CTFD.Model.RuntimeData
                 this.RaisePropertyChanged(nameof(this.Name));
             }
         }
+
+        [DataMember]
+        public string User { get; set; }
 
         [DataMember]
         public string GroupName { get; set; }
@@ -171,13 +174,14 @@ namespace CTFD.Model.RuntimeData
             this.InitializeTimer();
             this.InitializeSamples();
             this.Backup();
+            if (this.Feedbacks != null) this.Feedbacks[5].Value = "就绪";
         }
 
         private void InitializeSamples()
         {
-            for (int i = 0; i < this.Samples.Length; i++)
+            if (this.Samples != null)
             {
-                Samples[i].InitializeSample(i);
+                for (int i = 0; i < this.Samples.Length; i++) Samples[i].InitializeSample(i);
             }
         }
 
@@ -188,9 +192,9 @@ namespace CTFD.Model.RuntimeData
             this.backup.ProjectName = this.ProjectName;
             this.backup.Parameter = this.Parameter.GetCopy();
             this.backup.Samples = new Sample[32];
-            for (int i = 0; i < this.Samples.Length; i++)
+            if (this.Samples != null)
             {
-                this.backup.Samples[i] = new Sample(this.Samples[i].ID, this.Samples[i].HoleName, this.Samples[i].Detection);
+                for (int i = 0; i < this.Samples.Length; i++) this.backup.Samples[i] = new Sample(this.Samples[i].ID, this.Samples[i].HoleName, this.Samples[i].Detection);
             }
         }
 
@@ -202,6 +206,10 @@ namespace CTFD.Model.RuntimeData
 
         public int CalculateRemainningTime()
         {
+            this.Parameter.HighSpeedTimes = 3;
+            this.Parameter.LowSpeedTimes = 1;
+            this.Parameter.MeltDuration = 1800;
+            this.Parameter.CooldownDuration = 600;
             var remainningTime =
                 this.Parameter.LysisDuration +
                 this.Parameter.AmplificationDuration +
@@ -235,6 +243,7 @@ namespace CTFD.Model.RuntimeData
             this.BackgroundTimer.Restart();
             this.CountdownTimer.Restart();
             this.startTime = DateTime.Now;
+            //this.StartTime = this.startTime.ToString("yyyyMMddHHmmss");
         }
 
         private void StopTimer()
@@ -246,6 +255,7 @@ namespace CTFD.Model.RuntimeData
         private void ResetExperiment()
         {
             this.Charts.InitializeSeries();
+            this.Charts.SetSectionEnabled(false);
         }
 
         public void AddTemperatureValue(Token token, int value)
@@ -352,12 +362,26 @@ namespace CTFD.Model.RuntimeData
 
         public void AddRealtimeMeltingValue(int[] values) => this.Charts.AddRealtimeMeltingValue(values);
 
-        public void AddAmplificationCurve(List<int[]> curveData) => this.Charts.AddAmplificationCurve(curveData);
+        public void AddAmplificationCurve(List<int[]> curveData) => this.Charts.AddFindAmplificationCurve(curveData);
 
         public void AddDerivationMeltingCurves(List<int[]> curveData) => this.Charts.AddDerivationMeltingCurves(curveData);
 
         public void AddStandardMeltingCurve(List<int[]> curveData = null) => this.Charts.AddStandardMeltingCurve(curveData);
 
+        public void SetSectionEnabled(bool isEnabled) => this.Charts.SetSectionEnabled(isEnabled);
+
+        public void SetStartTime() => this.StartTime = DateTime.Now.ToString("yyyyMMddHHmmss");
+
         public IEnumerable<int[]> GetAmplificationData(int curveIndex) => this.Charts.GetFinalCurveData(curveIndex);
+
+        public bool GetFinalCurveStatus(int curveIndex) => this.Charts.GetFinalCurveStatus(curveIndex);
+
+        public void Synchronous()
+        {
+            this.RaisePropertyChanged(nameof(this.Name));
+            this.RaisePropertyChanged(nameof(this.User));
+            this.RaisePropertyChanged(nameof(this.StartTime));
+            this.Parameter.Synchronous();
+        }
     }
 }

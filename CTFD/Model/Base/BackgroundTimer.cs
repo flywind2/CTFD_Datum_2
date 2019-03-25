@@ -66,7 +66,6 @@ namespace CTFD.Model.Base
 
         public void ChangeTimer(DateTime dateTime)
         {
-
             this.time = dateTime;
             this.RaisePropertyChanged(nameof(TimingData));
         }

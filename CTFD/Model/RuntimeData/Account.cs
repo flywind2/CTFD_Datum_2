@@ -23,9 +23,6 @@ namespace CTFD.Model.RuntimeData
         [DataMember]
         public string DateTime { get; set; }
 
-        [DataMember]
-        public string Remark { get; set; }
-
         public void RaiseProperties()
         {
            this.RaisePropertyChanged(nameof(this.UserName));
@@ -33,13 +30,22 @@ namespace CTFD.Model.RuntimeData
 
         public Account() { }
 
-        public Account(string userName, string password, string role, string remark)
+        public Account(string userName, string password, string role)
         {
             this.UserName = userName;
             this.Password = password;
             this.Role = role;
             this.DateTime = System.DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss");
-            this.Remark = remark;
+        }
+
+        public void Clear()
+        {
+            this.UserName = string.Empty;
+            this.Password = string.Empty;
+            this.Role = string.Empty;
+            this.RaisePropertyChanged(nameof(this.UserName));
+            this.RaisePropertyChanged(nameof(this.Password));
+            this.RaisePropertyChanged(nameof(this.Role));
         }
     }
 }

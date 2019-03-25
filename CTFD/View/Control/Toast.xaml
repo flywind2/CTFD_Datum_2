@@ -7,7 +7,6 @@
     mc:Ignorable="d" 
     x:Name="Instance"
     d:DesignHeight="160" d:DesignWidth="500" Opacity="0">
-    
     <UserControl.Resources>
         <Storyboard x:Key="Opacity">
             <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="Instance" Storyboard.TargetProperty="Opacity" AutoReverse="False">

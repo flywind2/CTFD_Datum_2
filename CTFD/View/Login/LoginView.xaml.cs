@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace CTFD.View
+namespace CTFD.View.Login
 {
     /// <summary>
     /// LoginView.xaml 的交互逻辑
@@ -31,7 +31,13 @@ namespace CTFD.View
                 {
                     if (user.Password == this.TextBox_Password.Password)
                     {
-                        General.WorkingData.Configuration.Account = user;
+                        General.WorkingData.Configuration.Account = new Model.RuntimeData.Account
+                        {
+                            UserName = user.UserName,
+                            Role = user.Role,
+                            DateTime = user.DateTime,
+                            Password = user.Password
+                        };
                         General.RaiseGlobalHandler(GlobalEvent.ShowWorkingView, null);
                         this.ChangeErrorMessage(Visibility.Hidden);
                         this.TextBox_UserName.IsEnabled = false;
@@ -50,7 +56,7 @@ namespace CTFD.View
             };
         }
 
-        
+
 
         private void ChangeErrorMessage(Visibility visibility, int index = 0)
         {
